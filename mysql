@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * 生成mysqli数据字典
@@ -328,6 +329,9 @@ class MysqlDocs
 
     private function buildFile($dir, $html)
     {
+        if (!is_dir('temp/')) {
+            mkdir('temp/');
+        }
         file_put_contents($dir, $html);
     }
 
