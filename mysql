@@ -40,6 +40,7 @@ class MysqlDocs
     private $columns = [];
     private $className = '';        // 当前生成的类名
     private $isHasStatus = false;   // 当前是否有status字段
+    private $docs = 'docs';
     // int类型包含的子类型
     private $int = [
         'int',
@@ -324,13 +325,13 @@ class MysqlDocs
      */
     private function getFileDir()
     {
-        return 'temp/'.$this->className.'.php';
+        return $this->docs.'/'.$this->className.'.php';
     }
 
     private function buildFile($dir, $html)
     {
-        if (!is_dir('temp/')) {
-            mkdir('temp/');
+        if (!is_dir($this->docs.'/')) {
+            mkdir($this->docs.'/');
         }
         file_put_contents($dir, $html);
     }
