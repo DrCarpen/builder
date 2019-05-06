@@ -24,14 +24,14 @@ class MysqlDocs
      * **********   不然我不解析          ********
      * **********   你就老老实实自己写文件去 ******
      */
-    private $table = 'users';  // 需生成的表名
+    private $table = 'operation_log';  // 需生成的表名
     /**
      * **********    数据库基础配置     **********
      */
-    private $host = 'localhost';    // 数据库连接
+    private $host = 'mysql.dovecot.cn';    // 数据库连接
     private $userName = 'root';     // 数据库账号
-    private $dbPwd = 'root';        // 数据库密码
-    private $database = 'test';     // 数据库名
+    private $dbPwd = 'juyin@2018';        // 数据库密码
+    private $database = 'cn_uniondrug_module_stagnation';     // 数据库名
     /**
      * *********     功能配置        ***********
      */
@@ -188,9 +188,10 @@ class MysqlDocs
     private function checkTable()
     {
         $tables = $this->queryAll('show tables');
+//        print_r($tables);die;
         $flag = false;
         foreach ($tables as $val) {
-            if ($this->table == $val['Tables_in_test']) {
+            if ($this->table == $val['Tables_in_'.$this->database]) {
                 $flag = true;
             }
         }
