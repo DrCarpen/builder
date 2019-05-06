@@ -113,6 +113,12 @@ class Construct
             case 'trait':
                 return $this->docs.$this->className.'Trait.php';
                 break;
+            case 'row':
+                return $this->docs.'row.php';
+                break;
+            case 'rows':
+                return $this->docs.'rows.php';
+                break;
             default:
                 return $this->docs.$this->className.'.php';
         }
@@ -129,6 +135,10 @@ class Construct
                 break;
             case 'trait':
                 $this->docs = 'Docs/Trait/';
+                break;
+            case 'row':
+            case 'rows':
+                $this->docs = 'Docs/Results/'.$this->className.'/';
                 break;
             default:
                 $this->docs = 'Docs/Model/';
@@ -152,9 +162,9 @@ class Construct
     protected function getAuthorInfo()
     {
         $author = '/**'.PHP_EOL;
-        $author .= '* @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
-        $author .= '* @date   '.date('Y-m-d').PHP_EOL;
-        $author .= '*/'.PHP_EOL;
+        $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
+        $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
+        $author .= ' */'.PHP_EOL;
         return $author;
     }
 }

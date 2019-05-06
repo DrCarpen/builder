@@ -27,6 +27,10 @@ class Document
         $constructModel->build($columns);
         $constructTrait = new ConstructTrait($this->dbConfig, $this->authorConfig);
         $constructTrait->build($columns);
+        $constructRow = new ConstructRow($this->dbConfig, $this->authorConfig);
+        $constructRow->build();
+        $constructRows = new ConstructRows($this->dbConfig, $this->authorConfig);
+        $constructRows->build();
     }
 
     /**
