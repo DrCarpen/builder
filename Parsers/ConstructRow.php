@@ -52,12 +52,12 @@ class ConstructRow extends Construct
     private function getProperty()
     {
         $property = '/**'.PHP_EOL;
-        $property .= '* Class Row'.PHP_EOL;
+        $property .= ' * Class Row'.PHP_EOL;
         $property .= ' * @package App\Structs\Results\\'.$this->className.PHP_EOL;
-        $property .= '*/'.PHP_EOL;
+        $property .= ' */'.PHP_EOL;
         $property .= 'class Row extends Struct'.PHP_EOL;
         $property .= '{'.PHP_EOL;
-        $property .= ' use '.$this->className.'Trait;'.PHP_EOL;
+        $property .= '    use '.$this->className.'Trait;'.PHP_EOL;
         $property .= '}'.PHP_EOL;
         return $property;
     }

@@ -42,9 +42,9 @@ class ConstructTrait extends Construct
         $head = '<?php'.PHP_EOL;
         $head .= $author;
         $head .= 'namespace App\Structs\Traits;'.PHP_EOL.PHP_EOL;
-        $head .= '/**
- * @package App\Structs\Traits
- */'.PHP_EOL.PHP_EOL;
+        $head .= '/**'.PHP_EOL;
+        $head .= ' * @package App\Structs\Traits'.PHP_EOL;
+        $head .= ' */'.PHP_EOL;
         return $head;
     }
 
@@ -58,11 +58,11 @@ class ConstructTrait extends Construct
         $property .= '{'.PHP_EOL;
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
-                $property .= '   /**'.PHP_EOL;
-                $property .= '    * '.$value['COLUMN_COMMENT'].PHP_EOL;
-                $property .= '    * @var '.$this->getType($value['DATA_TYPE']).PHP_EOL;
-                $property .= '    */'.PHP_EOL;
-                $property .= '   public $'.$value['COLUMN_NAME'].';'.PHP_EOL;
+                $property .= '    /**'.PHP_EOL;
+                $property .= '     * '.$value['COLUMN_COMMENT'].PHP_EOL;
+                $property .= '     * @var '.$this->getType($value['DATA_TYPE']).PHP_EOL;
+                $property .= '     */'.PHP_EOL;
+                $property .= '    public $'.$value['COLUMN_NAME'].';'.PHP_EOL;
             }
         }
         $property .= '}'.PHP_EOL;

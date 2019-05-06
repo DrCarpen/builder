@@ -43,13 +43,14 @@ class ConstructModel extends Construct
         $property = '/**'.PHP_EOL;
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
-                $property .= '* @property '.$this->getType($value['DATA_TYPE']).'      $'.$value['COLUMN_NAME'].'     '.$value['COLUMN_COMMENT'].PHP_EOL;
+                $property .= ' * @property '.$this->getType($value['DATA_TYPE']).'      $'.$value['COLUMN_NAME'].'     '.$value['COLUMN_COMMENT'].PHP_EOL;
             }
             if ($value['COLUMN_NAME'] == 'status') {
                 $this->isHasStatus = true;
             }
         }
-        $property .= '* @package App\Models'.PHP_EOL.'*/'.PHP_EOL;
+        $property .= ' * @package App\Models'.PHP_EOL;
+        $property .= ' */'.PHP_EOL;
         return $property;
     }
 
@@ -74,11 +75,7 @@ class ConstructModel extends Construct
     private function getBottom()
     {
         $bottom = 'class '.$this->className.' extends Model
-{
-    public function getSource()
-    {
-        return "'.$this->table.'";
-    }';
+{'.PHP_EOL;
         if ($this->isHasStatus) {
             $bottom .= '
     const STATUS_ON = 1;
@@ -89,8 +86,11 @@ class ConstructModel extends Construct
     ];
     private static $_unknowsMessage = \'非法状态\';
 
-   
-
+    public function getSource()
+    {
+        return "'.$this->table.'";
+    }
+    
     public function getStatusText()
     {
         return isset(static::$_statusText[$this->status]) ? static::$_statusText[$this->status] : static::$_unknowsMessage;
