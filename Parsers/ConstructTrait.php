@@ -59,7 +59,9 @@ class ConstructTrait extends Construct
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
                 $property .= '    /**'.PHP_EOL;
-                $property .= '     * '.$value['COLUMN_COMMENT'].PHP_EOL;
+                if ($value['COLUMN_COMMENT']) {
+                    $property .= '     * '.$value['COLUMN_COMMENT'].PHP_EOL;
+                }
                 $property .= '     * @var '.$this->getType($value['DATA_TYPE']).PHP_EOL;
                 $property .= '     */'.PHP_EOL;
                 $property .= '    public $'.$value['COLUMN_NAME'].';'.PHP_EOL;

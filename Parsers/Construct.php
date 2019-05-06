@@ -119,6 +119,9 @@ class Construct
             case 'rows':
                 return $this->docs.'rows.php';
                 break;
+            case 'controller':
+                return $this->docs.$this->className.'Controller.php';
+                break;
             default:
                 return $this->docs.$this->className.'.php';
         }
@@ -139,6 +142,9 @@ class Construct
             case 'row':
             case 'rows':
                 $this->docs = 'Docs/Results/'.$this->className.'/';
+                break;
+            case 'controller':
+                $this->docs = 'Docs/Controllers/';
                 break;
             default:
                 $this->docs = 'Docs/Model/';
