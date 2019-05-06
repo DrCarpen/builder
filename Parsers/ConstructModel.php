@@ -7,87 +7,31 @@
 class ConstructModel extends Construct
 {
     private $columns;
-    private $noShowFields;
     private $isHasStatus = false;
-    private $name;
-    private $email;
-    // int类型包含的子类型
-    private $int = [
-        'int',
-        'integer',
-        'tinyint',
-        'smallint',
-        'mediumint',
-        'bigint'
-    ];
-    // string字符串类型包含的子类型
-    private $string = [
-        'char',
-        'varchar',
-        'text',
-        'tinytext',
-        'mediumtext',
-        'longtext',
-        'json'
-    ];
-    // float类型包含的子类型
-    private $float = [
-        'double',
-        'float',
-        'decimal'
-    ];
-    // 日期类型包含的子类型
-    private $time = [
-        'date',
-        'datetime',
-        'year',
-        'time'
-    ];
-    // 时间戳类型
-    private $timestamp = [
-        'timestamp'
-    ];
+    protected $fileType = 'model';
 
-    public function __construct($dbConfig,$authorConfig)
+    public function __construct($dbConfig, $authorConfig)
     {
-        $this->table = $dbConfig['table'];
-        $this->name = $authorConfig['name'];
-        $this->email = $authorConfig['email'];
-        $this->noShowFields = $dbConfig['noShowFields'];
-        $this->className = $this->getClassName();
-        $this->docs = 'Docs/Model/';
+        parent::__construct($dbConfig, $authorConfig);
     }
 
     public function build($columns)
     {
         $this->columns = $columns;
         $html = $this->getFileContent();
-        $this->buildFile($this->getFileDir(), $html);
+        $this->buildFile($html);
     }
 
     /**
-     * 查询此类型
-     * @param $type
+     * 获取内容
      * @return string
      */
-    private function getType($type)
+    private function getFileContent()
     {
-        switch ($type) {
-            case in_array($type, $this->int):
-            case in_array($type, $this->timestamp):
-                return 'int';
-                break;
-            case in_array($type, $this->string):
-            case in_array($type, $this->time):
-                return 'string';
-                break;
-            case in_array($type, $this->float):
-                return 'float';
-                break;
-            default:
-                return 'string';
-                break;
-        }
+        $html = $this->getHead($this->getAuthorInfo());
+        $html .= $this->getProperty();
+        $html .= $this->getBottom();
+        return $html;
     }
 
     /**
@@ -111,15 +55,13 @@ class ConstructModel extends Construct
 
     /**
      * 配置头文件
+     * @param $author
      * @return string
      */
-    private function getHead()
+    private function getHead($author)
     {
         $head = '<?php'.PHP_EOL;
-        $head .= '/**'.PHP_EOL;
-        $head .= '* @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
-        $head .= '* @date   '.date('Y-m-d').PHP_EOL;
-        $head .= '*/'.PHP_EOL;
+        $head .= $author;
         $head .= 'namespace App\Models;'.PHP_EOL.PHP_EOL;
         $head .= 'use App\Models\Abstracts\Model;'.PHP_EOL.PHP_EOL;
         return $head;
@@ -157,17 +99,5 @@ class ConstructModel extends Construct
         }
         $bottom .= PHP_EOL.'}';
         return $bottom;
-    }
-
-    /**
-     * 获取内容
-     * @return string
-     */
-    private function getFileContent()
-    {
-        $html = $this->getHead();
-        $html .= $this->getProperty();
-        $html .= $this->getBottom();
-        return $html;
     }
 }
