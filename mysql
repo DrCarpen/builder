@@ -110,7 +110,6 @@ class MysqlDocs
         $this->setHeader();
         $this->checkTable();
         $this->getColumns();
-        $this->getProperty();
         $html = $this->getFileContent();
         $this->buildFile($this->getFileDir(), $html);
     }

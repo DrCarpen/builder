@@ -1,0 +1,47 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @author liyang <liyang@uniondrug.cn>
+ * @date   2019-05-06
+ */
+
+class doc
+{
+    public $dbConfig;
+    public $authorConfig;
+    public $base;
+
+    public function __construct($base)
+    {
+        $this->base = $base;
+        $this->dbConfig = require $base.'/Config/Db.php';
+        $this->dbConfig['table'] = $this->getArgvs() ? $this->getArgvs() : $this->dbConfig['table'];
+        $this->authorConfig = require $base.'/Config/Author.php';
+    }
+
+    public function build()
+    {
+        $model = new Model($this->dbConfig);
+        $columns = $model->build();
+        $constructModel = new ConstructModel($this->dbConfig,$this->authorConfig);
+        $constructModel->build($columns);
+    }
+
+    /**
+     * 处理入参
+     */
+    private function getArgvs()
+    {
+        $argvs = $_SERVER['argv'];
+        if (count($argvs) > 1) {
+            return $argvs[1];
+        }
+    }
+}
+
+spl_autoload_register(function($className){
+    require getcwd().'/Parsers/'.$className.'.php';
+});
+$base = getcwd();
+$init = new doc($base);
+$init->build();
