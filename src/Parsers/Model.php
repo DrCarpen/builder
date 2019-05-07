@@ -1,4 +1,5 @@
 <?php
+namespace Uniondrug\Builder\Parsers;
 
 /**
  * @author liyang <liyang@uniondrug.cn>

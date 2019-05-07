@@ -1,11 +1,11 @@
-#!/usr/bin/env php
 <?php
 /**
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
+namespace Uniondrug\Builder\Parsers;
 
-class Document
+class Collection
 {
     public $dbConfig;
     public $authorConfig;
@@ -63,14 +63,12 @@ class Document
         }
     }
 
-    private function formPrint($notice){
+    private function formPrint($notice)
+    {
         echo $notice.PHP_EOL;
     }
 }
 
-spl_autoload_register(function($className){
-    require getcwd().'/vendor/uniondrug/MysqlDocs/Parsers/'.$className.'.php';
-});
 $base = getcwd();
 //echo $base;die;
 $init = new Document($base);

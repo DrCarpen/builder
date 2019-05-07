@@ -3,10 +3,11 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
+namespace Uniondrug\Builder\Parsers;
 
-class ConstructRows extends Construct
+class ConstructRow extends Construct
 {
-    protected $fileType = 'rows';
+    protected $fileType = 'row';
 
     public function __construct($dbConfig, $authorConfig)
     {
@@ -40,7 +41,8 @@ class ConstructRows extends Construct
         $head = '<?php'.PHP_EOL;
         $head .= $author;
         $head .= 'namespace App\Structs\Results\\'.$this->className.';'.PHP_EOL.PHP_EOL;
-        $head .= 'use Uniondrug\Structs\PaginatorStruct;'.PHP_EOL.PHP_EOL;
+        $head .= 'use App\Structs\Traits\\'.$this->className.'Trait;'.PHP_EOL;
+        $head .= 'use Uniondrug\Structs\Struct;'.PHP_EOL.PHP_EOL;
         return $head;
     }
 
@@ -51,15 +53,12 @@ class ConstructRows extends Construct
     private function getProperty()
     {
         $property = '/**'.PHP_EOL;
-        $property .= ' * Class Rows'.PHP_EOL;
+        $property .= ' * Class Row'.PHP_EOL;
         $property .= ' * @package App\Structs\Results\\'.$this->className.PHP_EOL;
         $property .= ' */'.PHP_EOL;
-        $property .= 'class Rows extends PaginatorStruct'.PHP_EOL;
+        $property .= 'class Row extends Struct'.PHP_EOL;
         $property .= '{'.PHP_EOL;
-        $property .= '    /**'.PHP_EOL;
-        $property .= '     * @var Row[]'.PHP_EOL;
-        $property .= '     */'.PHP_EOL;
-        $property .= '    public $body;'.PHP_EOL;
+        $property .= '    use '.$this->className.'Trait;'.PHP_EOL;
         $property .= '}'.PHP_EOL;
         return $property;
     }

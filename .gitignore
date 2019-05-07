@@ -3,3 +3,6 @@
 /.idea
 /Docs
 document
+/vendor
+/console
+/composer.lock
