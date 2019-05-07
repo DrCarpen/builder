@@ -85,6 +85,16 @@ class Construct
         }
     }
 
+    protected function getValidator($type, $column)
+    {
+        if ($type == 'string') {
+            $validator = 'options={mixChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
+        } else {
+            $validator = '';
+        }
+        return $validator;
+    }
+
     /**
      * 获取类名
      * @return string
@@ -135,6 +145,16 @@ class Construct
                     'paging' => $this->docs.'PagingLogic.php'
                 ];
                 break;
+            case 'struct':
+                return [
+                    'create' => $this->docs.'CreateStruct.php',
+                    'delete' => $this->docs.'DeleteStruct.php',
+                    'update' => $this->docs.'UpdateStruct.php',
+                    'detail' => $this->docs.'DetailStruct.php',
+                    'listing' => $this->docs.'ListingStruct.php',
+                    'paging' => $this->docs.'PagingStruct.php'
+                ];
+                break;
             default:
                 return $this->docs.$this->className.'.php';
         }
@@ -154,7 +174,7 @@ class Construct
                 break;
             case 'row':
             case 'rows':
-                $this->docs = 'Docs/Results/'.$this->className.'/';
+                $this->docs = 'Docs/Structs/Results/'.$this->className.'/';
                 break;
             case 'controller':
                 $this->docs = 'Docs/Controllers/';
@@ -164,6 +184,9 @@ class Construct
                 break;
             case 'logic':
                 $this->docs = 'Docs/Logic/'.$this->className.'/';
+                break;
+            case 'struct':
+                $this->docs = 'Docs/Structs/Requests/'.$this->className.'/';
                 break;
             default:
                 $this->docs = 'Docs/Model/';
@@ -178,7 +201,10 @@ class Construct
         if (!is_dir($this->docs)) {
             mkdir($this->docs, 0777, true);
         }
-        if ($this->fileType == 'logic') {
+        if (in_array($this->fileType, [
+            'logic',
+            'struct'
+        ])) {
             $fileDir = $this->getFileDir();
             foreach ($fileDir as $key => $value) {
                 if ($html[$key]) {

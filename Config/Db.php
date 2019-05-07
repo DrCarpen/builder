@@ -10,7 +10,7 @@
 //    'database' => 'cn_uniondrug_module_stagnation',
 //    'port' => 3306,
 //    'table' => 'operation_log',
-//    'noShowFields' => [],
+//    'noShowFields' => []
 //];
 return [
     'host' => '582959f06c18d.sh.cdb.myqcloud.com',
@@ -19,5 +19,5 @@ return [
     'database' => 'cn_uniondrug_module_stagnation',
     'port' => 3712,
     'table' => 'users',
-    'noShowFields' => [],
+    'noShowFields' => []
 ];
