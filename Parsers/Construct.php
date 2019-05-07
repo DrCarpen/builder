@@ -167,29 +167,29 @@ class Construct
     {
         switch ($this->fileType) {
             case 'model':
-                $this->docs = 'Docs/Model/';
+                $this->docs = 'app/Models/';
                 break;
             case 'trait':
-                $this->docs = 'Docs/Trait/';
+                $this->docs = 'app/Structs/Traits/';
                 break;
             case 'row':
             case 'rows':
-                $this->docs = 'Docs/Structs/Results/'.$this->className.'/';
+                $this->docs = 'app/Structs/Results/'.$this->className.'/';
                 break;
             case 'controller':
-                $this->docs = 'Docs/Controllers/';
+                $this->docs = 'app/Controllers/';
                 break;
             case 'service':
-                $this->docs = 'Docs/Services/';
+                $this->docs = 'app/Services/';
                 break;
             case 'logic':
-                $this->docs = 'Docs/Logic/'.$this->className.'/';
+                $this->docs = 'app/Logics/'.$this->className.'/';
                 break;
             case 'struct':
-                $this->docs = 'Docs/Structs/Requests/'.$this->className.'/';
+                $this->docs = 'app/Structs/Requests/'.$this->className.'/';
                 break;
             default:
-                $this->docs = 'Docs/Model/';
+                $this->docs = 'app/Models/';
         }
     }
 
@@ -208,11 +208,21 @@ class Construct
             $fileDir = $this->getFileDir();
             foreach ($fileDir as $key => $value) {
                 if ($html[$key]) {
-                    file_put_contents($value, $html[$key]);
+                    if (!file_exists($value)) {
+                        file_put_contents($value, $html[$key]);
+                    } else {
+                        echo '[Warning file is exist]'.$value.PHP_EOL;
+                        continue;
+                    }
                 }
             }
         } else {
-            file_put_contents($this->getFileDir(), $html);
+            $file = $this->getFileDir();
+            if (!file_exists($file)) {
+                file_put_contents($file, $html);
+            } else {
+                echo '[Warning file is exist] '.$file.PHP_EOL;
+            }
         }
     }
 
