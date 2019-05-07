@@ -11,12 +11,11 @@ class Collection
     public $authorConfig;
     public $base;
 
-    public function __construct($base)
+    public function __construct($base, $dbConfig, $authorConfig)
     {
         $this->base = $base;
-        $this->dbConfig = require $base.'/vendor/uniondrug/MysqlDocs/Config/Db.php';
-        $this->dbConfig['table'] = $this->getArgvs() ? $this->getArgvs() : $this->dbConfig['table'];
-        $this->authorConfig = require $base.'/vendor/uniondrug/MysqlDocs/Config/Author.php';
+        $this->dbConfig = $dbConfig;
+        $this->authorConfig = $authorConfig;
     }
 
     public function build()
@@ -52,24 +51,8 @@ class Collection
         $this->formPrint('[success !! ]');
     }
 
-    /**
-     * 处理入参
-     */
-    private function getArgvs()
-    {
-        $argvs = $_SERVER['argv'];
-        if (count($argvs) > 1) {
-            return $argvs[1];
-        }
-    }
-
     private function formPrint($notice)
     {
         echo $notice.PHP_EOL;
     }
 }
-
-$base = getcwd();
-//echo $base;die;
-$init = new Document($base);
-$init->build();
