@@ -31,7 +31,7 @@ class ConstructController extends Construct
         $html .= $this->getBodyDelete();
         $html .= $this->getBodyUpdate();
         $html .= $this->getBodyDetail();
-        $html .= $this->getBodyList();
+        $html .= $this->getBodyListing();
         $html .= $this->getBodyPaging();
         $html .= $this->getBottom();
         return $html;
@@ -146,18 +146,18 @@ class ConstructController extends Construct
         return $body;
     }
 
-    private function getBodyList()
+    private function getBodyListing()
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 全部列表'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'List'.PHP_EOL;
-        $body .= '     * @Route("/list")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\ListStruct'.PHP_EOL;
+        $body .= '     * @sdk '.strtolower($this->className).'Listing'.PHP_EOL;
+        $body .= '     * @Route("/listing")'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\ListingStruct'.PHP_EOL;
         $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Rows'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
-        $body .= '    public function listsAction()'.PHP_EOL;
+        $body .= '    public function listingAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
-        $body .= '        $output = ListLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
+        $body .= '        $output = ListingLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
         $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
         $body .= '    }'.PHP_EOL;
         $body .= PHP_EOL;

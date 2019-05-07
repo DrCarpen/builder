@@ -122,6 +122,9 @@ class Construct
             case 'controller':
                 return $this->docs.$this->className.'Controller.php';
                 break;
+            case 'service':
+                return $this->docs.$this->className.'Service.php';
+                break;
             default:
                 return $this->docs.$this->className.'.php';
         }
@@ -145,6 +148,9 @@ class Construct
                 break;
             case 'controller':
                 $this->docs = 'Docs/Controllers/';
+                break;
+            case 'service':
+                $this->docs = 'Docs/Services/';
                 break;
             default:
                 $this->docs = 'Docs/Model/';

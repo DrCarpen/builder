@@ -33,6 +33,8 @@ class Document
         $constructRows->build();
         $constructController = new ConstructController($this->dbConfig, $this->authorConfig);
         $constructController->build();
+        $constructService = new ConstructService($this->dbConfig, $this->authorConfig);
+        $constructService->build();
     }
 
     /**
