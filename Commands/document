@@ -35,6 +35,8 @@ class Document
         $constructController->build();
         $constructService = new ConstructService($this->dbConfig, $this->authorConfig);
         $constructService->build();
+        $constructLogic = new ConstructLogic($this->dbConfig, $this->authorConfig);
+        $constructLogic->build();
     }
 
     /**

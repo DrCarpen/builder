@@ -101,7 +101,7 @@ class Construct
     }
 
     /**
-     * 配置目录
+     * 获取文件名及路径
      * @return string
      */
     protected function getFileDir()
@@ -124,6 +124,16 @@ class Construct
                 break;
             case 'service':
                 return $this->docs.$this->className.'Service.php';
+                break;
+            case 'logic':
+                return [
+                    'create' => $this->docs.'CreateLogic.php',
+                    'delete' => $this->docs.'DeleteLogic.php',
+                    'update' => $this->docs.'UpdateLogic.php',
+                    'detail' => $this->docs.'DetailLogic.php',
+                    'listing' => $this->docs.'ListingLogic.php',
+                    'paging' => $this->docs.'PagingLogic.php'
+                ];
                 break;
             default:
                 return $this->docs.$this->className.'.php';
@@ -152,6 +162,9 @@ class Construct
             case 'service':
                 $this->docs = 'Docs/Services/';
                 break;
+            case 'logic':
+                $this->docs = 'Docs/Logic/'.$this->className.'/';
+                break;
             default:
                 $this->docs = 'Docs/Model/';
         }
@@ -165,7 +178,16 @@ class Construct
         if (!is_dir($this->docs)) {
             mkdir($this->docs, 0777, true);
         }
-        file_put_contents($this->getFileDir(), $html);
+        if ($this->fileType == 'logic') {
+            $fileDir = $this->getFileDir();
+            foreach ($fileDir as $key => $value) {
+                if ($html[$key]) {
+                    file_put_contents($value, $html[$key]);
+                }
+            }
+        } else {
+            file_put_contents($this->getFileDir(), $html);
+        }
     }
 
     /**
