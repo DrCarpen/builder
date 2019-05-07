@@ -1,4 +1,4 @@
-# mysql 注释生成工具
+# 项目脚手架工具
 
 
 
@@ -11,5 +11,6 @@
 1. `执行如下命令`
 
 ```bash
-php msyql wx_members
+ln -s Commands\document document
+php  document [your table name]
 ```
