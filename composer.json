@@ -1,5 +1,5 @@
 {
-    "name" : "uniondrug/builder",
+    "name" : "drcarpen/builder",
     "description" : "export uniondrug documents when created a new model",
     "keywords" : [
         "phalcon"
