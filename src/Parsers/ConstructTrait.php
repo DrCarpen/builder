@@ -55,7 +55,7 @@ class ConstructTrait extends Construct
      */
     private function getProperty()
     {
-        $property = 'trait UserTrait'.PHP_EOL;
+        $property = 'trait '.$this->className.'Trait'.PHP_EOL;
         $property .= '{'.PHP_EOL;
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {

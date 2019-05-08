@@ -38,6 +38,9 @@ class Collection
         $this->formPrint('[构造Rows]');
         $constructController = new ConstructController($this->dbConfig, $this->authorConfig);
         $constructController->build();
+        $this->formPrint('[构造Listing]');
+        $constructListing = new ConstructListing($this->dbConfig, $this->authorConfig);
+        $constructListing->build();
         $this->formPrint('[构造Model]');
         $constructService = new ConstructService($this->dbConfig, $this->authorConfig);
         $constructService->build();

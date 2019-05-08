@@ -130,6 +130,9 @@ class Construct
             case 'rows':
                 return $this->docs.'rows.php';
                 break;
+            case 'listing':
+                return $this->docs.'listing.php';
+                break;
             case 'controller':
                 return $this->docs.$this->className.'Controller.php';
                 break;
@@ -175,6 +178,7 @@ class Construct
                 break;
             case 'row':
             case 'rows':
+            case 'listing':
                 $this->docs = 'app/Structs/Results/'.$this->className.'/';
                 break;
             case 'controller':

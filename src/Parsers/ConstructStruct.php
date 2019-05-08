@@ -90,7 +90,10 @@ class ConstructStruct extends Construct
     private function getBody($structHead)
     {
         $body = '{'.PHP_EOL;
-        if ($structHead == 'Create') {
+        if (!in_array($structHead, [
+            'Delete',
+            'Detail'
+        ])) {
             $body .= $this->getCreateStruct();
         }
         return $body;

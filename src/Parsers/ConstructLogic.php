@@ -59,11 +59,10 @@ class ConstructLogic extends Construct
         $head .= 'namespace App\Logics\\'.$this->className.';'.PHP_EOL.PHP_EOL;
         $head .= 'use App\Logics\Abstracts\Logic;'.PHP_EOL;
         $head .= 'use App\Structs\Requests\\'.$this->className.'\\'.$structHead.'Struct;'.PHP_EOL;
-        if (in_array($structHead, [
-            'Paging',
-            'Listing'
-        ])) {
+        if ($structHead == 'Paging') {
             $head .= 'use App\Structs\Results\\'.$this->className.'\Rows;'.PHP_EOL;
+        } else if ($structHead == 'Listing') {
+            $head .= 'use App\Structs\Results\\'.$this->className.'\Listing;'.PHP_EOL;
         } else {
             $head .= 'use App\Structs\Results\\'.$this->className.'\Row;'.PHP_EOL;
         }
@@ -93,11 +92,10 @@ class ConstructLogic extends Construct
         $body .= '    {'.PHP_EOL;
         $body .= '        $struct = '.$structHead.'Struct::factory($payload);'.PHP_EOL;
         $body .= '        $output = $this->'.strtolower($this->className).'Service->'.strtolower($structHead).'($struct);'.PHP_EOL;
-        if (in_array($structHead, [
-            'Paging',
-            'Listing'
-        ])) {
+        if ($structHead == 'Paging') {
             $body .= '        return Rows::factory($output);'.PHP_EOL;
+        } else if ($structHead == 'Listing') {
+            $body .= '        return Listing::factory($output);'.PHP_EOL;
         } else {
             $body .= '        return Row::factory($output);'.PHP_EOL;
         }
