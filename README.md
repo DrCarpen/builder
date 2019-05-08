@@ -12,5 +12,5 @@
 
 ```bash
 ln -s Commands\document document
-php  document [your table name]
+php  document [your table name] 
 ```
