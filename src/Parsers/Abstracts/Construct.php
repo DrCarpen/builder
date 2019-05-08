@@ -3,9 +3,11 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-namespace Uniondrug\Builder\Parsers;
+namespace Uniondrug\Builder\Parsers\Abstracts;
 
-class Construct
+use Uniondrug\Builder\Parsers\Abstracts\Base;
+
+class Construct extends Base
 {
     protected $table;
     protected $docs;
@@ -50,9 +52,11 @@ class Construct
     protected $timestamp = [
         'timestamp'
     ];
+    public $console;
 
     public function __construct($dbConfig, $authorConfig)
     {
+        parent::__construct();
         $this->name = $authorConfig['name'];
         $this->email = $authorConfig['email'];
         $this->table = $dbConfig['table'];
@@ -215,8 +219,9 @@ class Construct
                 if ($html[$key]) {
                     if (!file_exists($value)) {
                         file_put_contents($value, $html[$key]);
+                        $this->console->info($value.' is built');
                     } else {
-                        echo '[Warning file is exist]'.$value.PHP_EOL;
+                        $this->console->warning($value.' file is exist');
                         continue;
                     }
                 }
@@ -225,8 +230,9 @@ class Construct
             $file = $this->getFileDir();
             if (!file_exists($file)) {
                 file_put_contents($file, $html);
+                $this->console->info($file.' is built');
             } else {
-                echo '[Warning file is exist] '.$file.PHP_EOL;
+                $this->console->warning($file.' file is exist');
             }
         }
     }

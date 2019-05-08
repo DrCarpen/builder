@@ -5,6 +5,8 @@
  */
 namespace Uniondrug\Builder\Parsers;
 
+use Uniondrug\Builder\Parsers\Abstracts\Construct;
+
 class ConstructService extends Construct
 {
     protected $fileType = 'service';

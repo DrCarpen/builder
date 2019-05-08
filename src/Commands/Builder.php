@@ -5,6 +5,7 @@
  */
 namespace Uniondrug\Builder\Commands;
 
+use Uniondrug\Builder\Parsers\Tool\Console;
 use Uniondrug\Console\Command;
 use Uniondrug\Builder\Parsers\Collection;
 
@@ -25,12 +26,14 @@ class Builder extends Command
      * @var string
      */
     protected $description = '脚手架生成工具';
+    public $console;
 
     /**
      * @inheritdoc
      */
     public function handle()
     {
+        $this->console = new Console();
         $dbConfig = $this->checkDatabase();
         $dbConfig['table'] = $this->checkArgvs();
         $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
@@ -46,7 +49,7 @@ class Builder extends Command
         $connection = app()->getConfig()->database->connection;
         // 检查数据库链接是否存在
         if (empty($connection)) {
-            echo 'config/database is not exist, please checkout your config files!';
+            $this->console->error('config/database is not exist, please checkout your config files!');
             exit;
         }
         // 检查数据库配置是否存在
@@ -58,7 +61,7 @@ class Builder extends Command
                     'password',
                     'dbname'
                 ])) {
-                echo $value.' do not have right value';
+                $this->console->error(' do not have right value');
                 exit;
             }
         }
@@ -79,9 +82,8 @@ class Builder extends Command
     {
         $table = $this->input->getOption('table');
         if (empty($table)) {
-            echo 'database table name is not exist'.PHP_EOL;
-            echo 'try again like this :'.PHP_EOL;
-            echo ' php console builder --t tableName'.PHP_EOL;
+            $this->console->error('database table name is not exist,try again like this :');
+            $this->console->error(' php console builder --table tableName');
             exit;
         }
         return $table;

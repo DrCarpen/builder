@@ -5,6 +5,8 @@
  */
 namespace Uniondrug\Builder\Parsers;
 
+use Uniondrug\Builder\Parsers\Abstracts\Construct;
+
 class ConstructLogic extends Construct
 {
     protected $fileType = 'logic';

@@ -1,11 +1,13 @@
 <?php
-namespace Uniondrug\Builder\Parsers;
+namespace Uniondrug\Builder\Parsers\Abstracts;
+
+use Uniondrug\Builder\Parsers\Abstracts\Base;
 
 /**
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-class Model
+class Model extends Base
 {
     private $table;
     private $host;
@@ -17,6 +19,7 @@ class Model
 
     public function __construct($dbConfig)
     {
+        parent::__construct();
         $this->host = $dbConfig['host'];
         $this->userName = $dbConfig['user'];
         $this->dbPwd = $dbConfig['password'];
@@ -47,9 +50,9 @@ class Model
     {
         $conn = mysqli_connect("$this->host:".$this->port, "$this->userName", "$this->dbPwd");
         if (!$conn) {
-            echo "Error: Unable to connect to MySQL.".PHP_EOL;
-            echo "Debugging errno: ".mysqli_connect_errno().PHP_EOL;
-            echo "Debugging error: ".mysqli_connect_error().PHP_EOL;
+            $this->console->error('Unable to connect to MySQL');
+            $this->console->error('Debugging errno'.mysqli_connect_errno());
+            $this->console->error('Debugging error'.mysqli_connect_error());
             exit;
         }
         $this->conn = $conn;
@@ -82,17 +85,6 @@ class Model
     }
 
     /**
-     * 断点测试
-     * @param $data
-     */
-    private function p($data)
-    {
-        echo '<pre>';
-        print_r($data);
-        echo '<br>';
-    }
-
-    /**
      * @param $sql
      * @return array
      */
@@ -119,8 +111,8 @@ class Model
             }
         }
         if ($flag == false) {
-            echo 'There is no table in this database,please check in the config';
-            die;
+            $this->console->error('The table  is not exist in  database ['.$this->database.'],make sure your table is exist');
+            exit();
         }
     }
 
