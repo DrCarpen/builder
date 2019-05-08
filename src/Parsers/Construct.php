@@ -78,7 +78,7 @@ class Construct
                 return 'string';
                 break;
             case in_array($type, $this->float):
-                return 'float';
+                return 'double';
                 break;
             default:
                 return 'string';
