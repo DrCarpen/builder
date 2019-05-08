@@ -15,7 +15,16 @@ use Uniondrug\Builder\Parsers\Collection;
 class Builder extends Command
 {
     protected $signature = 'builder
-                            {--t : 发布markdown文档}';
+                            {--table= : 指定数据库的表名}';
+    protected $authorConfig = [
+        'name' => 'dev',
+        'email' => 'dev@uniondrug.com'
+    ];
+    /**
+     * 命令描述
+     * @var string
+     */
+    protected $description = '脚手架生成工具';
 
     /**
      * @inheritdoc
@@ -23,9 +32,8 @@ class Builder extends Command
     public function handle()
     {
         $dbConfig = $this->checkDatabase();
-        $this->checkArgvs();
-        $this->dbConfig['table'] = $this->getArgvs() ? $this->getArgvs() : $this->dbConfig['table'];
-        $collection = new Collection(getcwd(), $dbConfig, []);
+        $dbConfig['table'] = $this->checkArgvs();
+        $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
         $collection->build();
     }
 
@@ -69,12 +77,13 @@ class Builder extends Command
      */
     private function checkArgvs()
     {
-        $argvs = $_SERVER['argv'];
-        print_r( $this->getOptions());die;
-        $this->argument();
-        print_r($argv);die;
-        if (count($argvs) > 1) {
-            return $argvs[1];
+        $table = $this->input->getOption('table');
+        if (empty($table)) {
+            echo 'database table name is not exist'.PHP_EOL;
+            echo 'try again like this :'.PHP_EOL;
+            echo ' php console builder --t tableName'.PHP_EOL;
+            exit;
         }
+        return $table;
     }
 }
