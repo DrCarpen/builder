@@ -6,3 +6,4 @@ document
 /vendor
 /console
 /composer.lock
+BuilderCommand.php

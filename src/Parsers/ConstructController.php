@@ -53,7 +53,7 @@ class ConstructController extends Construct
         $head .= 'use App\Logics\\'.$this->className.'\DeleteLogic;'.PHP_EOL;
         $head .= 'use App\Logics\\'.$this->className.'\UpdateLogic;'.PHP_EOL;
         $head .= 'use App\Logics\\'.$this->className.'\DetailLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\ListLogic;'.PHP_EOL;
+        $head .= 'use App\Logics\\'.$this->className.'\ListingLogic;'.PHP_EOL;
         $head .= 'use App\Logics\\'.$this->className.'\PagingLogic;'.PHP_EOL;
         $head .= PHP_EOL;
         return $head;
@@ -68,7 +68,7 @@ class ConstructController extends Construct
         $property = '/**'.PHP_EOL;
         $property .= ' * Class '.$this->className.'Controller'.PHP_EOL;
         $property .= ' * @package App\Controllers'.PHP_EOL;
-        $property .= ' * @RoutePrefix("/'.strtolower($this->className).'")'.PHP_EOL;
+        $property .= ' * @RoutePrefix("/'.lcfirst($this->className).'")'.PHP_EOL;
         $property .= ' */'.PHP_EOL;
         $property .= 'class '.$this->className.'Controller extends Base'.PHP_EOL;
         return $property;
@@ -79,10 +79,10 @@ class ConstructController extends Construct
         $body = '{'.PHP_EOL;
         $body .= '    /**'.PHP_EOL;
         $body .= '     * 新增'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Create'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Create'.PHP_EOL;
         $body .= '     * @Route("/create")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\CreateStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Row'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\CreateStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function createAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
@@ -97,10 +97,10 @@ class ConstructController extends Construct
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 修改'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Update'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Update'.PHP_EOL;
         $body .= '     * @Route("/update")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\UpdateStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Row'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\UpdateStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function updateAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
@@ -115,10 +115,10 @@ class ConstructController extends Construct
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 删除'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Delete'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Delete'.PHP_EOL;
         $body .= '     * @Route("/delete")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\DeleteStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Row'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\DeleteStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function deleteAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
@@ -133,10 +133,10 @@ class ConstructController extends Construct
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 详情'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Detail'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Detail'.PHP_EOL;
         $body .= '     * @Route("/delete")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\DetailStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Row'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\DetailStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function detailAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
@@ -151,10 +151,10 @@ class ConstructController extends Construct
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 全部列表'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Listing'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Listing'.PHP_EOL;
         $body .= '     * @Route("/listing")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\ListingStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Rows'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\ListingStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Rows'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function listingAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
@@ -169,10 +169,10 @@ class ConstructController extends Construct
     {
         $body = '    /**'.PHP_EOL;
         $body .= '     * 分页列表'.PHP_EOL;
-        $body .= '     * @sdk '.strtolower($this->className).'Paging'.PHP_EOL;
+        $body .= '     * @sdk '.lcfirst($this->className).'Paging'.PHP_EOL;
         $body .= '     * @Route("/paging")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.strtolower($this->className).'\PagingStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.strtolower($this->className).'\Rows'.PHP_EOL;
+        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\PagingStruct'.PHP_EOL;
+        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Rows'.PHP_EOL;
         $body .= '     */'.PHP_EOL;
         $body .= '    public function pagingAction()'.PHP_EOL;
         $body .= '    {'.PHP_EOL;

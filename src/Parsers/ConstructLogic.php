@@ -91,7 +91,7 @@ class ConstructLogic extends Construct
         $body .= '    public function run($payload)'.PHP_EOL;
         $body .= '    {'.PHP_EOL;
         $body .= '        $struct = '.$structHead.'Struct::factory($payload);'.PHP_EOL;
-        $body .= '        $output = $this->'.strtolower($this->className).'Service->'.strtolower($structHead).'($struct);'.PHP_EOL;
+        $body .= '        $output = $this->'.lcfirst($this->className).'Service->'.lcfirst($structHead).'($struct);'.PHP_EOL;
         if ($structHead == 'Paging') {
             $body .= '        return Rows::factory($output);'.PHP_EOL;
         } else if ($structHead == 'Listing') {
