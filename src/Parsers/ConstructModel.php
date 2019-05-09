@@ -64,11 +64,16 @@ class ConstructModel extends Construct
      */
     private function getHead($author)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Models;'.PHP_EOL.PHP_EOL;
-        $head .= 'use App\Models\Abstracts\Model;'.PHP_EOL.PHP_EOL;
-        return $head;
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Models;
+
+use App\Models\Abstracts\Model;
+
+
+TEMP;
+        return $this->templeteParser->repalceTempale(['AUTHOR' => $author], $template);
     }
 
     /**
@@ -77,30 +82,37 @@ class ConstructModel extends Construct
      */
     private function getBottom()
     {
-        $bottom = 'class '.$this->className.' extends Model
-{'.PHP_EOL;
-        if ($this->isHasStatus) {
-            $bottom .= '
+        $template = <<<'TEMP'
+class {{CLASS_NAME}} extends Model
+{
+{{STATUS_TEXT}}
+    public function getSource()
+    {
+        return "{{TABLE}}";
+    }
+}
+    
+TEMP;
+        $statusText = <<<'TEMP'
     const STATUS_ON = 1;
     const STATUS_OFF = 0;
     private static $_statusText = [
-        self::STATUS_ON => \'已开启\',
-        self::STATUS_OFF => \'已关闭\'
+        self::STATUS_ON => '已开启',
+        self::STATUS_OFF => '已关闭'
     ];
-    private static $_unknowsMessage = \'非法状态\';
+    private static $_unknowsMessage = '非法状态';
 
-    public function getSource()
-    {
-        return "'.$this->table.'";
-    }
-    
     public function getStatusText()
     {
         return isset(static::$_statusText[$this->status]) ? static::$_statusText[$this->status] : static::$_unknowsMessage;
     }
-';
-        }
-        $bottom .= PHP_EOL.'}';
-        return $bottom;
+    
+TEMP;
+        $template = $this->templeteParser->repalceTempale(['STATUS_TEXT' => ($this->isHasStatus ? $statusText : '')], $template);
+        $replaceList = [
+            'TABLE' => $this->table,
+            'CLASS_NAME' => $this->className
+        ];
+        return $this->templeteParser->repalceTempale($replaceList, $template);
     }
 }

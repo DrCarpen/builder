@@ -71,3 +71,6 @@ php console builder --table tableName --e release
 1. 生成`create，delete，update，detail，listing，paging`的方法及sdk名
 
 
+#### v1.0功能
+1. 修改之前的模板注入方式为正则匹配
+
