@@ -15,6 +15,6 @@ class TemplateParser
                 $template = preg_replace($rexp, $value, $template);
             }
         }
-        return $template;
+        return $template.PHP_EOL;
     }
 }

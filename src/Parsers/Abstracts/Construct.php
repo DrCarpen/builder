@@ -52,6 +52,14 @@ class Construct extends Base
     protected $timestamp = [
         'timestamp'
     ];
+    public $CURD = [
+        'create',
+        'delete',
+        'update',
+        'detail',
+        'listing',
+        'paging'
+    ];
     public $console;
 
     public function __construct($dbConfig, $authorConfig)
@@ -245,7 +253,7 @@ class Construct extends Base
         $author = '/**'.PHP_EOL;
         $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
         $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
-        $author .= ' */'.PHP_EOL;
+        $author .= ' */';
         return $author;
     }
 }

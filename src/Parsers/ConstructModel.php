@@ -31,9 +31,7 @@ class ConstructModel extends Construct
      */
     private function getFileContent()
     {
-        $html = $this->getHead($this->getAuthorInfo());
-        $html .= $this->getProperty();
-        $html .= $this->getBottom();
+        $html = $this->getBody($this->getAuthorInfo());
         return $html;
     }
 
@@ -41,28 +39,7 @@ class ConstructModel extends Construct
      * 获取注释
      * @return string
      */
-    private function getProperty()
-    {
-        $property = '/**'.PHP_EOL;
-        foreach ($this->columns as $key => $value) {
-            if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
-                $property .= ' * @property '.$this->getType($value['DATA_TYPE']).'      $'.$value['COLUMN_NAME'].'     '.$value['COLUMN_COMMENT'].PHP_EOL;
-            }
-            if ($value['COLUMN_NAME'] == 'status') {
-                $this->isHasStatus = true;
-            }
-        }
-        $property .= ' * @package App\Models'.PHP_EOL;
-        $property .= ' */'.PHP_EOL;
-        return $property;
-    }
-
-    /**
-     * 配置头文件
-     * @param $author
-     * @return string
-     */
-    private function getHead($author)
+    private function getBody($author)
     {
         $template = <<<'TEMP'
 <?php
@@ -70,19 +47,10 @@ class ConstructModel extends Construct
 namespace App\Models;
 
 use App\Models\Abstracts\Model;
-
-
-TEMP;
-        return $this->templeteParser->repalceTempale(['AUTHOR' => $author], $template);
-    }
-
-    /**
-     * 配置底部文件
-     * @return string
-     */
-    private function getBottom()
-    {
-        $template = <<<'TEMP'
+        
+/**
+{{PROPERTY_TEMPLATE_LIST}} * @package App\Models
+ */
 class {{CLASS_NAME}} extends Model
 {
 {{STATUS_TEXT}}
@@ -91,8 +59,48 @@ class {{CLASS_NAME}} extends Model
         return "{{TABLE}}";
     }
 }
-    
+ 
 TEMP;
+        return $this->templeteParser->repalceTempale([
+            'PROPERTY_TEMPLATE_LIST' => $this->getPropety(),
+            'AUTHOR' => $author,
+            'TABLE' => $this->table,
+            'CLASS_NAME' => $this->className,
+            'STATUS_TEXT' => $this->isHasStatus ? $this->getStatusText() : ''
+        ], $template);
+    }
+
+    /**
+     * @return string
+     */
+    private function getPropety()
+    {
+        $propertyTemplate = <<<'TEMP'
+ * @property {{DATA_TYPE}}  ${{COLUMN_NAME}}    {{COLUMN_COMMENT}}
+TEMP;
+        $propertyTemplateList = '';
+        foreach ($this->columns as $key => $value) {
+            if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
+                $repalceList = [
+                    'DATA_TYPE' => $this->getType($value['DATA_TYPE']),
+                    'COLUMN_NAME' => $value['COLUMN_NAME'],
+                    'COLUMN_COMMENT' => $value['COLUMN_COMMENT']
+                ];
+                $propertyTemplateList .= $this->templeteParser->repalceTempale($repalceList, $propertyTemplate);
+            }
+            if ($value['COLUMN_NAME'] == 'status') {
+                $this->isHasStatus = true;
+            }
+        }
+        return $propertyTemplateList;
+    }
+
+    /**
+     * 配置底部文件
+     * @return string
+     */
+    private function getStatusText()
+    {
         $statusText = <<<'TEMP'
     const STATUS_ON = 1;
     const STATUS_OFF = 0;
@@ -108,11 +116,6 @@ TEMP;
     }
     
 TEMP;
-        $template = $this->templeteParser->repalceTempale(['STATUS_TEXT' => ($this->isHasStatus ? $statusText : '')], $template);
-        $replaceList = [
-            'TABLE' => $this->table,
-            'CLASS_NAME' => $this->className
-        ];
-        return $this->templeteParser->repalceTempale($replaceList, $template);
+        return $statusText;
     }
 }

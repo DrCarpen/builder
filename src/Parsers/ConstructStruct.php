@@ -42,10 +42,7 @@ class ConstructStruct extends Construct
     private function getFileContent()
     {
         foreach ($this->html as $key => $value) {
-            $html = $this->getHead($this->getAuthorInfo(), ucfirst($value));
-            $html .= $this->getProperty(ucfirst($value));
-            $html .= $this->getBody(ucfirst($value));
-            $html .= $this->getBottom();
+            $html = $this->getStruct($this->getAuthorInfo(), ucfirst($value));
             $this->html[$value] = $html;
         }
     }
@@ -56,49 +53,32 @@ class ConstructStruct extends Construct
      * @param $structHead
      * @return string
      */
-    private function getHead($author, $structHead)
+    private function getStruct($author, $structHead)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Structs\Requests\\'.$this->className.';'.PHP_EOL.PHP_EOL;
-        if ($structHead == 'Paging') {
-            $head .= 'use Uniondrug\Structs\PagingRequest;'.PHP_EOL;
-        } else {
-            $head .= 'use Uniondrug\Structs\Struct;'.PHP_EOL;
-        }
-        $head .= PHP_EOL;
-        return $head;
-    }
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Structs\Requests\{{CLASS_NAME}};
+        
+use Uniondrug\Structs\{{STRUCT_NAME}};
 
-    /**
-     * 获取注释
-     * @param $structHead
-     * @return string
-     */
-    private function getProperty($structHead)
-    {
-        if ($structHead == 'Paging') {
-            $property = 'class '.$structHead.'Struct extends PagingRequest'.PHP_EOL;
-        } else {
-            $property = 'class '.$structHead.'Struct extends Struct'.PHP_EOL;
-        }
-        return $property;
-    }
+class {{STRUCT_HEAD}}Struct extends {{STRUCT_NAME}}
+{
+{{STRUCT_BODY}}
+}
 
-    /**
-     * @param $structHead
-     * @return string
-     */
-    private function getBody($structHead)
-    {
-        $body = '{'.PHP_EOL;
-        if (!in_array($structHead, [
-            'Delete',
-            'Detail'
-        ])) {
-            $body .= $this->getCreateStruct();
-        }
-        return $body;
+TEMP;
+        $replaceList = [
+            'AUTHOR' => $author,
+            'CLASS_NAME' => $this->className,
+            'STRUCT_HEAD' => $structHead,
+            'STRUCT_NAME' => $structHead == 'Paging' ? 'PagingRequest' : 'Struct',
+            'STRUCT_BODY' => !in_array($structHead, [
+                'Delete',
+                'Detail'
+            ]) ? $this->getCreateStruct() : ''
+        ];
+        return $this->templeteParser->repalceTempale($replaceList, $template);
     }
 
     /**
@@ -107,27 +87,29 @@ class ConstructStruct extends Construct
      */
     private function getCreateStruct()
     {
-        $body = '';
+        $template = <<<'TEMP'
+    /**
+     * {{COLUMN_COMMENT}}
+     * @var {{DATA_TYPE}}
+     * @validator({{VALIDATOR_TYPE}})
+     */
+    public ${{COLUMN_NAME}};
+TEMP;
+        $templateList = '';
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields) && $value['COLUMN_KEY'] != 'PRI' && !in_array($value['COLUMN_NAME'], [
                     'gmtCreated',
                     'gmtUpdated'
                 ])) {
-                $body .= '    /**'.PHP_EOL;
-                if ($value['COLUMN_COMMENT']) {
-                    $body .= '     * '.$value['COLUMN_COMMENT'].PHP_EOL;
-                }
-                $body .= '     * @var '.$this->getType($value['DATA_TYPE']).PHP_EOL;
-                $body .= '     * @validator('.$this->getValidator($this->getType($value['DATA_TYPE']), $value).')'.PHP_EOL;
-                $body .= '     */'.PHP_EOL;
-                $body .= '    public $'.$value['COLUMN_NAME'].';'.PHP_EOL;
+                $repalceList = [
+                    'COLUMN_COMMENT' => $value['COLUMN_COMMENT'],
+                    'VALIDATOR_TYPE' => $this->getValidator($this->getType($value['DATA_TYPE']), $value),
+                    'DATA_TYPE' => $this->getType($value['DATA_TYPE']),
+                    'COLUMN_NAME' => $value['COLUMN_NAME']
+                ];
+                $templateList .= $this->templeteParser->repalceTempale($repalceList, $template);
             }
         }
-        return $body;
-    }
-
-    private function getBottom()
-    {
-        return '}'.PHP_EOL;
+        return $templateList;
     }
 }

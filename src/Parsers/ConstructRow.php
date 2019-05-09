@@ -29,7 +29,6 @@ class ConstructRow extends Construct
     private function getFileContent()
     {
         $html = $this->getHead($this->getAuthorInfo());
-        $html .= $this->getProperty();
         return $html;
     }
 
@@ -40,28 +39,27 @@ class ConstructRow extends Construct
      */
     private function getHead($author)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Structs\Results\\'.$this->className.';'.PHP_EOL.PHP_EOL;
-        $head .= 'use App\Structs\Traits\\'.$this->className.'Trait;'.PHP_EOL;
-        $head .= 'use Uniondrug\Structs\Struct;'.PHP_EOL.PHP_EOL;
-        return $head;
-    }
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Structs\Results\{{CLASS_NAME}};
+ 
+use App\Structs\Traits\{{CLASS_NAME}}Trait;
+use Uniondrug\Structs\Struct;
 
-    /**
-     * 获取注释
-     * @return string
-     */
-    private function getProperty()
-    {
-        $property = '/**'.PHP_EOL;
-        $property .= ' * Class Row'.PHP_EOL;
-        $property .= ' * @package App\Structs\Results\\'.$this->className.PHP_EOL;
-        $property .= ' */'.PHP_EOL;
-        $property .= 'class Row extends Struct'.PHP_EOL;
-        $property .= '{'.PHP_EOL;
-        $property .= '    use '.$this->className.'Trait;'.PHP_EOL;
-        $property .= '}'.PHP_EOL;
-        return $property;
+/**
+ * Class Row
+ * @package App\Structs\Results\{{CLASS_NAME}}
+ */
+ class Row extends Struct
+ {
+     use {{CLASS_NAME}}Trait;
+ }
+ 
+TEMP;
+        return $this->templeteParser->repalceTempale([
+            'CLASS_NAME' => $this->className,
+            'AUTHOR' => $author
+        ], $template);
     }
 }
