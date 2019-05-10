@@ -46,7 +46,7 @@ php console builder --table tableName --e release
 
 ### 参数说明
 
-1. --table tableName 表名必填，根据此表名生成对应的Model等文件
+1. --table tableName 表名必填，根据此表名生成对应的Model等文件(默认使用database.php中的配置)
 1. --env     environment 指定的环境变量，可改变database.php中的对应环境的数据库配置
 
 ### 功能说明
@@ -71,6 +71,4 @@ php console builder --table tableName --e release
 1. 生成`create，delete，update，detail，listing，paging`的方法及sdk名
 
 
-#### v1.0功能
-1. 修改之前的模板注入方式为正则匹配
 

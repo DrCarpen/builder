@@ -79,8 +79,8 @@ TEMP;
         $templateList = '';
         foreach ($this->CURD as $key => $value) {
             $templateList .= $this->templeteParser->repalceTempale([
-                'NAME' => $value,
-                'UCFIRST_NAME' => ucfirst($value)
+                'NAME' => $key,
+                'UCFIRST_NAME' => ucfirst($key)
             ], $template);
         }
         return $templateList;
@@ -95,7 +95,7 @@ TEMP;
         foreach ($this->CURD as $key => $value) {
             $templateList .= $this->templeteParser->repalceTempale([
                 'CLASS_NAME' => $this->className,
-                'UCFIRST_NAME' => ucfirst($value)
+                'UCFIRST_NAME' => ucfirst($key)
             ], $template);
         }
         return $templateList;

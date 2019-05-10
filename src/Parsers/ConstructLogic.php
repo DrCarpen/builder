@@ -67,7 +67,7 @@ class {{STRUCT_HEAD}}Logic extends Logic
     public function run($payload)
     {
         $struct = {{STRUCT_HEAD}}Struct::factory($payload);
-        $output = $this->{{LCFIRST_CLASS_NAME}}Service->{{STRUCT_HEAD}}($struct);
+        $output = $this->{{LCFIRST_CLASS_NAME}}Service->{{LCFIRST_STRUCT_HEAD}}($struct);
         return {{RESULT_STRUCT}}::factory($output);
     }
 }
@@ -83,6 +83,7 @@ TEMP;
             'CLASS_NAME' => $this->className,
             'AUTHOR' => $author,
             'STRUCT_HEAD' => $structHead,
+            'LCFIRST_STRUCT_HEAD' => lcfirst($structHead),
             'RESULT_STRUCT' => $resultStruct,
             'LCFIRST_CLASS_NAME' => lcfirst($this->className)
         ], $template);
