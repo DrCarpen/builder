@@ -52,6 +52,14 @@ class Construct extends Base
     protected $timestamp = [
         'timestamp'
     ];
+    public $CURD = [
+        'create' => '新增',
+        'delete' => '删除',
+        'update' => '修改',
+        'detail' => '详情',
+        'listing' => '无分页列表',
+        'paging' => '分页列表'
+    ];
     public $console;
 
     public function __construct($dbConfig, $authorConfig)
@@ -129,13 +137,13 @@ class Construct extends Base
                 return $this->docs.$this->className.'Trait.php';
                 break;
             case 'row':
-                return $this->docs.'row.php';
+                return $this->docs.'Row.php';
                 break;
             case 'rows':
-                return $this->docs.'rows.php';
+                return $this->docs.'Rows.php';
                 break;
             case 'listing':
-                return $this->docs.'listing.php';
+                return $this->docs.'Listing.php';
                 break;
             case 'controller':
                 return $this->docs.$this->className.'Controller.php';
@@ -245,7 +253,7 @@ class Construct extends Base
         $author = '/**'.PHP_EOL;
         $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
         $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
-        $author .= ' */'.PHP_EOL;
+        $author .= ' */';
         return $author;
     }
 }

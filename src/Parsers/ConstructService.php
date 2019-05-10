@@ -31,15 +31,7 @@ class ConstructService extends Construct
      */
     private function getFileContent()
     {
-        $html = $this->getHead($this->getAuthorInfo());
-        $html .= $this->getProperty();
-        $html .= $this->getBodyCreate();
-        $html .= $this->getBodyDelete();
-        $html .= $this->getBodyUpdate();
-        $html .= $this->getBodyDetail();
-        $html .= $this->getBodyListing();
-        $html .= $this->getBodyPaging();
-        $html .= $this->getBottom();
+        $html = $this->getBody($this->getAuthorInfo());
         return $html;
     }
 
@@ -48,93 +40,64 @@ class ConstructService extends Construct
      * @param $author
      * @return string
      */
-    private function getHead($author)
+    private function getBody($author)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Services;'.PHP_EOL.PHP_EOL;
-        $head .= 'use App\Services\Abstracts\Service;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\CreateStruct;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\DeleteStruct;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\UpdateStruct;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\DetailStruct;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\ListingStruct;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\PagingStruct;'.PHP_EOL;
-        $head .= PHP_EOL;
-        return $head;
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Services;
+
+use App\Services\Abstracts\Service;
+{{STRUCT_BODY}}
+
+/**
+ * Class {{CLASS_NAME}}Service
+ * @package App\Services    
+ */ 
+class {{CLASS_NAME}}Service extends Service
+{
+{{SERVICE_BODY}}    
+}
+
+TEMP;
+        return $this->templeteParser->repalceTempale([
+            'AUTHOR' => $author,
+            'STRUCT_BODY' => $this->getStructBody(),
+            'SERVICE_BODY' => $this->getServiceBody(),
+            'CLASS_NAME' => $this->className
+        ], $template);
     }
 
-    /**
-     * 获取注释
-     * @return string
-     */
-    private function getProperty()
+    private function getServiceBody()
     {
-        $property = '/**'.PHP_EOL;
-        $property .= ' * Class '.$this->className.'Service'.PHP_EOL;
-        $property .= ' * @package App\Services'.PHP_EOL;
-        $property .= ' */'.PHP_EOL;
-        $property .= 'class '.$this->className.'Service extends Service'.PHP_EOL;
-        return $property;
+        $template = <<<'TEMP'
+    public function {{NAME}}({{UCFIRST_NAME}}Struct $struct)
+    {
+    }
+    
+TEMP;
+        $templateList = '';
+        foreach ($this->CURD as $key => $value) {
+            $templateList .= $this->templeteParser->repalceTempale([
+                'NAME' => $key,
+                'UCFIRST_NAME' => ucfirst($key)
+            ], $template);
+        }
+        return $templateList;
     }
 
-    private function getBodyCreate()
+    private function getStructBody()
     {
-        $body = '{'.PHP_EOL;
-        $body .= '    public function create(CreateStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyUpdate()
-    {
-        $body = '    public function update(UpdateStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyDelete()
-    {
-        $body = '    public function delete(DeleteStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyDetail()
-    {
-        $body = '    public function detail(DetailStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyListing()
-    {
-        $body = '    public function listing(ListingStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyPaging()
-    {
-        $body = '    public function paging(PagingStruct $struct)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBottom()
-    {
-        return '}'.PHP_EOL;
+        $template = <<<'TEMP'
+use App\Structs\Requests\{{CLASS_NAME}}\{{UCFIRST_NAME}}Struct;
+TEMP;
+        $templateList = '';
+        foreach ($this->CURD as $key => $value) {
+            $templateList .= $this->templeteParser->repalceTempale([
+                'CLASS_NAME' => $this->className,
+                'UCFIRST_NAME' => ucfirst($key)
+            ], $template);
+        }
+        return $templateList;
     }
 }

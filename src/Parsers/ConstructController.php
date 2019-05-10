@@ -29,14 +29,6 @@ class ConstructController extends Construct
     private function getFileContent()
     {
         $html = $this->getHead($this->getAuthorInfo());
-        $html .= $this->getProperty();
-        $html .= $this->getBodyCreate();
-        $html .= $this->getBodyDelete();
-        $html .= $this->getBodyUpdate();
-        $html .= $this->getBodyDetail();
-        $html .= $this->getBodyListing();
-        $html .= $this->getBodyPaging();
-        $html .= $this->getBottom();
         return $html;
     }
 
@@ -47,146 +39,83 @@ class ConstructController extends Construct
      */
     private function getHead($author)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Controllers;'.PHP_EOL.PHP_EOL;
-        $head .= 'use App\Controllers\Abstracts\Base;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\CreateLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\DeleteLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\UpdateLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\DetailLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\ListingLogic;'.PHP_EOL;
-        $head .= 'use App\Logics\\'.$this->className.'\PagingLogic;'.PHP_EOL;
-        $head .= PHP_EOL;
-        return $head;
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Controllers;
+
+use App\Controllers\Abstracts\Base;
+{{STRUCT_BODY}}
+
+/**
+ * Class {{CLASS_NAME}}Controller
+ * @package App\Controllers 
+ * @RoutePrefix("/{{LCFIRST_CLASS_NAME}}");   
+ */ 
+class {{CLASS_NAME}}Controller extends Base
+{
+{{CONTROLLER_BODY}}   
+}
+TEMP;
+        return $this->templeteParser->repalceTempale([
+            'AUTHOR' => $author,
+            'STRUCT_BODY' => $this->getStructBody(),
+            'CONTROLLER_BODY' => $this->getControllerBody(),
+            'CLASS_NAME' => $this->className,
+            'LCFIRST_CLASS_NAME' => lcfirst($this->className)
+        ], $template);
     }
 
+    private function getStructBody()
+    {
+        $template = <<<'TEMP'
+use App\Logics\{{CLASS_NAME}}\{{UCFIRST_NAME}}Logic;
+TEMP;
+        $templateList = '';
+        foreach ($this->CURD as $key => $value) {
+            $templateList .= $this->templeteParser->repalceTempale([
+                'CLASS_NAME' => $this->className,
+                'UCFIRST_NAME' => ucfirst($key)
+            ], $template);
+        }
+        return $templateList;
+    }
+
+    private function getControllerBody()
+    {
+        $template = <<<'TEMP'
     /**
-     * 获取注释
-     * @return string
+     * {{CURD_VALUE}}
+     * @sdk {{LCFIRST_CLASS_NAME}}{{UCFIRST_CURD_KEY}}
+     * @Route("/{{CURD_KEY}}")
+     * @input \App\Structs\Requests\{{CLASS_NAME}}\{{UCFIRST_CURD_KEY}}Struct
+     * @output \App\Structs\Results\{{CLASS_NAME}}\{{RESULT_STRUCT}}
      */
-    private function getProperty()
+    public function {{CURD_KEY}}Action()
     {
-        $property = '/**'.PHP_EOL;
-        $property .= ' * Class '.$this->className.'Controller'.PHP_EOL;
-        $property .= ' * @package App\Controllers'.PHP_EOL;
-        $property .= ' * @RoutePrefix("/'.lcfirst($this->className).'")'.PHP_EOL;
-        $property .= ' */'.PHP_EOL;
-        $property .= 'class '.$this->className.'Controller extends Base'.PHP_EOL;
-        return $property;
+        $output = {{UCFIRST_CURD_KEY}}Logic::factory($this->request->getJsonRawBody());
+        return $this->serviceServer->withStruct($output);
     }
-
-    private function getBodyCreate()
-    {
-        $body = '{'.PHP_EOL;
-        $body .= '    /**'.PHP_EOL;
-        $body .= '     * 新增'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Create'.PHP_EOL;
-        $body .= '     * @Route("/create")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\CreateStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function createAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = CreateLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyUpdate()
-    {
-        $body = '    /**'.PHP_EOL;
-        $body .= '     * 修改'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Update'.PHP_EOL;
-        $body .= '     * @Route("/update")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\UpdateStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function updateAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = UpdateLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyDelete()
-    {
-        $body = '    /**'.PHP_EOL;
-        $body .= '     * 删除'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Delete'.PHP_EOL;
-        $body .= '     * @Route("/delete")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\DeleteStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function deleteAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = DeleteLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyDetail()
-    {
-        $body = '    /**'.PHP_EOL;
-        $body .= '     * 详情'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Detail'.PHP_EOL;
-        $body .= '     * @Route("/delete")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\DetailStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Row'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function detailAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = DetailLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyListing()
-    {
-        $body = '    /**'.PHP_EOL;
-        $body .= '     * 全部列表'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Listing'.PHP_EOL;
-        $body .= '     * @Route("/listing")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\ListingStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Rows'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function listingAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = ListingLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBodyPaging()
-    {
-        $body = '    /**'.PHP_EOL;
-        $body .= '     * 分页列表'.PHP_EOL;
-        $body .= '     * @sdk '.lcfirst($this->className).'Paging'.PHP_EOL;
-        $body .= '     * @Route("/paging")'.PHP_EOL;
-        $body .= '     * @input \App\Structs\Requests\\'.$this->className.'\PagingStruct'.PHP_EOL;
-        $body .= '     * @output \App\Structs\Results\\'.$this->className.'\Rows'.PHP_EOL;
-        $body .= '     */'.PHP_EOL;
-        $body .= '    public function pagingAction()'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $output = PagingLogic::factory($this->request->getJsonRawBody());'.PHP_EOL;
-        $body .= '        return $this->serviceServer->withStruct($output);'.PHP_EOL;
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBottom()
-    {
-        return '}'.PHP_EOL;
+    
+TEMP;
+        $templateList = '';
+        foreach ($this->CURD as $key => $value) {
+            if ($key == 'paging') {
+                $resultStruct = 'Rows';
+            } else if ($key == 'listing') {
+                $resultStruct = 'Listing';
+            } else {
+                $resultStruct = 'Row';
+            }
+            $templateList .= $this->templeteParser->repalceTempale([
+                'CURD_KEY' => $key,
+                'UCFIRST_CURD_KEY' => ucfirst($key),
+                'CURD_VALUE' => $value,
+                'CLASS_NAME' => $this->className,
+                'LCFIRST_CLASS_NAME' => lcfirst($this->className),
+                'RESULT_STRUCT' => $resultStruct
+            ], $template);
+        }
+        return $templateList;
     }
 }

@@ -20,57 +20,60 @@ class ConstructTrait extends Construct
     public function build($columns)
     {
         $this->columns = $columns;
-        $html = $this->getFileContent();
+        $html = $this->getFileContent($this->getAuthorInfo());
         $this->buildFile($html);
-    }
-
-    /**
-     * 获取内容
-     * @return string
-     */
-    private function getFileContent()
-    {
-        $html = $this->getHead($this->getAuthorInfo());
-        $html .= $this->getProperty();
-        return $html;
-    }
-
-    /**
-     * 配置头文件
-     * @param $author
-     * @return string
-     */
-    private function getHead($author)
-    {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Structs\Traits;'.PHP_EOL.PHP_EOL;
-        $head .= '/**'.PHP_EOL;
-        $head .= ' * @package App\Structs\Traits'.PHP_EOL;
-        $head .= ' */'.PHP_EOL;
-        return $head;
     }
 
     /**
      * 获取注释
      * @return string
      */
-    private function getProperty()
+    private function getFileContent($author)
     {
-        $property = 'trait '.$this->className.'Trait'.PHP_EOL;
-        $property .= '{'.PHP_EOL;
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Structs\Traits;
+          
+/**
+ * @package App\Structs\Traits
+ */
+trait {{CLASS_NAME}}Trait
+{
+{{PROPERTY_TEMPLATE_LIST}}    
+}
+
+TEMP;
+        return $this->templeteParser->repalceTempale([
+            'CLASS_NAME' => $this->className,
+            'PROPERTY_TEMPLATE_LIST' => $this->getPropertyTemplate(),
+            'AUTHOR' => $author
+        ], $template);
+    }
+
+    /**
+     * @return string
+     */
+    private function getPropertyTemplate()
+    {
+        $propertyTemplate = <<<'TEMP'
+    /**
+     * {{COLUMN_COMMENT}}
+     * @var {{DATA_TYPE}}
+     */
+    public ${{COLUMN_NAME}};
+TEMP;
+        $propertyTemplateList = '';
         foreach ($this->columns as $key => $value) {
             if (!in_array($value['COLUMN_NAME'], $this->noShowFields)) {
-                $property .= '    /**'.PHP_EOL;
-                if ($value['COLUMN_COMMENT']) {
-                    $property .= '     * '.$value['COLUMN_COMMENT'].PHP_EOL;
-                }
-                $property .= '     * @var '.$this->getType($value['DATA_TYPE']).PHP_EOL;
-                $property .= '     */'.PHP_EOL;
-                $property .= '    public $'.$value['COLUMN_NAME'].';'.PHP_EOL;
+                $replaceList = [
+                    'COLUMN_COMMENT' => $value['COLUMN_COMMENT'],
+                    'DATA_TYPE' => $this->getType($value['DATA_TYPE']),
+                    'COLUMN_NAME' => $value['COLUMN_NAME']
+                ];
+                $propertyTemplateList .= $this->templeteParser->repalceTempale($replaceList, $propertyTemplate);
             }
         }
-        $property .= '}'.PHP_EOL;
-        return $property;
+        return $propertyTemplateList;
     }
 }

@@ -40,10 +40,7 @@ class ConstructLogic extends Construct
     private function getFileContent()
     {
         foreach ($this->html as $key => $value) {
-            $html = $this->getHead($this->getAuthorInfo(), ucfirst($value));
-            $html .= $this->getProperty(ucfirst($value));
-            $html .= $this->getBody(ucfirst($value));
-            $html .= $this->getBottom();
+            $html = $this->getBody($this->getAuthorInfo(), ucfirst($value));
             $this->html[$value] = $html;
         }
     }
@@ -54,60 +51,41 @@ class ConstructLogic extends Construct
      * @param $structHead
      * @return string
      */
-    private function getHead($author, $structHead)
+    private function getBody($author, $structHead)
     {
-        $head = '<?php'.PHP_EOL;
-        $head .= $author;
-        $head .= 'namespace App\Logics\\'.$this->className.';'.PHP_EOL.PHP_EOL;
-        $head .= 'use App\Logics\Abstracts\Logic;'.PHP_EOL;
-        $head .= 'use App\Structs\Requests\\'.$this->className.'\\'.$structHead.'Struct;'.PHP_EOL;
+        $template = <<<'TEMP'
+<?php
+{{AUTHOR}}
+namespace App\Logics\{{CLASS_NAME}};
+
+use App\Logics\Abstracts\Logic;
+use App\Structs\Requests\{{CLASS_NAME}}\{{STRUCT_HEAD}}Struct;
+use App\Structs\Results\GroupManageCopy1\{{RESULT_STRUCT}};
+
+class {{STRUCT_HEAD}}Logic extends Logic
+{
+    public function run($payload)
+    {
+        $struct = {{STRUCT_HEAD}}Struct::factory($payload);
+        $output = $this->{{LCFIRST_CLASS_NAME}}Service->{{LCFIRST_STRUCT_HEAD}}($struct);
+        return {{RESULT_STRUCT}}::factory($output);
+    }
+}
+TEMP;
         if ($structHead == 'Paging') {
-            $head .= 'use App\Structs\Results\\'.$this->className.'\Rows;'.PHP_EOL;
+            $resultStruct = 'Rows';
         } else if ($structHead == 'Listing') {
-            $head .= 'use App\Structs\Results\\'.$this->className.'\Listing;'.PHP_EOL;
+            $resultStruct = 'Listing';
         } else {
-            $head .= 'use App\Structs\Results\\'.$this->className.'\Row;'.PHP_EOL;
+            $resultStruct = 'Row';
         }
-        $head .= PHP_EOL;
-        return $head;
-    }
-
-    /**
-     * 获取注释
-     * @param $structHead
-     * @return string
-     */
-    private function getProperty($structHead)
-    {
-        $property = 'class '.$structHead.'Logic extends Logic'.PHP_EOL;
-        return $property;
-    }
-
-    /**
-     * @param $structHead
-     * @return string
-     */
-    private function getBody($structHead)
-    {
-        $body = '{'.PHP_EOL;
-        $body .= '    public function run($payload)'.PHP_EOL;
-        $body .= '    {'.PHP_EOL;
-        $body .= '        $struct = '.$structHead.'Struct::factory($payload);'.PHP_EOL;
-        $body .= '        $output = $this->'.lcfirst($this->className).'Service->'.lcfirst($structHead).'($struct);'.PHP_EOL;
-        if ($structHead == 'Paging') {
-            $body .= '        return Rows::factory($output);'.PHP_EOL;
-        } else if ($structHead == 'Listing') {
-            $body .= '        return Listing::factory($output);'.PHP_EOL;
-        } else {
-            $body .= '        return Row::factory($output);'.PHP_EOL;
-        }
-        $body .= '    }'.PHP_EOL;
-        $body .= PHP_EOL;
-        return $body;
-    }
-
-    private function getBottom()
-    {
-        return '}'.PHP_EOL;
+        return $this->templeteParser->repalceTempale([
+            'CLASS_NAME' => $this->className,
+            'AUTHOR' => $author,
+            'STRUCT_HEAD' => $structHead,
+            'LCFIRST_STRUCT_HEAD' => lcfirst($structHead),
+            'RESULT_STRUCT' => $resultStruct,
+            'LCFIRST_CLASS_NAME' => lcfirst($this->className)
+        ], $template);
     }
 }
