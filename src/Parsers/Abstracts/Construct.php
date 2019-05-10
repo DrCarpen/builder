@@ -53,12 +53,12 @@ class Construct extends Base
         'timestamp'
     ];
     public $CURD = [
-        'create',
-        'delete',
-        'update',
-        'detail',
-        'listing',
-        'paging'
+        'create' => '新增',
+        'delete' => '删除',
+        'update' => '修改',
+        'detail' => '详情',
+        'listing' => '无分页列表',
+        'paging' => '分页列表'
     ];
     public $console;
 
@@ -137,13 +137,13 @@ class Construct extends Base
                 return $this->docs.$this->className.'Trait.php';
                 break;
             case 'row':
-                return $this->docs.'row.php';
+                return $this->docs.'Row.php';
                 break;
             case 'rows':
-                return $this->docs.'rows.php';
+                return $this->docs.'Rows.php';
                 break;
             case 'listing':
-                return $this->docs.'listing.php';
+                return $this->docs.'Listing.php';
                 break;
             case 'controller':
                 return $this->docs.$this->className.'Controller.php';
