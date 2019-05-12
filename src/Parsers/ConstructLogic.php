@@ -60,7 +60,7 @@ namespace App\Logics\{{CLASS_NAME}};
 
 use App\Logics\Abstracts\Logic;
 use App\Structs\Requests\{{CLASS_NAME}}\{{STRUCT_HEAD}}Struct;
-use App\Structs\Results\GroupManageCopy1\{{RESULT_STRUCT}};
+use App\Structs\Results\{{CLASS_NAME}}\{{RESULT_STRUCT}};
 
 class {{STRUCT_HEAD}}Logic extends Logic
 {
