@@ -70,5 +70,12 @@ php console builder --table tableName --e release
 #### Controller层
 1. 生成`create，delete，update，detail，listing，paging`的方法及sdk名
 
+#### 版本更新计划
+##### v1.1版本
+1. 已知bug修复
+1. 支持多model生成，baseModel与normalModel拆分，支持重写
+1. 支持数据字段注解，支持@enum(1=a|2=b)的文档显示
+1. 支持单model重写 --model all
+                 --model  tableName
 
 
