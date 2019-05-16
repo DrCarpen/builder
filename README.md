@@ -35,8 +35,14 @@ class BuilderCommand extends Builder
 }
 
 ```
+##### 3 .gitignore文件添加忽略目录
 
-##### 3 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
+```bash
+app/Commands/BuilderCommand.php
+
+```
+
+##### 4 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
 
 ```bash
 
