@@ -1,4 +1,4 @@
-# Bilder
+# Builder
 ### 介绍
 > 以命令行模式生成对应的 `Model,Trait,Struct,Service,Logic,Controller`文件,自动生成“CURD”
 的接口模板
@@ -46,7 +46,7 @@ app/Commands/BuilderCommand.php
 
 ```bash
 
-php console builder --table tableName --e release
+php console builder --table tableName -e release
 
 ```
 
