@@ -10,7 +10,7 @@
 
 ```bash
 "require-dev" : {
-        "drcarpen/builder":"^0.4"
+        "drcarpen/builder":"^1.0"
     }
 ```
 #####  2 app/Commands 加入新文件 BuilderCommand.php
@@ -46,7 +46,7 @@ app/Commands/BuilderCommand.php
 
 ```bash
 
-php console builder --table tableName -e release
+php console builder --table tableName --env release
 
 ```
 
