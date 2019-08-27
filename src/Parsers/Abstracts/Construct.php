@@ -101,7 +101,7 @@ class Construct extends Base
     protected function getValidator($type, $column)
     {
         if ($type == 'string' && $column['CHARACTER_MAXIMUM_LENGTH']) {
-            $validator = 'options={mixChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
+            $validator = 'options={minChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
         } else {
             $validator = '';
         }
