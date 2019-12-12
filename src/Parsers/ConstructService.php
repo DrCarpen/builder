@@ -6,6 +6,7 @@
 namespace Uniondrug\Builder\Parsers;
 
 use Uniondrug\Builder\Parsers\Abstracts\Construct;
+use App\Services\Abstracts\ServiceTrait;
 
 class ConstructService extends Construct
 {
@@ -23,6 +24,7 @@ class ConstructService extends Construct
     {
         $html = $this->getFileContent();
         $this->buildFile($html);
+        $this->editServiceTrait();
     }
 
     /**
@@ -99,5 +101,30 @@ TEMP;
             ], $template);
         }
         return $templateList;
+    }
+    
+    //增加改写ServiceTrait
+    private function editServiceTrait()
+    {
+        $name=$this->className."Service";
+        
+        $service =new \ReflectionClass(ServiceTrait::class);
+        //更改注解
+        $doc = $service->getDocComment();
+        $text = " * @property ".$name."  ".ucfirst($name);
+        $text .= PHP_EOL."*/";
+        $zs = str_replace('*/',$text,$doc);
+
+        //更改use
+        $oldUseText = "namespace App\Services\Abstracts;".PHP_EOL;
+        $newUseText = $oldUseText.PHP_EOL.'use App\\Services\\'.$name.';';
+        
+        $filename = $service->getFileName();
+        $oldFlie = file_get_contents($filename);
+        $newFlie = str_replace($doc,$zs,$oldFlie);
+        $newFlie = str_replace($oldUseText,$newUseText,$oldFlie);
+        $this->console->info($this->className." 写入 ServiceTrait");
+        //this->console->info($newFlie);exit();
+        file_put_contents($filename,$newFlie);
     }
 }
