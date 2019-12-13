@@ -14,6 +14,7 @@ class Construct extends Base
     protected $className;
     protected $name;
     protected $email;
+    protected $tool;
     protected $noShowFields;
     protected $fileType; // 文件类型：model;trait;controller;service;logic;
     // int类型包含的子类型
@@ -67,6 +68,7 @@ class Construct extends Base
         parent::__construct();
         $this->name = $authorConfig['name'];
         $this->email = $authorConfig['email'];
+        $this->tool = $authorConfig['tool'];
         $this->table = $dbConfig['table'];
         $this->noShowFields = $dbConfig['noShowFields'];
         $this->className = $this->getClassName();
@@ -253,6 +255,7 @@ class Construct extends Base
         $author = '/**'.PHP_EOL;
         $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
         $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
+        $author .= ' * @tool   Created By '.$this->tool.PHP_EOL;
         $author .= ' */';
         return $author;
     }

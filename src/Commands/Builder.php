@@ -18,8 +18,9 @@ class Builder extends Command
     protected $signature = 'builder
                             {--table= : 指定数据库的表名}';
     protected $authorConfig = [
-        'name' => 'dev',
-        'email' => 'dev@uniondrug.com'
+        'name' => 'developer',
+        'email' => 'developer@uniondrug.cn',
+        'tool' => 'Builder'
     ];
     /**
      * 命令描述
@@ -34,10 +35,25 @@ class Builder extends Command
     public function handle()
     {
         $this->console = new Console();
+        $this->setAuthorConfig();
         $dbConfig = $this->checkDatabase();
         $dbConfig['table'] = $this->checkArgvs();
         $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
         $collection->build();
+    }
+
+    private function setAuthorConfig()
+    {
+        $nameShell = 'git config --get user.name ';
+        $emailShell = 'git config --get user.email';
+        $name = shell_exec($nameShell);
+        $email = shell_exec($emailShell);
+        if ($name) {
+            $this->authorConfig['name'] = str_replace(PHP_EOL, '', $name);
+        }
+        if ($email) {
+            $this->authorConfig['email'] = str_replace(PHP_EOL, '', $email);;
+        }
     }
 
     /**
