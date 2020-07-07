@@ -8,9 +8,10 @@
 namespace Uniondrug\Builder\Modes;
 
 /**
- * Class Full
+ * 简单模式
+ * Class SimpleMode
  * @package Uniondrug\Builder\Modes
  */
-class Full
+class SimpleMode
 {
 }

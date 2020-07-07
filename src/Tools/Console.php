@@ -12,6 +12,12 @@ namespace Uniondrug\Builder\Tools;
  */
 class Console
 {
+    public function errorExit($format, ... $args)
+    {
+        $this->error($format, ... $args);
+        exit();
+    }
+
     public function debug($format, ... $args)
     {
         $this->printer("DEBUG", 30, 47, $format, ... $args);

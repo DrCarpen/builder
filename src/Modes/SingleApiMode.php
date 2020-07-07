@@ -8,9 +8,10 @@
 namespace Uniondrug\Builder\Modes;
 
 /**
- * Class Single
+ * 单接口模式
+ * Class SingleApiMode
  * @package Uniondrug\Builder\Modes
  */
-class Single
+class SingleApiMode
 {
 }
