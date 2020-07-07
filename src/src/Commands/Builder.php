@@ -6,7 +6,7 @@
 namespace Uniondrug\Builder\Commands;
 
 use Uniondrug\Builder\Parsers\Tool\Console;
-use Uniondrug\Console\Command;
+use Uniondrug\Commands;
 use Uniondrug\Builder\Parsers\Collection;
 
 /**

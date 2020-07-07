@@ -3,20 +3,22 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-namespace Uniondrug\Builder\Commands;
+namespace Uniondrug\Commands;
 
-use Uniondrug\Builder\Parsers\Tool\Console;
 use Uniondrug\Console\Command;
 use Uniondrug\Builder\Parsers\Collection;
+use Uniondrug\Tools\Console;
 
 /**
  * Class Builder
- * @package Uniondrug\Builder\Commands
+ * @package Uniondrug\Commands
  */
 class Builder extends Command
 {
     protected $signature = 'builder
-                            {--table= : 指定数据库的表名}';
+                            {--table= : 数据表名}
+                            {--mode= : 指定渠道,single,qigai,full}
+                            ';
     protected $authorConfig = [
         'name' => 'developer',
         'email' => 'developer@uniondrug.cn',
@@ -34,15 +36,26 @@ class Builder extends Command
      */
     public function handle()
     {
+
+        echo 1;die;
+        $reflect = new \Reflection(Console::class);
+
+        print_r($reflect->getMethods());die;
+//        print_r($this->input->getOptions());die;
         $this->console = new Console();
-        $this->setAuthorConfig();
+        $this->getAuthorInfo();
         $dbConfig = $this->checkDatabase();
         $dbConfig['table'] = $this->checkArgvs();
+        
+        // TODO::模式分发
         $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
         $collection->build();
     }
 
-    private function setAuthorConfig()
+    /**
+     * 获取用户名称信息
+     */
+    private function getAuthorInfo()
     {
         $nameShell = 'git config --get user.name ';
         $emailShell = 'git config --get user.email';
@@ -65,7 +78,7 @@ class Builder extends Command
         $connection = app()->getConfig()->database->connection;
         // 检查数据库链接是否存在
         if (empty($connection)) {
-            $this->console->error('config/database is not exist, please checkout your config files!');
+            $this->console->error('目录config/database is not exist, please checkout your config files!');
             exit;
         }
         // 检查数据库配置是否存在
@@ -96,6 +109,7 @@ class Builder extends Command
      */
     private function checkArgvs()
     {
+
         $table = $this->input->getOption('table');
         if (empty($table)) {
             $this->console->error('database table name is not exist,try again like this :');
