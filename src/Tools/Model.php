@@ -1,10 +1,11 @@
 <?php
-namespace Uniondrug\Builder\Parsers\Abstracts;
+namespace Uniondrug\Builder\Tools;
 
+use Uniondrug\Builder\Tools\Abstracts\Base;
 
 /**
- * @author liyang <liyang@uniondrug.cn>
- * @date   2019-05-06
+ * Class Model
+ * @package Uniondrug\Builder\Tools
  */
 class Model extends Base
 {

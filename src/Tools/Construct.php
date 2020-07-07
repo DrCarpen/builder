@@ -3,9 +3,10 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-namespace Uniondrug\Builder\Parsers\Abstracts;
+namespace Uniondrug\Builder\Tools;
 
 use Uniondrug\Builder\Parsers\Abstracts\Base;
+
 
 class Construct extends Base
 {

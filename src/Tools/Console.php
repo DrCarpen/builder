@@ -3,12 +3,12 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-05-09
  */
-namespace Uniondrug\Tools;
+namespace Uniondrug\Builder\Tools;
 
 /**
  * 控制台消息
  * Class Console
- * @package Uniondrug\Tools
+ * @package Uniondrug\Builder\Tools
  */
 class Console
 {

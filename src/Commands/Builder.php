@@ -3,15 +3,15 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-namespace Uniondrug\Commands;
+namespace Uniondrug\Builder\Commands;
 
 use Uniondrug\Console\Command;
 use Uniondrug\Builder\Parsers\Collection;
-use Uniondrug\Tools\Console;
+use Uniondrug\Builder\Tools\Console;
 
 /**
  * Class Builder
- * @package Uniondrug\Commands
+ * @package Uniondrug\Builder\Commands
  */
 class Builder extends Command
 {
@@ -36,17 +36,10 @@ class Builder extends Command
      */
     public function handle()
     {
-
-        echo 1;die;
-        $reflect = new \Reflection(Console::class);
-
-        print_r($reflect->getMethods());die;
-//        print_r($this->input->getOptions());die;
         $this->console = new Console();
         $this->getAuthorInfo();
         $dbConfig = $this->checkDatabase();
         $dbConfig['table'] = $this->checkArgvs();
-        
         // TODO::模式分发
         $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
         $collection->build();
@@ -78,7 +71,7 @@ class Builder extends Command
         $connection = app()->getConfig()->database->connection;
         // 检查数据库链接是否存在
         if (empty($connection)) {
-            $this->console->error('目录config/database is not exist, please checkout your config files!');
+            $this->console->error('目录/config/database.php is not exist, please checkout your config files!');
             exit;
         }
         // 检查数据库配置是否存在
@@ -109,7 +102,6 @@ class Builder extends Command
      */
     private function checkArgvs()
     {
-
         $table = $this->input->getOption('table');
         if (empty($table)) {
             $this->console->error('database table name is not exist,try again like this :');
