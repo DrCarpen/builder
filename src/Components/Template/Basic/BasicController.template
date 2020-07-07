@@ -1,0 +1,16 @@
+<?php
+{{AUTHOR}}
+namespace App\Controllers;
+
+use App\Controllers\Abstracts\Base;
+{{STRUCT_BODY}}
+
+/**
+ * Class {{CLASS_NAME}}Controller
+ * @package App\Controllers
+ * @RoutePrefix("/{{LCFIRST_CLASS_NAME}}");
+ */
+class {{CLASS_NAME}}Controller extends Base
+{
+{{CONTROLLER_BODY}}
+}

@@ -1,0 +1,15 @@
+<?php
+{{AUTHOR}}
+namespace App\Services;
+
+use App\Services\Abstracts\Service;
+{{STRUCT_BODY}}
+
+/**
+ * Class {{CLASS_NAME}}Service
+ * @package App\Services
+ */
+class {{CLASS_NAME}}Service extends Service
+{
+{{SERVICE_BODY}}
+}

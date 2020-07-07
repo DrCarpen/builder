@@ -1,0 +1,17 @@
+<?php
+{{AUTHOR}}
+namespace App\Structs\Results\{{CLASS_NAME}};
+
+use App\Structs\Traits\{{CLASS_NAME}}Trait;
+use Uniondrug\Structs\Struct;
+
+/**
+ * Class Row
+ * @package App\Structs\Results\{{CLASS_NAME}}
+ */
+ class Row extends Struct
+ {
+     use {{CLASS_NAME}}Trait;
+ }
+
+}

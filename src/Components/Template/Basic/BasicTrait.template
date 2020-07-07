@@ -1,0 +1,11 @@
+<?php
+{{AUTHOR}}
+namespace App\Structs\Traits;
+
+/**
+ * @package App\Structs\Traits
+ */
+trait {{CLASS_NAME}}Trait
+{
+{{PROPERTY_TEMPLATE_LIST}}
+}
