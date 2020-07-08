@@ -5,11 +5,6 @@
  */
 namespace Uniondrug\Builder\Tools;
 
-/**
- * 控制台消息
- * Class Console
- * @package Uniondrug\Builder\Tools
- */
 class Console
 {
     public function errorExit($format, ... $args)

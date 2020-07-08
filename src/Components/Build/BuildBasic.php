@@ -3,12 +3,15 @@
  * @author liyang <liyang@uniondrug.cn>
  * @date   2019-05-06
  */
-namespace Uniondrug\Builder\Tools;
+namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Parsers\Abstracts\Base;
+use Uniondrug\Builder\Tools\ToolBar;
 
-
-class Construct extends Base
+/**
+ * Class BuildBasic
+ * @package Uniondrug\Builder\Components\Build
+ */
+class BuildBasic extends ToolBar
 {
     protected $table;
     protected $docs;
@@ -72,6 +75,28 @@ class Construct extends Base
         $this->noShowFields = $dbConfig['noShowFields'];
         $this->className = $this->getClassName();
         $this->getDocs();
+    }
+
+    /**
+     * 获取用户名称信息
+     */
+    private function getAuthorInfo()
+    {
+        $nameShell = 'git config --get user.name ';
+        $emailShell = 'git config --get user.email';
+        $name = shell_exec($nameShell);
+        $email = shell_exec($emailShell);
+        if ($name) {
+            $this->authorConfig['name'] = str_replace(PHP_EOL, '', $name);
+        } else {
+            $this->authorConfig['name'] = 'developer';
+        }
+        if ($email) {
+            $this->authorConfig['email'] = str_replace(PHP_EOL, '', $email);
+        } else {
+            $this->authorConfig['email'] = 'developer@uniondrug.cn';
+        }
+        $this->authorConfig['tool'] = 'Builder';
     }
 
     /**

@@ -7,29 +7,26 @@
  */
 namespace Uniondrug\Builder\Modes;
 
+use Uniondrug\Builder\Components\Build\BuildModel;
+
 /**
  * 简单模式
  * Class SimpleMode
  * @package Uniondrug\Builder\Modes
  */
-class SimpleMode
+class SimpleMode extends Mode
 {
-    public $dbConfig;
-    public $authorConfig;
-    public $base;
-
-    public function __construct($base, $dbConfig, $authorConfig)
+    public function __construct($table)
     {
+        $this->table = $table;
         parent::__construct();
-        $this->base = $base;
-        $this->dbConfig = $dbConfig;
-        $this->authorConfig = $authorConfig;
     }
 
-    public function build()
+    public function run()
     {
-        $this->console->info('开始初始化Model');
-        $model = new Model($this->dbConfig);
-        $columns = $model->build();
+        print_r($this->columns);
+        die;
+        // 调用组件-创建model文件
+        new BuildModel();
     }
 }
