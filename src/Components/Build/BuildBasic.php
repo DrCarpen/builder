@@ -271,15 +271,15 @@ class BuildBasic extends ToolBar
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function getAuthorInfo()
-    {
-        $author = '/**'.PHP_EOL;
-        $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
-        $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
-        $author .= ' */';
-        return $author;
-    }
+//    /**
+//     * @return string
+//     */
+//    protected function getAuthorInfo()
+//    {
+//        $author = '/**'.PHP_EOL;
+//        $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
+//        $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
+//        $author .= ' */';
+//        return $author;
+//    }
 }
