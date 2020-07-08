@@ -5,6 +5,7 @@
  */
 namespace Uniondrug\Builder\Commands;
 
+use Uniondrug\Builder\Modes\SimpleMode;
 use Uniondrug\Console\Command;
 use Uniondrug\Builder\Parsers\Collection;
 use Uniondrug\Builder\Tools\Console;
@@ -41,9 +42,12 @@ class Builder extends Command
         $dbConfig = $this->checkDatabase();
         // TODO::模式分发
         // 1 简单模式
+
+        $mode = new SimpleMode();
+        $mode->run();
         // 2 单接口模式
-        $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
-        $collection->build();
+//        $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
+//        $collection->build();
     }
 
     /**
@@ -75,7 +79,6 @@ class Builder extends Command
     private function checkDatabase()
     {
         $connection = app()->getConfig()->database->connection;
-        // 检查数据库链接是否存在
         if (empty(app()->getConfig()->database)) {
             $this->console->errorExit('目录文件/config/database.php 不存在，请检查目录');
         }
