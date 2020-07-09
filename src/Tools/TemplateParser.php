@@ -11,7 +11,7 @@ namespace Uniondrug\Builder\Tools;
  */
 class TemplateParser
 {
-    public function repalceTempale($replaceList, $template)
+    public function assign($replaceList, $template)
     {
         if (!empty($replaceList)) {
             foreach ($replaceList as $key => $value) {
@@ -19,6 +19,6 @@ class TemplateParser
                 $template = preg_replace($rexp, $value, $template);
             }
         }
-        return $template.PHP_EOL;
+        return $template;
     }
 }

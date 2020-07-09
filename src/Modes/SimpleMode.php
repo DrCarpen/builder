@@ -25,7 +25,7 @@ class SimpleMode extends Mode
     public function run($parameter)
     {
         // 调用组件-创建model文件
-        $build = new BuildModel($this->columns, $parameter);
-        $build->build();
+        $build = new BuildModel($parameter);
+        $build->build($this->columns);
     }
 }

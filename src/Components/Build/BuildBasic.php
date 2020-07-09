@@ -30,9 +30,6 @@ class BuildBasic
      * @var TemplateParser
      */
     public $templateParser;
-    protected $docs;
-    protected $noShowFields;
-    protected $fileType; // 文件类型：model;trait;controller;service;logic;
     // int类型包含的子类型
     protected $int = [
         'int',
@@ -86,6 +83,9 @@ class BuildBasic
         $this->_templateParser();
     }
 
+    /**
+     * @param $parameter
+     */
     private function _parameter($parameter)
     {
         $this->api = key_exists('api', $parameter) ? $parameter['api'] : '';
@@ -133,23 +133,29 @@ class BuildBasic
         $author .= ' * @Author '.$this->authorName.' <'.$this->authorEmail.'>'.PHP_EOL;
         $author .= ' * @Date   '.date('Y-m-d').PHP_EOL;
         $author .= ' * @Time   '.date('H:i:s').PHP_EOL;
-        $author .= ' */'.PHP_EOL;
+        $author .= ' */';
         return $author;
     }
 
-    /**
-     * @param        $classType 类型：Controller...
-     * @param string $apiName   定义接口名：Create...
-     * @return string
-     */
-    protected function getClassName($classType, $apiName = '')
+    protected function _tableName()
     {
         $nameArr = explode('_', strtolower($this->table));
-        $className = '';
+        $tableName = '';
         foreach ($nameArr as $value) {
-            $className .= ucfirst($value);
+            $tableName .= ucfirst($value);
         }
-        $apiName = $apiName ? ucfirst($apiName) : '';
+        return $tableName;
+    }
+
+    /**
+     * 获取类名
+     * @param        $classType 类型：Controller...
+     * @return string
+     */
+    protected function getClassName($classType)
+    {
+        $className = $this->_tableName();
+        $apiName = $this->api ? ucfirst($this->api) : '';
         switch ($classType) {
             case 'Controller':
                 $className = $className.'Controller';
@@ -171,6 +177,9 @@ class BuildBasic
                 break;
             case 'Result':
                 $className = $apiName.'Result';
+                break;
+            default:
+                $className = '';
                 break;
         }
         return $className;
@@ -201,6 +210,62 @@ class BuildBasic
         }
     }
 
+    /**
+     * 属性列表
+     * @param $columns
+     * @return string
+     */
+    protected function getPropertyContent($columns)
+    {
+        $propertyTemplate = ' * @property {{DATA_TYPE}}  ${{COLUMN_NAME}}    {{COLUMN_COMMENT}}';
+        $propertyTemplateContent = [];
+        foreach ($columns as $key => $value) {
+            $repalceList = [
+                'DATA_TYPE' => $this->getType($value['dateType']),
+                'COLUMN_NAME' => $value['columnName'],
+                'COLUMN_COMMENT' => $value['columnComment']
+            ];
+            $propertyTemplateContent[] = $this->templateParser->assign($repalceList, $propertyTemplate);
+        }
+        return implode(PHP_EOL, $propertyTemplateContent);
+    }
+
+    /**
+     * 获取文件名
+     * @param $classType
+     * @return string
+     */
+    protected function getFileName($classType)
+    {
+        $tableName = $this->_tableName();
+        $api = $this->api ? ucfirst($this->api) : '';
+        switch ($classType) {
+            case 'Model':
+                return $tableName.'Model.php';
+                break;
+            case 'Trait':
+                return $tableName.'Trait.php';
+                break;
+            case 'Controller':
+                return $tableName.'Controller.php';
+                break;
+            case 'Service':
+                return $tableName.'Service.php';
+                break;
+            case 'Logic':
+                return $api.'Logic.php';
+                break;
+            case 'Request':
+                return $api.'Request.php';
+                break;
+            case 'Result':
+                return $api.'Result.php';
+                break;
+            default:
+                return '';
+        }
+    }
+
     protected function getValidator($type, $column)
     {
         if ($type == 'string' && $column['CHARACTER_MAXIMUM_LENGTH']) {
@@ -212,124 +277,102 @@ class BuildBasic
     }
 
     /**
-     * 获取文件名及路径
+     * 获取文件对应的目录
+     * @param $classType
      * @return string
      */
-    protected function getFileDir()
+    protected function getDocumentDirectPrefix($classType)
     {
-        switch ($this->fileType) {
-            case 'model':
-                return $this->docs.$this->className.'.php';
+        $tableName = $this->_tableName();
+        $base = './app/';
+        switch ($classType) {
+            case 'Controller':
+                $prifix = $base.'Models/';
                 break;
-            case 'trait':
-                return $this->docs.$this->className.'Trait.php';
+            case 'Service':
+                $prifix = $base.'Services/';
                 break;
-            case 'row':
-                return $this->docs.'Row.php';
+            case 'Model':
+                $prifix = $base.'Models/';
                 break;
-            case 'rows':
-                return $this->docs.'Rows.php';
+            case 'Trait':
+                $prifix = $base.'Structs/Traits/';
                 break;
-            case 'listing':
-                return $this->docs.'Listing.php';
+            case 'Logic':
+                $prifix = $base.'Logics/'.$tableName.'/';
                 break;
-            case 'controller':
-                return $this->docs.$this->className.'Controller.php';
+            case 'Request':
+                $prifix = $base.'Structs/Requests/'.$tableName.'/';
                 break;
-            case 'service':
-                return $this->docs.$this->className.'Service.php';
+            case 'Result':
+                $prifix = $base.'Structs/Results/'.$tableName.'/';
                 break;
-            case 'logic':
-                return [
-                    'create' => $this->docs.'CreateLogic.php',
-                    'delete' => $this->docs.'DeleteLogic.php',
-                    'update' => $this->docs.'UpdateLogic.php',
-                    'detail' => $this->docs.'DetailLogic.php',
-                    'listing' => $this->docs.'ListingLogic.php',
-                    'paging' => $this->docs.'PagingLogic.php'
-                ];
-                break;
-            case 'struct':
-                return [
-                    'create' => $this->docs.'CreateStruct.php',
-                    'delete' => $this->docs.'DeleteStruct.php',
-                    'update' => $this->docs.'UpdateStruct.php',
-                    'detail' => $this->docs.'DetailStruct.php',
-                    'listing' => $this->docs.'ListingStruct.php',
-                    'paging' => $this->docs.'PagingStruct.php'
-                ];
-                break;
-            default:
-                return $this->docs.$this->className.'.php';
         }
+        return $prifix;
     }
 
     /**
-     * 获取文件对应的目录结构
+     * 获取文件对应的基础模板
+     * @param $classType
+     * @return bool|string
      */
-    private function getDocs()
+    protected function getTemplate($classType)
     {
-        switch ($this->fileType) {
-            case 'model':
-                $this->docs = 'app/Models/';
+        $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Basic/';
+        switch ($classType) {
+            case 'Controller':
+                $templateDirect = $templateDirect.'BasicController.template';
                 break;
-            case 'trait':
-                $this->docs = 'app/Structs/Traits/';
+            case 'Service':
+                $templateDirect = $templateDirect.'BasicService.template';
                 break;
-            case 'row':
-            case 'rows':
-            case 'listing':
-                $this->docs = 'app/Structs/Results/'.$this->className.'/';
+            case 'Model':
+                $templateDirect = $templateDirect.'BasicModel.template';
                 break;
-            case 'controller':
-                $this->docs = 'app/Controllers/';
+            case 'Trait':
+                $templateDirect = $templateDirect.'BasicTrait.template';
                 break;
-            case 'service':
-                $this->docs = 'app/Services/';
+            case 'Logic':
+                $templateDirect = $templateDirect.'BasicLogic.template';
                 break;
-            case 'logic':
-                $this->docs = 'app/Logics/'.$this->className.'/';
+            case 'Request':
+                $templateDirect = $templateDirect.'BasicRequest.template';
                 break;
-            case 'struct':
-                $this->docs = 'app/Structs/Requests/'.$this->className.'/';
+            case 'Result':
+                $templateDirect = $templateDirect.'BasicResult.template';
                 break;
-            default:
-                $this->docs = 'app/Models/';
         }
+        return file_get_contents($templateDirect);
     }
 
     /**
      * @param $html
+     * @param $documentDirectPrifix
+     * @param $fileDirect
      */
-    protected function buildFile($html)
+    protected function buildFile($html, $documentDirectPrifix, $fileDirect)
     {
-        if (!is_dir($this->docs)) {
-            mkdir($this->docs, 0777, true);
+        if (!is_dir($documentDirectPrifix)) {
+            mkdir($documentDirectPrifix, 0777, true);
         }
-        if (in_array($this->fileType, [
-            'logic',
-            'struct'
-        ])) {
-            $fileDir = $this->getFileDir();
-            foreach ($fileDir as $key => $value) {
-                if ($html[$key]) {
-                    if (!file_exists($value)) {
-                        file_put_contents($value, $html[$key]);
-                        $this->console->info($value.' is built');
-                    } else {
-                        $this->console->warning($value.' file is exist');
-                        continue;
-                    }
-                }
-            }
+        if (!file_exists($fileDirect)) {
+            file_put_contents($fileDirect, $html);
+            $this->console->info($file.' is built');
         } else {
-            $file = $this->getFileDir();
-            if (!file_exists($file)) {
-                file_put_contents($file, $html);
-                $this->console->info($file.' is built');
-            } else {
-                $this->console->warning($file.' file is exist');
-            }
+            $this->console->warning($file.' file is exist');
         }
+    }
+
+    /**
+     * 检查文件是否存在
+     * @param $direct
+     * @return bool
+     */
+    protected function checkFileExsit($direct)
+    {
+        if (file_exists($direct)) {
+            return true;
+        }
+        return false;
     }
 }
