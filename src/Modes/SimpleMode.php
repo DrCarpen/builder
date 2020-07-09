@@ -16,17 +16,16 @@ use Uniondrug\Builder\Components\Build\BuildModel;
  */
 class SimpleMode extends Mode
 {
-    public function __construct($table)
+    public function __construct($parameter)
     {
-        $this->table = $table;
+        $this->table = $parameter['table'];
         parent::__construct();
     }
 
-    public function run()
+    public function run($parameter)
     {
-        print_r($this->columns);
-        die;
         // 调用组件-创建model文件
-        new BuildModel();
+        $build = new BuildModel($this->columns, $parameter);
+        $build->build();
     }
 }

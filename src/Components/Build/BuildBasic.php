@@ -5,19 +5,32 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Tools\ToolBar;
+use Uniondrug\Builder\Tools\Console;
+use Uniondrug\Builder\Tools\TemplateParser;
 
 /**
  * Class BuildBasic
  * @package Uniondrug\Builder\Components\Build
  */
-class BuildBasic extends ToolBar
+class BuildBasic
 {
-    protected $table;
+    /**
+     * @var string
+     */
+    public $api;
+    /**
+     * @var string
+     */
+    public $table;
+    /**
+     * @var Console
+     */
+    public $console;
+    /**
+     * @var TemplateParser
+     */
+    public $templateParser;
     protected $docs;
-    protected $className;
-    protected $name;
-    protected $email;
     protected $noShowFields;
     protected $fileType; // 文件类型：model;trait;controller;service;logic;
     // int类型包含的子类型
@@ -64,39 +77,103 @@ class BuildBasic extends ToolBar
         'listing' => '无分页列表',
         'paging' => '分页列表'
     ];
-    public $console;
 
-    public function __construct($dbConfig, $authorConfig)
+    public function __construct($parameter)
     {
-        parent::__construct();
-        $this->name = $authorConfig['name'];
-        $this->email = $authorConfig['email'];
-        $this->table = $dbConfig['table'];
-        $this->noShowFields = $dbConfig['noShowFields'];
-        $this->className = $this->getClassName();
-        $this->getDocs();
+        $this->_console();
+        $this->_parameter($parameter);
+        $this->_setAuthorInfo();
+        $this->_templateParser();
+    }
+
+    private function _parameter($parameter)
+    {
+        $this->api = key_exists('api', $parameter) ? $parameter['api'] : '';
+        $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
+    }
+
+    private function _templateParser()
+    {
+        $this->templateParser = new TemplateParser();
+    }
+
+    private function _console()
+    {
+        $this->console = new Console();
     }
 
     /**
      * 获取用户名称信息
      */
-    private function getAuthorInfo()
+    private function _setAuthorInfo()
     {
         $nameShell = 'git config --get user.name ';
         $emailShell = 'git config --get user.email';
         $name = shell_exec($nameShell);
         $email = shell_exec($emailShell);
         if ($name) {
-            $this->authorConfig['name'] = str_replace(PHP_EOL, '', $name);
+            $this->authorName = str_replace(PHP_EOL, '', $name);
         } else {
-            $this->authorConfig['name'] = 'developer';
+            $this->authorName = 'developer';
         }
         if ($email) {
-            $this->authorConfig['email'] = str_replace(PHP_EOL, '', $email);
+            $this->authorEmail = str_replace(PHP_EOL, '', $email);
         } else {
-            $this->authorConfig['email'] = 'developer@uniondrug.cn';
+            $this->authorEmail = 'developer@uniondrug.cn';
         }
-        $this->authorConfig['tool'] = 'Builder';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAuthorContent()
+    {
+        $author = '/**'.PHP_EOL;
+        $author .= ' * Created by Builder'.PHP_EOL;
+        $author .= ' * @Author '.$this->authorName.' <'.$this->authorEmail.'>'.PHP_EOL;
+        $author .= ' * @Date   '.date('Y-m-d').PHP_EOL;
+        $author .= ' * @Time   '.date('H:i:s').PHP_EOL;
+        $author .= ' */'.PHP_EOL;
+        return $author;
+    }
+
+    /**
+     * @param        $classType 类型：Controller...
+     * @param string $apiName   定义接口名：Create...
+     * @return string
+     */
+    protected function getClassName($classType, $apiName = '')
+    {
+        $nameArr = explode('_', strtolower($this->table));
+        $className = '';
+        foreach ($nameArr as $value) {
+            $className .= ucfirst($value);
+        }
+        $apiName = $apiName ? ucfirst($apiName) : '';
+        switch ($classType) {
+            case 'Controller':
+                $className = $className.'Controller';
+                break;
+            case 'Service':
+                $className = $className.'Service';
+                break;
+            case 'Model':
+                $className = $className.'Model';
+                break;
+            case 'Trait':
+                $className = $className.'Trait';
+                break;
+            case 'Logic':
+                $className = $apiName.'Logic';
+                break;
+            case 'Request':
+                $className = $apiName.'Request';
+                break;
+            case 'Result':
+                $className = $apiName.'Result';
+                break;
+        }
+        return $className;
     }
 
     /**
@@ -132,21 +209,6 @@ class BuildBasic extends ToolBar
             $validator = '';
         }
         return $validator;
-    }
-
-    /**
-     * 获取类名
-     * @return string
-     */
-    protected function getClassName()
-    {
-        $name = strtolower($this->table);
-        $nameArr = explode('_', $name);
-        $className = '';
-        foreach ($nameArr as $value) {
-            $className .= ucfirst($value);
-        }
-        return $className;
     }
 
     /**
@@ -270,16 +332,4 @@ class BuildBasic extends ToolBar
             }
         }
     }
-
-//    /**
-//     * @return string
-//     */
-//    protected function getAuthorInfo()
-//    {
-//        $author = '/**'.PHP_EOL;
-//        $author .= ' * @author '.$this->name.' <'.$this->email.'>'.PHP_EOL;
-//        $author .= ' * @date   '.date('Y-m-d').PHP_EOL;
-//        $author .= ' */';
-//        return $author;
-//    }
 }

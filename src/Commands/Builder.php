@@ -5,6 +5,7 @@
  */
 namespace Uniondrug\Builder\Commands;
 
+use Symfony\Component\Console\Input\InputAwareInterface;
 use Uniondrug\Builder\Modes\SimpleMode;
 use Uniondrug\Builder\Modes\SingleApiMode;
 use Uniondrug\Console\Command;
@@ -37,19 +38,20 @@ class Builder extends Command
      */
     public function handle()
     {
-        $this->getConsole();
+        $this->_console();
         $this->checkParameter();
         $this->checkDatabase();
+        $parameter = $this->getParameter();
         // TODO::模式分发
-        if ($this->input->getOption('api')) {
-            $mode = new SingleApiMode();
+        if ($parameter['api']) {
+            $mode = new SingleApiMode($parameter);
         } else {
-            $mode = new SimpleMode($this->input->getOption('table'));
+            $mode = new SimpleMode($parameter);
         }
-        $mode->run();
+        $mode->run($parameter);
     }
 
-    private function getConsole()
+    private function _console()
     {
         $this->console = new Console();
     }
@@ -94,5 +96,14 @@ class Builder extends Command
                                     php console builder --table tableName');
         }
         return true;
+    }
+
+    /**
+     * 参数
+     * @return array
+     */
+    private function getParameter()
+    {
+        return $this->input->getOptions();
     }
 }

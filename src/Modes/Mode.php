@@ -7,13 +7,73 @@
  */
 namespace Uniondrug\Builder\Modes;
 
-use Uniondrug\Builder\Tools\ToolBar;
+use Uniondrug\Builder\Tools\Console;
+use Uniondrug\Builder\Tools\Model;
 
-class Mode extends ToolBar
+/**
+ * Class Mode
+ * @package Uniondrug\Builder\Modes
+ */
+class Mode
 {
-    // 获取数据库的字段
+    /**
+     * 数据表字段
+     * @var array
+     */
+    public $columns;
+    /**
+     * @var Console
+     */
+    public $console;
+    /**
+     * @var string
+     */
+    public $table;
+    /**
+     * @var string
+     */
+    public $api;
+
     public function __construct()
     {
-        parent::__construct();
+        $this->_console();
+        // 获取数据库的字段
+        $this->_columns();
+    }
+
+    private function _console()
+    {
+        $this->console = new Console();
+    }
+
+    private function _columns()
+    {
+        $model = new Model($this->_getDbConfig());
+        $columns = $model->getColums();
+        $_columns = [];
+        foreach ($columns as $column) {
+            $_columns[] = [
+                'columnName' => $column['COLUMN_NAME'],
+                'columnDefault' => $column['COLUMN_DEFAULT'],
+                'isNullAble' => $column['IS_NULLABLE'],
+                'dateType' => $column['DATA_TYPE'],
+                'characterMaximumLength' => $column['CHARACTER_MAXIMUM_LENGTH'],
+                'numbericPrecision' => $column['NUMERIC_PRECISION'],
+                'columnComment' => $column['COLUMN_COMMENT']
+            ];
+        }
+        $this->columns = $_columns;
+    }
+
+    private function _getDbConfig()
+    {
+        $connection = app()->getConfig()->database->connection;
+        $dbConfig['host'] = $connection['host'];
+        $dbConfig['username'] = $connection['username'];
+        $dbConfig['password'] = $connection['password'];
+        $dbConfig['dbname'] = $connection['dbname'];
+        $dbConfig['port'] = $connection['port'];
+        $dbConfig['table'] = $this->table;
+        return $dbConfig;
     }
 }

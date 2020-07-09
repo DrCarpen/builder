@@ -5,13 +5,9 @@ namespace App\Models;
 use App\Models\Abstracts\Model;
 
 /**
-{{PROPERTY_TEMPLATE_LIST}} * @package App\Models
+{{PROPERTY_TEMPLATE_LIST}}
+ * @package App\Models
  */
 class {{CLASS_NAME}} extends Model
 {
-{{STATUS_TEXT}}
-    public function getSource()
-    {
-        return "{{TABLE}}";
-    }
 }
