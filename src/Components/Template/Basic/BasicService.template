@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Services\Abstracts\Service;
-{{STRUCT_BODY}}
 
 /**
  * Class {{CLASS_NAME}}Service
@@ -11,5 +10,4 @@ use App\Services\Abstracts\Service;
  */
 class {{CLASS_NAME}}Service extends Service
 {
-{{SERVICE_BODY}}
 }

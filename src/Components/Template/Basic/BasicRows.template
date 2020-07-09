@@ -8,12 +8,10 @@ use Uniondrug\Structs\PaginatorStruct;
  * Class Rows
  * @package App\Structs\Results\{{CLASS_NAME}}
  */
- class Rows extends PaginatorStruct
- {
+class Rows extends PaginatorStruct
+{
      /**
       * @var Row[]
       */
       public $body;
- }
-
- }
+}

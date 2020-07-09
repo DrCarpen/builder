@@ -7,6 +7,9 @@
  */
 namespace Uniondrug\Builder\Modes;
 
+use Uniondrug\Builder\Components\Build\BuildController;
+use Uniondrug\Builder\Components\Build\BuildModel;
+
 /**
  * 单接口模式
  * Class SingleApiMode
@@ -14,22 +17,21 @@ namespace Uniondrug\Builder\Modes;
  */
 class SingleApiMode extends Mode
 {
-    public $dbConfig;
-    public $authorConfig;
-    public $base;
-
-    public function __construct($base, $dbConfig, $authorConfig)
+    public function __construct($parameter)
     {
+        $this->table = $parameter['table'];
+        $this->api = $parameter['api'];
         parent::__construct();
-        $this->base = $base;
-        $this->dbConfig = $dbConfig;
-        $this->authorConfig = $authorConfig;
     }
 
-    public function run($api, $model)
+    public function run($parameter)
     {
         // 创建model
+        $model = new BuildModel($parameter);
+        $model->build($this->columns);
         // 创建控制器
+        $controller = new BuildController($parameter);
+        $controller->build($this->columns);
         // 创建logic
         // 创建service
         // 创建 trait

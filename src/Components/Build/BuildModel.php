@@ -9,11 +9,10 @@ use Uniondrug\Builder\Components\Build\BuildBasic;
 
 class BuildModel extends BuildBasic
 {
-    public $classType = 'Model';
-
     public function __construct($parameter)
     {
         parent::__construct($parameter);
+        $this->classType = 'Model';
     }
 
     /**
@@ -36,7 +35,7 @@ class BuildModel extends BuildBasic
         // 注解列表
         $propertyContent = $this->getPropertyContent($columns);
         // 获取模板
-        $template = $this->getTemplate($this->classType);
+        $template = $this->getBasicTemplate($this->classType);
         // 注入模板
         $fileContent = $this->templateParser->assign([
             'AUTHOR' => $authorContent,

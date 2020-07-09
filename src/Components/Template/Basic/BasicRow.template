@@ -13,5 +13,3 @@ use Uniondrug\Structs\Struct;
  {
      use {{CLASS_NAME}}Trait;
  }
-
-}
