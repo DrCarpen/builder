@@ -27,6 +27,10 @@ class BuildController extends BuildBasic
         if (!$this->checkFileExsit($direct)) {
             $this->initBuild($direct);
         }
+        if ($this->checkActionExist()) {
+            $this->console->error('此接口已存在');
+            return false;
+        }
         // 读取文件
         $initFile = $this->getInitFile($direct);
         // 创建接口数据
@@ -84,5 +88,19 @@ class BuildController extends BuildBasic
     protected function getSdkName()
     {
         return lcfirst($this->_tableName()).ucfirst($this->api);
+    }
+
+    protected function checkActionExist()
+    {
+        // 判断方法是否存在
+        $class = '\App\Controllers\\'.$this->_tableName().'Controller';
+        $service = new \ReflectionClass($class);
+        $methods = $service->getMethods();
+        foreach ($methods as $method) {
+            if ($method->name == $this->api.'Action') {
+                return true;
+            }
+        }
+        return false;
     }
 }

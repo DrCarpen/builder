@@ -8,7 +8,9 @@
 namespace Uniondrug\Builder\Modes;
 
 use Uniondrug\Builder\Components\Build\BuildController;
+use Uniondrug\Builder\Components\Build\BuildLogic;
 use Uniondrug\Builder\Components\Build\BuildModel;
+use Uniondrug\Builder\Components\Build\BuildService;
 
 /**
  * 单接口模式
@@ -33,7 +35,11 @@ class SingleApiMode extends Mode
         $controller = new BuildController($parameter);
         $controller->build($this->columns);
         // 创建logic
+        $logic = new BuildLogic($parameter);
+        $logic->build($this->columns);
         // 创建service
+        $service = new BuildService($parameter);
+        $service->build($this->columns);
         // 创建 trait
         // 创建 入参结构体
         // 创建  出参结构体

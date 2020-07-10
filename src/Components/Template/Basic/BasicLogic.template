@@ -1,0 +1,21 @@
+<?php
+{{AUTHOR}}
+namespace App\Logics\{{TABLE_NAME}};
+
+use App\Logics\Abstracts\Logic;
+use App\Structs\Requests\{{TABLE_NAME}}\{{MAX_API}}Request;
+use App\Structs\Results\{{TABLE_NAME}}\{{MAX_API}}Result;
+
+/**
+ * Class {{CLASS_NAME}}
+ * @package App\Logics\{{TABLE_NAME}}
+ */
+class {{CLASS_NAME}} extends Logic
+{
+    public function run($payload)
+    {
+        $struct = {{MAX_API}}Request::factory($payload);
+        $output = $this->{{MIN_TABLE_NAME}}Service->{{MIN_API}}($struct);
+        return {{MAX_API}}Result::factory($output);
+    }
+}
