@@ -11,6 +11,7 @@ use Uniondrug\Builder\Components\Build\BuildController;
 use Uniondrug\Builder\Components\Build\BuildLogic;
 use Uniondrug\Builder\Components\Build\BuildModel;
 use Uniondrug\Builder\Components\Build\BuildRequest;
+use Uniondrug\Builder\Components\Build\BuildResult;
 use Uniondrug\Builder\Components\Build\BuildService;
 use Uniondrug\Builder\Components\Build\BuildTrait;
 
@@ -49,5 +50,7 @@ class SingleApiMode extends Mode
         $request = new BuildRequest($parameter);
         $request->build($this->columns);
         // 创建  出参结构体
+        $result = new BuildResult($parameter);
+        $result->build($this->columns);
     }
 }

@@ -243,11 +243,14 @@ class Build
 
     /**
      * 获取文件名
-     * @param $classType
+     * @param int $row
      * @return string
      */
-    protected function getFileName()
+    protected function getFileName($row = 0)
     {
+        if ($row) {
+            return 'RowResult.php';
+        }
         $tableName = $this->_tableName();
         $api = $this->api ? ucfirst($this->api) : '';
         switch ($this->classType) {
@@ -366,25 +369,25 @@ class Build
         $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Part/';
         switch ($this->classType) {
             case 'Controller':
-                $templateDirect = $templateDirect.'ControllerBody.template';
+                $templateDirect = $templateDirect.'ControllerPart.template';
                 break;
             case 'Service':
-                $templateDirect = $templateDirect.'ServiceBody.template';
+                $templateDirect = $templateDirect.'ServicePart.template';
                 break;
             case 'Model':
-                $templateDirect = $templateDirect.'ModelBody.template';
+                $templateDirect = $templateDirect.'ModelPart.template';
                 break;
             case 'Trait':
-                $templateDirect = $templateDirect.'TraitBody.template';
+                $templateDirect = $templateDirect.'TraitPart.template';
                 break;
             case 'Logic':
-                $templateDirect = $templateDirect.'LogicBody.template';
+                $templateDirect = $templateDirect.'LogicPart.template';
                 break;
             case 'Request':
-                $templateDirect = $templateDirect.'RequestBody.template';
+                $templateDirect = $templateDirect.'RequestPart.template';
                 break;
             case 'Result':
-                $templateDirect = $templateDirect.'ResultBody.template';
+                $templateDirect = $templateDirect.'ResultPart.template';
                 break;
         }
         return file_get_contents($templateDirect);

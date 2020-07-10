@@ -59,7 +59,8 @@ class Mode
                 'dataType' => $column['DATA_TYPE'],
                 'characterMaximumLength' => $column['CHARACTER_MAXIMUM_LENGTH'],
                 'numbericPrecision' => $column['NUMERIC_PRECISION'],
-                'columnComment' => $column['COLUMN_COMMENT']
+                'columnComment' => $column['COLUMN_COMMENT'],
+                'columnKey' => $column['COLUMN_KEY']
             ];
         }
         $this->columns = $_columns;
