@@ -161,14 +161,13 @@ class Build
 
     /**
      * 获取类名
-     * @param        $classType 类型：Controller...
      * @return string
      */
-    protected function getClassName($classType)
+    protected function getClassName()
     {
         $className = $this->_tableName();
         $apiName = $this->api ? ucfirst($this->api) : '';
-        switch ($classType) {
+        switch ($this->classType) {
             case 'Controller':
                 $className = $className.'Controller';
                 break;
@@ -233,7 +232,7 @@ class Build
         $propertyTemplateContent = [];
         foreach ($columns as $key => $value) {
             $repalceList = [
-                'DATA_TYPE' => $this->getType($value['dateType']),
+                'DATA_TYPE' => $this->getType($value['dataType']),
                 'COLUMN_NAME' => $value['columnName'],
                 'COLUMN_COMMENT' => $value['columnComment']
             ];
@@ -247,11 +246,11 @@ class Build
      * @param $classType
      * @return string
      */
-    protected function getFileName($classType)
+    protected function getFileName()
     {
         $tableName = $this->_tableName();
         $api = $this->api ? ucfirst($this->api) : '';
-        switch ($classType) {
+        switch ($this->classType) {
             case 'Model':
                 return $tableName.'Model.php';
                 break;
@@ -293,11 +292,11 @@ class Build
      * @param $classType
      * @return string
      */
-    protected function getDocumentDirectPrefix($classType)
+    protected function getDocumentDirectPrefix()
     {
         $tableName = $this->_tableName();
         $base = './app/';
-        switch ($classType) {
+        switch ($this->classType) {
             case 'Controller':
                 $prifix = $base.'Controllers/';
                 break;
@@ -328,44 +327,10 @@ class Build
      * @param $classType
      * @return bool|string
      */
-    protected function getTemplate($classType)
+    protected function getBasicTemplate()
     {
         $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Basic/';
-        switch ($classType) {
-            case 'Controller':
-                $templateDirect = $templateDirect.'BasicController.template';
-                break;
-            case 'Service':
-                $templateDirect = $templateDirect.'BasicService.template';
-                break;
-            case 'Model':
-                $templateDirect = $templateDirect.'BasicModel.template';
-                break;
-            case 'Trait':
-                $templateDirect = $templateDirect.'BasicTrait.template';
-                break;
-            case 'Logic':
-                $templateDirect = $templateDirect.'BasicLogic.template';
-                break;
-            case 'Request':
-                $templateDirect = $templateDirect.'BasicRequest.template';
-                break;
-            case 'Result':
-                $templateDirect = $templateDirect.'BasicResult.template';
-                break;
-        }
-        return file_get_contents($templateDirect);
-    }
-
-    /**
-     * 获取文件对应的基础模板
-     * @param $classType
-     * @return bool|string
-     */
-    protected function getBasicTemplate($classType)
-    {
-        $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Basic/';
-        switch ($classType) {
+        switch ($this->classType) {
             case 'Controller':
                 $templateDirect = $templateDirect.'BasicController.template';
                 break;
@@ -396,30 +361,30 @@ class Build
      * @param $templateName
      * @return bool|string
      */
-    protected function getPartTemplate($classType)
+    protected function getPartTemplate()
     {
         $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Part/';
-        switch ($classType) {
+        switch ($this->classType) {
             case 'Controller':
                 $templateDirect = $templateDirect.'ControllerBody.template';
                 break;
             case 'Service':
-                $templateDirect = $templateDirect.'BasicService.template';
+                $templateDirect = $templateDirect.'ServiceBody.template';
                 break;
             case 'Model':
-                $templateDirect = $templateDirect.'BasicModel.template';
+                $templateDirect = $templateDirect.'ModelBody.template';
                 break;
             case 'Trait':
-                $templateDirect = $templateDirect.'BasicTrait.template';
+                $templateDirect = $templateDirect.'TraitBody.template';
                 break;
             case 'Logic':
-                $templateDirect = $templateDirect.'BasicLogic.template';
+                $templateDirect = $templateDirect.'LogicBody.template';
                 break;
             case 'Request':
-                $templateDirect = $templateDirect.'BasicRequest.template';
+                $templateDirect = $templateDirect.'RequestBody.template';
                 break;
             case 'Result':
-                $templateDirect = $templateDirect.'BasicResult.template';
+                $templateDirect = $templateDirect.'ResultBody.template';
                 break;
         }
         return file_get_contents($templateDirect);
@@ -447,9 +412,6 @@ class Build
         }
         if (!file_exists($fileDirect)) {
             file_put_contents($fileDirect, $html);
-            $this->console->info($file.' is built');
-        } else {
-            $this->console->warning($file.' file is exist');
         }
     }
 
@@ -460,7 +422,6 @@ class Build
      */
     protected function rewriteFile($fileDirect, $file)
     {
-        $this->console->warning('正在覆盖原文件Controller!');
         file_put_contents($fileDirect, $file);
     }
 

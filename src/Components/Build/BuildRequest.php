@@ -7,29 +7,25 @@ namespace Uniondrug\Builder\Components\Build;
 
 use Uniondrug\Builder\Components\Build\BuildBasic;
 
-class BuildModel extends BuildBasic
+class BuildRequest extends BuildBasic
 {
     public function __construct($parameter)
     {
         parent::__construct($parameter);
-        $this->classType = 'Model';
+        $this->classType = 'Request';
     }
 
-    /**
-     * @param $columns
-     * @return bool
-     */
     public function build($columns)
     {
         // 获取文件名称
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();
-        // 判断目录是否存在
-        if ($this->checkFileExsit($direct)) {
-            $this->console->info('Model文件已存在！');
-            return false;
+        // 判断基础文件是否存在
+        if (!$this->checkFileExsit($direct)) {
+            $this->initBuild($direct, [
+                'TABLE_NAME' => $this->_tableName(),
+                ''
+            ]);
         }
-        // 注解列表
-        $this->initBuild($direct, ['PROPERTY_TEMPLATE_LIST' => $this->getPropertyContent($columns)]);
         return true;
     }
 }

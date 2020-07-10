@@ -5,9 +5,9 @@ namespace App\Services;
 use App\Services\Abstracts\Service;
 
 /**
- * Class {{CLASS_NAME}}Service
+ * Class {{CLASS_NAME}}
  * @package App\Services
  */
-class {{CLASS_NAME}}Service extends Service
+class {{CLASS_NAME}} extends Service
 {
 }

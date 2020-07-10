@@ -1,13 +1,14 @@
 <?php
 {{AUTHOR}}
-namespace App\Structs\Requests\{{CLASS_NAME}};
+namespace App\Structs\Requests\{{TABLE_NAME}};
 
 use Uniondrug\Structs\Struct;
 
 /**
- * Class ReceiveStruct
- * @package App\Structs\Requests\Privilege(TODO)
+ * Class {{CLASS_NAME}}
+ * @package App\Structs\Requests\{{TABLE_NAME}}
  */
-class {{STRUCT_HEAD}} extends Struct
+class {{CLASS_NAME}} extends Struct
 {
+{{}}
 }

@@ -56,7 +56,7 @@ class Mode
                 'columnName' => $column['COLUMN_NAME'],
                 'columnDefault' => $column['COLUMN_DEFAULT'],
                 'isNullAble' => $column['IS_NULLABLE'],
-                'dateType' => $column['DATA_TYPE'],
+                'dataType' => $column['DATA_TYPE'],
                 'characterMaximumLength' => $column['CHARACTER_MAXIMUM_LENGTH'],
                 'numbericPrecision' => $column['NUMERIC_PRECISION'],
                 'columnComment' => $column['COLUMN_COMMENT']

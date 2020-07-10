@@ -7,7 +7,6 @@ namespace Uniondrug\Builder\Components\Build;
 
 use Uniondrug\Builder\Components\Build\BuildBasic;
 
-
-class BuildListing extends BuildBasic
+class BuildResult extends BuildBasic
 {
 }

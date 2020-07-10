@@ -5,7 +5,7 @@ namespace App\Structs\Traits;
 /**
  * @package App\Structs\Traits
  */
-trait {{CLASS_NAME}}Trait
+trait {{CLASS_NAME}}
 {
-{{PROPERTY_TEMPLATE_LIST}}
+{{TRAIT_LIST}}
 }

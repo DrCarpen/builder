@@ -6,6 +6,7 @@
 namespace Uniondrug\Builder\Components\Build;
 
 use Uniondrug\Builder\Components\Build\BuildBasic;
+use App\Services\Abstracts\ServiceTrait;
 
 class BuildService extends BuildBasic
 {
@@ -18,91 +19,62 @@ class BuildService extends BuildBasic
     public function build($columns)
     {
         // 获取文件名称
-        $direct = $this->getDocumentDirectPrefix($this->classType).$this->getFileName($this->classType);
+        $direct = $this->getDocumentDirectPrefix().$this->getFileName();
         // 判断初试文件是否存在
         if (!$this->checkFileExsit($direct)) {
-            $this->initBuild($direct);
+            $this->initBuild($direct, ['TABLE_NAME' => lcfirst($this->_tableName())]);
             // 更新serviceTrait文件
-
+            $this->rewriteServiceTrait();
         }
-        if ($this->checkActionExist()) {
-            $this->console->error('此接口已存在');
-            return false;
-        }
-        // 读取文件
-        $initFile = $this->getInitFile($direct);
-        // 创建接口数据
-        $controllerBody = $this->getPartTemplate($this->classType);
-        $controllerBodyFile = $this->templateParser->assign([
-            'API_NAME' => $this->getApiName(),
-            'SDK_NAME' => $this->getSdkName(),
-            'MIN_API' => $this->api,
-            'MAX_API' => ucfirst($this->api),
-            'TABLE_NAME' => $this->_tableName(),
-        ], $controllerBody);
-        // 追加接口
-        $newFile = preg_replace('/\}$/', $controllerBodyFile.'}', $initFile);
-        // 追加命名空间
-        $baseText = 'use App\Controllers\Abstracts\Base;';
-        $text = $baseText.PHP_EOL.'use App\Logics\\'.$this->_tableName().'\\'.ucfirst($this->api).'Logic;';
-        $newFile = str_replace($baseText, $text, $newFile);
-        $this->rewriteFile($direct, $newFile);
+        // 追加API
+        $this->appendAPI($direct);
         return true;
     }
 
-    public function initBuild($direct)
-    {
-        // 作者信息
-        $authorContent = $this->getAuthorContent();
-        // 方法类
-        $className = $this->getClassName($this->classType);
-        // 获取模板
-        $template = $this->getBasicTemplate($this->classType);
-        // 注入模板
-        $fileContent = $this->templateParser->assign([
-            'AUTHOR' => $authorContent,
-            'CLASS_NAME' => $className,
-            'TABLE_NAME' => lcfirst($this->_tableName()),
-        ], $template);
-        // 生成文件
-        $this->buildFile($fileContent, $this->getDocumentDirectPrefix($this->classType), $direct);
-    }
-
-
-    public function rewriteServiceTrait(){
-
-    }
     /**
-     * 获取当前API名称
-     * @return mixed|string
+     * @throws \ReflectionException
      */
-    protected function getApiName()
+    public function rewriteServiceTrait()
     {
-        if (key_exists($this->api, $this->apiNameMapping)) {
-            return $this->apiNameMapping[$this->api];
-        }
-        return $this->api;
+        $name = $this->getClassName();
+        $service = new \ReflectionClass(ServiceTrait::class);
+        //更改注解
+        $preDocument = $service->getDocComment();
+        $propertyText = "* @property ".$name."  $".lcfirst($name);
+        $propertyText .= PHP_EOL."*/";
+        $newDocument = str_replace('*/', $propertyText, $preDocument);
+        //更改use
+        $oldUseText = "namespace App\Services\Abstracts;".PHP_EOL;
+        $newUseText = $oldUseText.PHP_EOL.'use App\\Services\\'.$name.';';
+        $filename = $service->getFileName();
+        $oldFlie = file_get_contents($filename);
+        $newFlie = str_replace($preDocument, $newDocument, $oldFlie);
+        $newFlie = str_replace($oldUseText, $newUseText, $newFlie);
+        $this->console->info($this->className." 写入 ServiceTrait");
+        file_put_contents($filename, $newFlie);
+        $this->console->info('已更新ServiceTrait文件');
     }
 
     /**
-     * @return string
+     * @param $direct
      */
-    protected function getSdkName()
+    public function appendAPI($direct)
     {
-        return lcfirst($this->_tableName()).ucfirst($this->api);
-    }
-
-    protected function checkActionExist()
-    {
-        // 判断方法是否存在
-        $class = '\App\Controllers\\'.$this->_tableName().'Controller';
-        $service = new \ReflectionClass($class);
-        $methods = $service->getMethods();
-        foreach ($methods as $method) {
-            if ($method->name == $this->api.'Action') {
-                return true;
-            }
-        }
-        return false;
+        // 读取文件
+        $initFile = $this->getInitFile($direct);
+        // 创建接口数据
+        $partBody = $this->getPartTemplate();
+        $partBodyFile = $this->templateParser->assign([
+            'MIN_API' => $this->api,
+            'MAX_API' => ucfirst($this->api)
+        ], $partBody);
+        // 追加接口
+        $newFile = preg_replace('/\}$/', $partBodyFile.'}', $initFile);
+        // 追加命名空间
+        $baseText = 'namespace App\Services;';
+        $text = $baseText.PHP_EOL.PHP_EOL.'use App\Structs\Request\\'.$this->_tableName().'\\'.ucfirst($this->api).'Request;';
+        $newFile = str_replace($baseText, $text, $newFile);
+        $this->rewriteFile($direct, $newFile);
+        $this->console->info('已更新Service文件');
     }
 }
