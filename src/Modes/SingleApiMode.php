@@ -24,33 +24,31 @@ class SingleApiMode extends Mode
 {
     public function __construct($parameter)
     {
-        $this->table = $parameter['table'];
-        $this->api = $parameter['api'];
-        parent::__construct();
+        parent::__construct($parameter);
     }
 
-    public function run($parameter)
+    public function run()
     {
         // 创建model
-        $model = new BuildModel($parameter);
+        $model = new BuildModel($this->parameter);
         $model->build($this->columns);
         // 创建控制器
-        $controller = new BuildController($parameter);
+        $controller = new BuildController($this->parameter);
         $controller->build($this->columns);
         // 创建logic
-        $logic = new BuildLogic($parameter);
+        $logic = new BuildLogic($this->parameter);
         $logic->build($this->columns);
         // 创建service
-        $service = new BuildService($parameter);
+        $service = new BuildService($this->parameter);
         $service->build($this->columns);
         // 创建 trait
-        $trait = new BuildTrait($parameter);
+        $trait = new BuildTrait($this->parameter);
         $trait->build($this->columns);
         // 创建 入参结构体
-        $request = new BuildRequest($parameter);
+        $request = new BuildRequest($this->parameter);
         $request->build($this->columns);
         // 创建  出参结构体
-        $result = new BuildResult($parameter);
+        $result = new BuildResult($this->parameter);
         $result->build($this->columns);
     }
 }

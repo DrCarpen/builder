@@ -31,7 +31,7 @@ class Build
      */
     public $templateParser;
     /**
-     * class的类型
+     * 各个子类中定义class的类型
      * @var string
      */
     public $classType;
@@ -283,9 +283,9 @@ class Build
     protected function getValidator($type, $column)
     {
         if ($type == 'string' && $column['CHARACTER_MAXIMUM_LENGTH']) {
-            $validator = 'options={minChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
+            $validator = 'required,options={minChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
         } else {
-            $validator = '';
+            $validator = 'required';
         }
         return $validator;
     }

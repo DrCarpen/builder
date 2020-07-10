@@ -18,14 +18,13 @@ class SimpleMode extends Mode
 {
     public function __construct($parameter)
     {
-        $this->table = $parameter['table'];
-        parent::__construct();
+        parent::__construct($parameter);
     }
 
-    public function run($parameter)
+    public function run()
     {
         // 调用组件-创建model文件
-        $build = new BuildModel($parameter);
+        $build = new BuildModel($this->parameter);
         $build->build($this->columns);
     }
 }

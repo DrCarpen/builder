@@ -30,15 +30,23 @@ class Mode
      */
     public $table;
     /**
-     * @var string
+     * @var array
      */
-    public $api;
+    public $parameter;
 
-    public function __construct()
+    public function __construct($parameter)
     {
         $this->_console();
+        // 初始化全局变量
+        $this->_parameter($parameter);
         // 获取数据库的字段
         $this->_columns();
+    }
+
+    protected function _parameter($parameter)
+    {
+        $this->parameter = $parameter;
+        $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
     }
 
     private function _console()

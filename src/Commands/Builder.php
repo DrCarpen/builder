@@ -20,9 +20,8 @@ class Builder extends Command
 {
     protected $signature = 'builder
                             {--table= : 数据表名}
-                            {--api= : 接口名称，默认支持接口，c(create)|d(detail)|u(update)|l(listing)|p(paging)}
+                            {--api= : 接口名称，支持自定义接口}
                             ';
-    protected $authorConfig = [];
     /**
      * 命令描述
      * @var string
@@ -39,16 +38,16 @@ class Builder extends Command
     public function handle()
     {
         $this->_console();
-        $this->checkParameter();
-        $this->checkDatabase();
-        $parameter = $this->getParameter();
+        $this->_checkParameter();
+        $this->_checkDatabase();
+        $parameter = $this->_getParameter();
         // TODO::模式分发
         if ($parameter['api']) {
             $mode = new SingleApiMode($parameter);
         } else {
             $mode = new SimpleMode($parameter);
         }
-        $mode->run($parameter);
+        $mode->run();
     }
 
     private function _console()
@@ -60,7 +59,7 @@ class Builder extends Command
      * 检查数据库配置
      * @return bool
      */
-    private function checkDatabase()
+    private function _checkDatabase()
     {
         $connection = app()->getConfig()->database->connection;
         if (empty(app()->getConfig()->database)) {
@@ -88,7 +87,7 @@ class Builder extends Command
      * 校验参数
      * @return bool
      */
-    private function checkParameter()
+    private function _checkParameter()
     {
         $table = $this->input->getOption('table');
         if (empty($table)) {
@@ -102,7 +101,7 @@ class Builder extends Command
      * 参数
      * @return array
      */
-    private function getParameter()
+    private function _getParameter()
     {
         return $this->input->getOptions();
     }

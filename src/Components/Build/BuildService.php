@@ -71,8 +71,8 @@ class BuildService extends BuildBasic
         // 追加接口
         $newFile = preg_replace('/\}$/', $partBodyFile.'}', $initFile);
         // 追加命名空间
-        $baseText = 'namespace App\Services;';
-        $text = $baseText.PHP_EOL.PHP_EOL.'use App\Structs\Requests\\'.$this->_tableName().'\\'.ucfirst($this->api).'Request;';
+        $baseText = 'use App\Services\Abstracts\Service;';
+        $text = $baseText.PHP_EOL.'use App\Structs\Requests\\'.$this->_tableName().'\\'.ucfirst($this->api).'Request;';
         $newFile = str_replace($baseText, $text, $newFile);
         $this->rewriteFile($direct, $newFile);
         $this->console->info('已更新Service文件');
