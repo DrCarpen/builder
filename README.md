@@ -1,48 +1,34 @@
-# Builder
-### 介绍
-> 以命令行模式生成对应的 `Model,Trait,Struct,Service,Logic,Controller`文件,自动生成“CURD”
-的接口模板
+## Builder v2.0
 
+### 介绍
+1. 致力于开发全流程的代码生成工具
+1. 支持单接口模式，可自定义接口
+1. 支持model模式
+1. 一行命令，让你的CURD生活更加简单
 
 
 ### 使用方法
 ##### 1 composer.json引入如下包名，更新composer
-
-```bash
+```text
 "require-dev" : {
-        "drcarpen/builder":"^1.0"
+        "drcarpen/builder":"^2.0"
     }
 ```
 #####  2 app/Commands 加入新文件 BuilderCommand.php
-```bash
+```text
 
 <?php
 namespace App\Commands;
 
 use Uniondrug\Builder\Commands\Builder;
 
-/**
- * 生成脚手架
- * php console builder --table tableName
- * @package App\Commands
- */
 class BuilderCommand extends Builder
 {
-    protected $authorConfig = [
-        'name' => 'yourName',
-        'email' => 'yourEmail@uniondrug.cn'
-    ];
 }
-
-```
-##### 3 .gitignore文件添加忽略目录
-
-```bash
-app/Commands/BuilderCommand.php
-
 ```
 
-##### 4 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
+
+##### 3 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
 
 ```bash
 

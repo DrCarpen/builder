@@ -46,6 +46,9 @@ class BuildResult extends BuildBasic
         return true;
     }
 
+    /**
+     * @return string
+     */
     protected function getExtendClass()
     {
         if ($this->api == 'page') {
@@ -57,6 +60,9 @@ class BuildResult extends BuildBasic
         }
     }
 
+    /**
+     * @return string
+     */
     protected function getUseTrait()
     {
         if (in_array($this->api, [
@@ -69,6 +75,9 @@ class BuildResult extends BuildBasic
         }
     }
 
+    /**
+     * @return bool|string
+     */
     protected function getResultPart()
     {
         if (in_array($this->api, [

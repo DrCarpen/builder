@@ -123,7 +123,7 @@ class Model
             }
         }
         if ($flag == false) {
-            $this->console->errorExit('此表不存在于数据库 ['.$this->dbname.']中，请检查数据库及配置！');
+            $this->console->errorExit('此表['.$this->table.']不存在于数据库 ['.$this->dbname.']中，请检查数据库及配置！');
         }
     }
 

@@ -31,7 +31,6 @@ class BuildController extends BuildBasic
             $this->console->errorExit($this->getClassName().'控制器中已经存在此API');
         }
         $this->appendAPI($direct);
-        $this->console->info('已覆盖原文件Controller!');
         return true;
     }
 
@@ -55,6 +54,10 @@ class BuildController extends BuildBasic
         return lcfirst($this->_tableName()).ucfirst($this->api);
     }
 
+    /**
+     * @return bool
+     * @throws \ReflectionException
+     */
     protected function checkActionExist()
     {
         // 判断方法是否存在
@@ -69,6 +72,9 @@ class BuildController extends BuildBasic
         return false;
     }
 
+    /**
+     * @param $direct
+     */
     public function appendAPI($direct)
     {
         // 读取文件
@@ -89,5 +95,6 @@ class BuildController extends BuildBasic
         $text = $baseText.PHP_EOL.'use App\Logics\\'.$this->_tableName().'\\'.ucfirst($this->api).'Logic;';
         $newFile = str_replace($baseText, $text, $newFile);
         $this->rewriteFile($direct, $newFile);
+        $this->console->info('Controller中已追加API!');
     }
 }
