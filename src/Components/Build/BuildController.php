@@ -89,7 +89,8 @@ class BuildController extends BuildBasic
             'TABLE_NAME' => $this->_tableName(),
         ], $controllerBody);
         // 追加接口
-        $newFile = preg_replace('/\}$/', $controllerBodyFile.PHP_EOL.'}', $initFile);
+        $newFile = substr_replace($initFile, PHP_EOL.$controllerBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
+//        $newFile = preg_replace('/\}$/', $controllerBodyFile.PHP_EOL.'}', $initFile);
         // 追加命名空间
         $baseText = 'use App\Controllers\Abstracts\Base;';
         $text = $baseText.PHP_EOL.'use App\Logics\\'.$this->_tableName().'\\'.ucfirst($this->api).'Logic;';

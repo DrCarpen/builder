@@ -69,7 +69,8 @@ class BuildService extends BuildBasic
             'MAX_API' => ucfirst($this->api)
         ], $partBody);
         // 追加接口
-        $newFile = preg_replace('/\}$/', $partBodyFile.'}', $initFile);
+        $newFile = substr_replace($initFile, PHP_EOL.$partBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
+        //        $newFile = preg_replace('/\}$/', $partBodyFile.'}', $initFile);
         // 追加命名空间
         $baseText = 'use App\Services\Abstracts\Service;';
         $text = $baseText.PHP_EOL.'use App\Structs\Requests\\'.$this->_tableName().'\\'.ucfirst($this->api).'Request;';
