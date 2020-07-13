@@ -23,9 +23,10 @@ class BuildModel extends BuildBasic
     {
         // 获取文件名称
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();
+        $oldDirect = $this->getDocumentDirectPrefix().$this->getOldFileName();
         // 判断目录是否存在
-        if ($this->checkFileExsit($direct)) {
-            $this->console->info('Model文件已存在！');
+        if ($this->checkFileExsit($direct) || $this->checkFileExsit($oldDirect)) {
+            $this->console->warning('Model文件已存在！');
             return false;
         }
         // 注解列表

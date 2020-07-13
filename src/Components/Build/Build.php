@@ -280,6 +280,45 @@ class Build
         }
     }
 
+    /**
+     * 获取文件名
+     * @param int $row
+     * @return string
+     */
+    protected function getOldFileName($row = 0)
+    {
+        if ($row) {
+            return 'Row.php';
+        }
+        $tableName = $this->_tableName();
+        $api = $this->api ? ucfirst($this->api) : '';
+        switch ($this->classType) {
+            case 'Model':
+                return $tableName.'.php';
+                break;
+            case 'Trait':
+                return $tableName.'Trait.php';
+                break;
+            case 'Controller':
+                return $tableName.'Controller.php';
+                break;
+            case 'Service':
+                return $tableName.'Service.php';
+                break;
+            case 'Logic':
+                return $api.'Logic.php';
+                break;
+            case 'Request':
+                return $api.'Request.php';
+                break;
+            case 'Result':
+                return $api.'Result.php';
+                break;
+            default:
+                return '';
+        }
+    }
+
     protected function getValidator($type, $column)
     {
         if ($type == 'string' && $column['CHARACTER_MAXIMUM_LENGTH']) {
