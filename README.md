@@ -5,6 +5,7 @@
 1. 支持单接口模式，可自定义接口
 1. 支持model模式
 1. 一行命令，让你的CURD生活更加简单
+1. 支持多数据选择
 
 
 ### 使用方法
@@ -32,14 +33,17 @@ class BuilderCommand extends Builder
 
 ```bash
 
-php console builder --table tableName -e release
+php console builder [--database=databaseName] --table=tableName --env=testing
+或
+php console builder -d databases.partner_db -t tableName -e testing
 
 ```
 
 ### 参数说明
 
-1. --table tableName 表名必填，根据此表名生成对应的Model等文件(默认使用database.php中的配置)
-1. -e     environment 指定的环境变量，可改变database.php中的对应环境的数据库配置
+1. --database[-d] databaseName 数据库名[非必填]
+1. --table[-t] tableName 表名[必填]
+1. --env[-e]     environment 指定的环境变量
 
 ### 功能说明
 
