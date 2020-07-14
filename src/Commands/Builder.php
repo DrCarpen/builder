@@ -8,6 +8,8 @@ namespace Uniondrug\Builder\Commands;
 use Phalcon\Config;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputAwareInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Uniondrug\Builder\Modes\SimpleMode;
 use Uniondrug\Builder\Modes\SingleApiMode;
 use Uniondrug\Console\Command;
@@ -33,18 +35,26 @@ class Builder extends Command
      */
     protected $description = '脚手架生成工具';
     /**
-     * @var Console
+     * 数据库配置必填项
+     * @var string[]
      */
-    public $console;
+    protected $_dbConfigItemRequired = [
+        'adapter',
+        'host',
+        'port',
+        'dbname',
+        'charset',
+        'username',
+        'password'
+    ];
 
     /**
      * @inheritdoc
      */
     public function handle()
     {
-        $this->_console();
+        $parameter = $this->getInputArguments();
         $dbConfig = $this->_checkDatabase();
-        $parameter = $this->_getParameter();
         // TODO::模式分发
         if ($parameter['api']) {
             $mode = new SingleApiMode($parameter, $dbConfig);
@@ -54,35 +64,30 @@ class Builder extends Command
         $mode->run();
     }
 
-    private function _console()
-    {
-        $this->console = new Console();
-    }
-
     /**
      * 获取默认的数据库连接
-     * @return mixed|Config
+     * @return Config
      */
     public function getDefaultDatabase()
     {
         $defaultDbFile = 'database.php';
         $filePath = \app()->configPath().'/'.$defaultDbFile;
         if (!$filePath) {
-            throw new RuntimeException('The file of '.$defaultDbFile.' not exist !');
+            throw new RuntimeException('The file of '.$defaultDbFile.' not exist');
         }
         // 配置文件的数据库配置不存在
         $defaultDbConfig = \config()->path('database.connection');
         if (!$defaultDbConfig) {
-            throw new RuntimeException('The connection of '.$defaultDbFile.' not exist!');
+            throw new RuntimeException('The connection of '.$defaultDbFile.' is required');
         }
-        return \config()->path('database.connection');
+        return $defaultDbConfig;
     }
 
     /**
-     * 解析输入数据库参数
+     * 解析输入参数并返回数据库
      * @return Config
      */
-    public function parseDatabase()
+    public function parseInputArgv()
     {
         // 参数databases.example_db
         $inputDbStr = $this->input->getOption('database');
@@ -111,7 +116,8 @@ class Builder extends Command
     }
 
     /**
-     * 解析输入表参数
+     * 解析输入表参数并返回表名
+     * @return bool|string
      */
     public function parseTable()
     {
@@ -122,6 +128,7 @@ class Builder extends Command
         if (empty($inputTable)) {
             throw new RuntimeException('The option of --table value is required');
         }
+        return $inputTable;
     }
 
     /**
@@ -131,23 +138,29 @@ class Builder extends Command
     private function _checkDatabase()
     {
         // 解析输入数据库参数
-        $dbConfig = $this->parseDatabase();
-        // 解析输入表参数
-        $table = $this->parseTable();
+        $dbConfig = $this->parseInputArgv();
+        // 获取默认的数据库配置
         $dbConfig = $dbConfig ?: $this->getDefaultDatabase();
-        foreach ($dbConfig as $key => $config) {
-            if (empty($config)) {
-                throw new RuntimeException('The config \''.$config.'\' of database is required');
+        $dbConfigItem = array_keys((array) $dbConfig);
+        // 缺失的必填项
+        $_lackRequired = array_diff($this->_dbConfigItemRequired, $dbConfigItem);
+        foreach ($_lackRequired as $vconfig) {
+            throw new RuntimeException('The config \''.$vconfig.'\' of database is required');
+        }
+        foreach ($dbConfig as $kconfig => $vconfig) {
+            if (empty($vconfig)) {
+                throw new RuntimeException('The config \''.$kconfig.'\' value of database is required');
             }
         }
+        // 解析输入表参数并合并到数据库配置
+        $dbConfig->table = $this->parseTable();
         return $dbConfig;
     }
 
     /**
-     * 参数
      * @return array
      */
-    private function _getParameter()
+    public function getInputArguments()
     {
         return $this->input->getOptions();
     }

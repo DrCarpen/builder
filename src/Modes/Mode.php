@@ -43,7 +43,6 @@ class Mode
     {
         // 初始化数据库配置
         $this->dbConfig = $dbConfig;
-        $this->_console();
         // 初始化全局变量
         $this->_parameter($parameter);
         // 获取数据库的字段
@@ -56,14 +55,9 @@ class Mode
         $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
     }
 
-    private function _console()
-    {
-        $this->console = new Console();
-    }
-
     private function _columns()
     {
-        $model = new Model($this->_getDbConfig());
+        $model = new Model($this->dbConfig);
         $columns = $model->getColums();
         $_columns = [];
         foreach ($columns as $column) {
@@ -79,16 +73,5 @@ class Mode
             ];
         }
         $this->columns = $_columns;
-    }
-
-    private function _getDbConfig()
-    {
-        $dbConfig['host'] = $this->dbConfig['host'];
-        $dbConfig['username'] = $this->dbConfig['username'];
-        $dbConfig['password'] = $this->dbConfig['password'];
-        $dbConfig['dbname'] = $this->dbConfig['dbname'];
-        $dbConfig['port'] = $this->dbConfig['port'];
-        $dbConfig['table'] = $this->table;
-        return $dbConfig;
     }
 }

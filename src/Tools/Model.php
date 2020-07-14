@@ -1,6 +1,7 @@
 <?php
 namespace Uniondrug\Builder\Tools;
 
+use Phalcon\Config;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Uniondrug\Builder\Tools\Base;
 
@@ -16,13 +17,11 @@ class Model
     private $password;
     private $dbname;
     private $port;
+    private $charset;
     private $connection;
-    private $console;
 
-    public function __construct($dbConfig)
+    public function __construct(Config $dbConfig)
     {
-        // 获取console
-        $this->_console();
         // 获取配置
         $this->_config($dbConfig);
         // 初始化数据库连接
@@ -42,12 +41,7 @@ class Model
         return $this->_getColumns();
     }
 
-    private function _console()
-    {
-        $this->console = new Console();
-    }
-
-    private function _config($dbConfig)
+    private function _config(Config $dbConfig)
     {
         $this->host = $dbConfig['host'];
         $this->username = $dbConfig['username'];
@@ -55,6 +49,7 @@ class Model
         $this->dbname = $dbConfig['dbname'];
         $this->port = $dbConfig['port'];
         $this->table = $dbConfig['table'];
+        $this->charset = $dbConfig['charset'];
     }
 
     /**
@@ -64,9 +59,7 @@ class Model
     {
         $connection = mysqli_connect("$this->host", "$this->username", "$this->password", "$this->dbname", "$this->port");
         if (!$connection) {
-            $this->console->error('无法连接上MySQL服务器');
-            $this->console->error('错误码：'.mysqli_connect_errno());
-            $this->console->errorExit('错误提示：'.mysqli_connect_error());
+            throw new RuntimeException('连接上MySQL服务器失败,错误码:'.mysqli_connect_errno().'错误提示:'.mysqli_connect_error());
         }
         $this->connection = $connection;
     }
@@ -84,7 +77,7 @@ class Model
      */
     private function _setCharset()
     {
-        $this->_query('SET NAMES utf8');
+        $this->_query('SET NAMES '.$this->charset);
     }
 
     /**
