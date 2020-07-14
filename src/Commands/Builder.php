@@ -44,7 +44,6 @@ class Builder extends Command
     {
         $this->_console();
         $this->_checkDatabase();
-        $this->_checkParameter();
         $parameter = $this->_getParameter();
         // TODO::模式分发
         if ($parameter['api']) {
