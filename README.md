@@ -35,15 +35,15 @@ class BuilderCommand extends Builder
 
 php console builder [--database=databaseName] --table=tableName --env=testing
 或
-php console builder -d databases.partner_db -t tableName -e testing
+php console builder [-d databases.partner_db] -t tableName -e testing
 
 ```
 
 ### 参数说明
 
-1. --database[-d] databaseName 数据库名[非必填]
-1. --table[-t] tableName 表名[必填]
-1. --env[-e]     environment 指定的环境变量
+1. --database databaseName 数据库名[非必填]
+1. --table    tableName 表名[必填]
+1. --env      environment 指定的环境变量
 
 ### 功能说明
 
