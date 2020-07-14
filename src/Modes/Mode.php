@@ -9,6 +9,7 @@ namespace Uniondrug\Builder\Modes;
 
 use Uniondrug\Builder\Tools\Console;
 use Uniondrug\Builder\Tools\Model;
+use Phalcon\Config;
 
 /**
  * Class Mode
@@ -33,9 +34,15 @@ class Mode
      * @var array
      */
     public $parameter;
+    /**
+     * @var Config
+     */
+    protected $dbConfig;
 
-    public function __construct($parameter)
+    public function __construct(array $parameter, Config $dbConfig)
     {
+        // 初始化数据库配置
+        $this->dbConfig = $dbConfig;
         $this->_console();
         // 初始化全局变量
         $this->_parameter($parameter);
@@ -76,12 +83,11 @@ class Mode
 
     private function _getDbConfig()
     {
-        $connection = app()->getConfig()->database->connection;
-        $dbConfig['host'] = $connection['host'];
-        $dbConfig['username'] = $connection['username'];
-        $dbConfig['password'] = $connection['password'];
-        $dbConfig['dbname'] = $connection['dbname'];
-        $dbConfig['port'] = $connection['port'];
+        $dbConfig['host'] = $this->dbConfig['host'];
+        $dbConfig['username'] = $this->dbConfig['username'];
+        $dbConfig['password'] = $this->dbConfig['password'];
+        $dbConfig['dbname'] = $this->dbConfig['dbname'];
+        $dbConfig['port'] = $this->dbConfig['port'];
         $dbConfig['table'] = $this->table;
         return $dbConfig;
     }

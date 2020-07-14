@@ -14,6 +14,7 @@ use Uniondrug\Builder\Components\Build\BuildRequest;
 use Uniondrug\Builder\Components\Build\BuildResult;
 use Uniondrug\Builder\Components\Build\BuildService;
 use Uniondrug\Builder\Components\Build\BuildTrait;
+use Phalcon\Config;
 
 /**
  * 单接口模式
@@ -22,9 +23,9 @@ use Uniondrug\Builder\Components\Build\BuildTrait;
  */
 class SingleApiMode extends Mode
 {
-    public function __construct($parameter)
+    public function __construct(array $parameter, Config $dbConfig)
     {
-        parent::__construct($parameter);
+        parent::__construct($parameter, $dbConfig);
     }
 
     public function run()

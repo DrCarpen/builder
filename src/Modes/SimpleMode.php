@@ -8,6 +8,7 @@
 namespace Uniondrug\Builder\Modes;
 
 use Uniondrug\Builder\Components\Build\BuildModel;
+use Phalcon\Config;
 
 /**
  * 简单模式
@@ -16,9 +17,9 @@ use Uniondrug\Builder\Components\Build\BuildModel;
  */
 class SimpleMode extends Mode
 {
-    public function __construct($parameter)
+    public function __construct(array $parameter, Config $dbConfig)
     {
-        parent::__construct($parameter);
+        parent::__construct($parameter, $dbConfig);
     }
 
     public function run()

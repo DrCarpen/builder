@@ -1,6 +1,7 @@
 <?php
 namespace Uniondrug\Builder\Tools;
 
+use Symfony\Component\Console\Exception\RuntimeException;
 use Uniondrug\Builder\Tools\Base;
 
 /**
@@ -123,7 +124,7 @@ class Model
             }
         }
         if ($flag == false) {
-            $this->console->errorExit('此表['.$this->table.']不存在于数据库 ['.$this->dbname.']中，请检查数据库及配置！');
+            throw new RuntimeException('The database of '.$this->dbname.' has no '.$this->table);
         }
     }
 

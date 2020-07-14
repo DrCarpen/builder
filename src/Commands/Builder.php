@@ -43,13 +43,13 @@ class Builder extends Command
     public function handle()
     {
         $this->_console();
-        $this->_checkDatabase();
+        $dbConfig = $this->_checkDatabase();
         $parameter = $this->_getParameter();
         // TODO::模式分发
         if ($parameter['api']) {
-            $mode = new SingleApiMode($parameter);
+            $mode = new SingleApiMode($parameter, $dbConfig);
         } else {
-            $mode = new SimpleMode($parameter);
+            $mode = new SimpleMode($parameter, $dbConfig);
         }
         $mode->run();
     }
@@ -65,7 +65,17 @@ class Builder extends Command
      */
     public function getDefaultDatabase()
     {
-        return \app()->getConfig()->database->connection;
+        $defaultDbFile = 'database.php';
+        $filePath = \app()->configPath().'/'.$defaultDbFile;
+        if (!$filePath) {
+            throw new RuntimeException('The file of '.$defaultDbFile.' not exist !');
+        }
+        // 配置文件的数据库配置不存在
+        $defaultDbConfig = \config()->path('database.connection');
+        if (!$defaultDbConfig) {
+            throw new RuntimeException('The connection of '.$defaultDbFile.' not exist!');
+        }
+        return \config()->path('database.connection');
     }
 
     /**
@@ -116,7 +126,7 @@ class Builder extends Command
 
     /**
      * 检查数据库配置
-     * @return bool
+     * @return Config
      */
     private function _checkDatabase()
     {
@@ -124,27 +134,13 @@ class Builder extends Command
         $dbConfig = $this->parseDatabase();
         // 解析输入表参数
         $table = $this->parseTable();
-        $connection = $dbConfig ?: $this->getDefaultDatabase();
-        // 检查数据库链接是否存在
-        if (empty(app()->getConfig()->database)) {
-            $this->console->errorExit('目录文件/config/database.php 不存在，请检查目录');
+        $dbConfig = $dbConfig ?: $this->getDefaultDatabase();
+        foreach ($dbConfig as $key => $config) {
+            if (empty($config)) {
+                throw new RuntimeException('The config \''.$config.'\' of database is required');
+            }
         }
-        if (empty(app()->getConfig()->database->connection)) {
-            $this->console->errorExit('database.php的connection配置 不存在，请检查目录');
-        }
-        if (empty($connection->host)) {
-            $this->console->errorExit('database.php的host配置 不存在，请检查目录');
-        }
-        if (empty($connection->port)) {
-            $this->console->errorExit('database.php的port配置 不存在，请检查目录');
-        }
-        if (empty($connection->username)) {
-            $this->console->errorExit('database.php的username配置 不存在，请检查目录');
-        }
-        if (empty($connection->password)) {
-            $this->console->errorExit('database.php的password配置 不存在，请检查目录');
-        }
-        return true;
+        return $dbConfig;
     }
 
     /**
