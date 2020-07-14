@@ -43,8 +43,8 @@ class Builder extends Command
     public function handle()
     {
         $this->_console();
-        $this->_checkParameter();
         $this->_checkDatabase();
+        $this->_checkParameter();
         $parameter = $this->_getParameter();
         // TODO::模式分发
         if ($parameter['api']) {
@@ -144,20 +144,6 @@ class Builder extends Command
         }
         if (empty($connection->password)) {
             $this->console->errorExit('database.php的password配置 不存在，请检查目录');
-        }
-        return true;
-    }
-
-    /**
-     * 校验参数
-     * @return bool
-     */
-    private function _checkParameter()
-    {
-        $table = $this->input->getOption('table');
-        if (empty($table)) {
-            $this->console->errorExit('数据表名不存在，检查参数，例如下 :
-                                    php console builder --table tableName');
         }
         return true;
     }
