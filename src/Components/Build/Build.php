@@ -242,6 +242,27 @@ class Build
     }
 
     /**
+     * 属性关系映射
+     * @param array $columns
+     * @return string
+     */
+    protected function getColumnMap(array $columns)
+    {
+        $columanMap = "";
+        foreach ($columns as $key => $value) {
+            $columnName = $value['columnName'];
+            $formateColumnName = preg_replace_callback("/[\_]+(\S)/", function($a){
+                return strtoupper($a[1]);
+            }, $value['columnName']);
+            $columanMap .= "'$columnName' => '$formateColumnName',";
+        }
+        $columanMap = preg_replace_callback("/[\,]+/", function($a){
+            return $a[0].PHP_EOL."\t\t\t";
+        }, $columanMap);
+        return trim($columanMap, " \t\n\r\0\x0B,");
+    }
+
+    /**
      * 获取文件名
      * @param int $row
      * @return string

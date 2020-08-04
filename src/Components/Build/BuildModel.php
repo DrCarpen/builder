@@ -29,8 +29,12 @@ class BuildModel extends BuildBasic
             $this->console->warning('Model文件已存在！');
             return false;
         }
+        $init = [
+            'COLUMN_MAP_LIST' => $this->getColumnMap($columns),
+            'PROPERTY_TEMPLATE_LIST' => $this->getPropertyContent($columns)
+        ];
         // 注解列表
-        $this->initBuild($direct, ['PROPERTY_TEMPLATE_LIST' => $this->getPropertyContent($columns)]);
+        $this->initBuild($direct, $init);
         return true;
     }
 }

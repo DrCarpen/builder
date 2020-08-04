@@ -10,4 +10,10 @@ use App\Models\Abstracts\Model;
  */
 class {{CLASS_NAME}} extends Model
 {
+    public function columnMap()
+    {
+        return [
+            {{COLUMN_MAP_LIST}}
+        ];
+    }
 }

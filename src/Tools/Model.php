@@ -131,6 +131,7 @@ class Model
         $sql .= 'INFORMATION_SCHEMA.COLUMNS ';
         $sql .= 'WHERE ';
         $sql .= "table_name = '{$this->table}' AND table_schema = '{$this->dbname}'";
+        $sql .= "ORDER BY ORDINAL_POSITION";
         return $this->_queryAll($sql);
     }
 }
