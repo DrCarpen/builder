@@ -175,7 +175,7 @@ class Build
                 $className = $className.'Service';
                 break;
             case 'Model':
-                $className = $className.'Model';
+                $className = $className.'';
                 break;
             case 'Trait':
                 $className = $className.'Trait';
