@@ -276,7 +276,7 @@ class Build
         $api = $this->api ? ucfirst($this->api) : '';
         switch ($this->classType) {
             case 'Model':
-                return $tableName.'Model.php';
+                return $tableName.'.php';
                 break;
             case 'Trait':
                 return $tableName.'Trait.php';
