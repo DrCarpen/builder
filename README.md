@@ -74,5 +74,64 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 1. 支持数据字段注解，支持@enum(1=a|2=b)的文档显示
 1. 支持单model重写 --model all
                  --model  tableName
+##### v2.0+版本
+1. 多数据库连接支持 
+1. 根据字段生成对应 [常量][映射方法][文本方法] 该字段是以`status`或`type`结尾的字段
+```text
+    php console builder --database=databases.db1 --table=message --column=type
+
+    class Message extends Model
+    {
+    	// 消息类型
+    	const TYPE_1 = 1; //特权通知
+    	const TYPE_2 = 2; //积分通知
+    	const TYPE_3 = 3; //到家通知
+    	const TYPE_4 = 4; //活动通知
+    	const TYPE_5 = 5; //公告
+    	const TYPE_6 = 6; //审核通知
+    	const TYPE_7 = 7; //意见反馈
+        // 消息类型映射
+        private static $_typeMap = [
+            self::TYPE_1 => '特权通知',
+    		self::TYPE_2 => '积分通知',
+    		self::TYPE_3 => '到家通知',
+    		self::TYPE_4 => '活动通知',
+    		self::TYPE_5 => '公告',
+    		self::TYPE_6 => '审核通知',
+    		self::TYPE_7 => '意见反馈'
+        ];
+    
+        /**
+         * 消息类型文本
+         * return string
+         */
+        public function getTypeText()
+        {
+            return static::$_typeMap[$this->type] ?? static::$_unknowText;
+        }
+    
+        /**
+         * return array
+         */
+        public function columnMap ()
+        {
+            return [
+                'id' => 'id',
+    			'suggestionId' => 'suggestionId',
+    			'title' => 'title',
+    			'type' => 'type',
+    			'content' => 'content',
+    			'assistantId' => 'assistantId',
+    			'hrefUrl' => 'hrefUrl',
+    			'isRead' => 'isRead',
+    			'status' => 'status',
+    			'workName' => 'workName',
+    			'gmtReaded' => 'gmtReaded',
+    			'gmtCreated' => 'gmtCreated',
+    			'gmtUpdated' => 'gmtUpdated'
+            ];
+        }
+    }
+```
 
 
