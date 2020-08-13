@@ -161,9 +161,10 @@ class Build
 
     /**
      * 获取类名
+     * @param string $table
      * @return string
      */
-    protected function getClassName()
+    protected function getClassName(string $table)
     {
         $className = $this->_tableName();
         $apiName = $this->api ? ucfirst($this->api) : '';

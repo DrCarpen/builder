@@ -26,8 +26,9 @@ class Builder extends Command
      * @var string
      */
     protected $signature = 'builder
-            {--table=|-t : Table\'s name}
             {--database=|-d : Database\'s name [databases.example_db]}
+            {--table=|-t : Table\'s name}
+            {--column=|-c : Table\'s column name}
             {--api= : 接口名称，支持自定义接口}';
     /**
      * 命令描述
