@@ -44,7 +44,7 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 1. --database  数据库名[非必填]
 1. --table     表名[必填]
 1. --column    字段名[非必填]
-1. --env       指定的环境变量[more]
+1. --env       指定的环境变量[默认development]
 
 ### 功能说明
 
