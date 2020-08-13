@@ -76,7 +76,7 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
                  --model  tableName
 ##### v2.0+版本
 1. 多数据库连接支持 
-1. 根据字段生成对应 [常量][映射方法][文本方法] 该字段是以`status`或`type`结尾的字段
+1. 根据字段生成对应 [常量][映射方法][文本方法] 注意：该字段是以`status`或`type`结尾的字段
 ```text
     php console builder --database=databases.db1 --table=message --column=type
 
@@ -117,18 +117,18 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
         {
             return [
                 'id' => 'id',
-    			'suggestionId' => 'suggestionId',
-    			'title' => 'title',
-    			'type' => 'type',
-    			'content' => 'content',
-    			'assistantId' => 'assistantId',
-    			'hrefUrl' => 'hrefUrl',
-    			'isRead' => 'isRead',
-    			'status' => 'status',
-    			'workName' => 'workName',
-    			'gmtReaded' => 'gmtReaded',
-    			'gmtCreated' => 'gmtCreated',
-    			'gmtUpdated' => 'gmtUpdated'
+                'suggestionId' => 'suggestionId',
+                'title' => 'title',
+                'type' => 'type',
+                'content' => 'content',
+                'assistantId' => 'assistantId',
+                'hrefUrl' => 'hrefUrl',
+                'isRead' => 'isRead',
+                'status' => 'status',
+                'workName' => 'workName',
+                'gmtReaded' => 'gmtReaded',
+                'gmtCreated' => 'gmtCreated',
+                'gmtUpdated' => 'gmtUpdated'
             ];
         }
     }
