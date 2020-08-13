@@ -77,6 +77,7 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 ##### v2.0+版本
 1. 多数据库连接支持 
 1. 根据字段生成对应 [常量][映射方法][文本方法] 注意：该字段是以`status`或`type`结尾的字段
+1. 字段注释参考  消息类型:1=特权通知|2=积分通知|3=到家通知|4=活动通知|5=公告|6=审核通知|7=意见反馈
 1. App\Models\Abstracts\Model 添加 public static $_unknowText = '未知文本';
 ```text
     php console builder --database=databases.db1 --table=message --column=type
