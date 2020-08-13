@@ -95,12 +95,12 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
         // 消息类型映射
         private static $_typeMap = [
             self::TYPE_1 => '特权通知',
-    		self::TYPE_2 => '积分通知',
-    		self::TYPE_3 => '到家通知',
-    		self::TYPE_4 => '活动通知',
-    		self::TYPE_5 => '公告',
-    		self::TYPE_6 => '审核通知',
-    		self::TYPE_7 => '意见反馈'
+            self::TYPE_2 => '积分通知',
+            self::TYPE_3 => '到家通知',
+            self::TYPE_4 => '活动通知',
+            self::TYPE_5 => '公告',
+            self::TYPE_6 => '审核通知',
+            self::TYPE_7 => '意见反馈'
         ];
     
         /**
