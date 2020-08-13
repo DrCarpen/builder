@@ -56,6 +56,7 @@ class Column
      * Column constructor.
      * @param array  $column
      * @param string $class
+     * @throws \ReflectionException
      */
     public function __construct(array $column, string $class)
     {
@@ -85,7 +86,7 @@ class Column
 
     /**
      * 常量处理
-     * @return bool
+     * @return bool|void
      */
     public function makeConst()
     {
@@ -116,12 +117,12 @@ class Column
             $this->columnList['const'] = trim($constText, "\n\r\0\x0B");
             $this->columnList['constVarName'] = $constVarName;
         }
+        return ;
     }
 
     /**
      * 生成类型映射
-     * @return bool
-     * @throws \ReflectionException
+     * @return bool|void
      */
     public function makeColumnMapVar()
     {
@@ -151,12 +152,12 @@ VAR;
         }, $columnMapVar);
         $this->columnList['columnMapVar'] = $columnMapVar;
         $this->columnList['columnMapVarName'] = $columnMapVarName;
+        return ;
     }
 
     /**
      * 生成列类型的中文文本
-     * @return bool
-     * @throws \ReflectionException
+     * @return bool|void
      */
     public function makeGetColumnTextFunc()
     {
@@ -180,10 +181,11 @@ VAR;
 FUNC;
         $this->columnList['columnTextFunc'] = $columnTextFunc;
         $this->columnList['columnTextFuncName'] = $columnTextFuncName;
+        return ;
     }
 
     /**
-     * @return bool
+     * @return bool|void
      */
     public function getColumnComment()
     {
@@ -192,8 +194,8 @@ FUNC;
         $pos2 = strpos($this->columnComment, '：');
         $pos = $pos1 ?: $pos2;
         $columnCommentText = substr($this->columnComment, 0, $pos);
-        //$columnComment = '用户类型：0=停用|1=正常';
-        $columnCommentArr = preg_split('/[\:\：\s\,\|]/', $this->columnComment);
+        $this->columnComment = str_replace(['：','｜', ' '], [':','|', ''], $this->columnComment);
+        $columnCommentArr = preg_split('/[\:\|]/', $this->columnComment);
         $columnCommentArr = array_filter($columnCommentArr, function($v){
             return $v !== '' && $v !== null;
         });
@@ -232,6 +234,7 @@ FUNC;
         }
         $this->columnCommentType = $columnCommentType;
         $this->columnCommentText = $columnCommentText;
+        return ;
     }
 
     /**

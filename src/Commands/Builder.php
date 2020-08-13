@@ -40,7 +40,6 @@ class Builder extends Command
      * @var string[]
      */
     protected $_dbConfigItemRequired = [
-        'adapter',
         'host',
         'port',
         'dbname',
