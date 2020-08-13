@@ -33,24 +33,25 @@ class BuilderCommand extends Builder
 
 ```bash
 
-php console builder [--database=databaseName] --table=tableName --env=testing
+php console builder [--database=数据库名] --table=表名 [--column=字段名] --env=testing
 或
-php console builder [-d databases.partner_db] -t tableName -e testing
+php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 
 ```
 
 ### 参数说明
 
-1. --database databaseName 数据库名[非必填]
-1. --table    tableName 表名[必填]
-1. --env      environment 指定的环境变量
+1. --database  数据库名[非必填]
+1. --table     表名[必填]
+1. --column    字段名[非必填]
+1. --env       指定的环境变量[more]
 
 ### 功能说明
 
 ####  Model层
 1. 根据指定的数据表生成对应的Model文件
 1. 生成property属性
-1. model含有`status`字段时，自动生成对应的`statusText`
+1. Table有`status`或`type`结尾的字段时，自动生成对应的[常量][映射方法][文本方法]`statusText`
 
 #### Struct层
 1. 生成对应的`trait`文件
