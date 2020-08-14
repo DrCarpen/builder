@@ -5,6 +5,8 @@
  */
 namespace Uniondrug\Builder;
 
+use Uniondrug\Postman\Parsers\Abstracts\Console;
+
 class Column
 {
     /**
@@ -78,6 +80,9 @@ class Column
             return false;
         }
         $this->getColumnComment();
+        if (!isset($this->columnCommentType)) {
+            return false;
+        }
         $this->makeConst();
         $this->makeColumnMapVar();
         $this->makeGetColumnTextFunc();
@@ -90,10 +95,6 @@ class Column
      */
     public function makeConst()
     {
-        // 没有列类型
-        if (!$this->columnCommentType) {
-            return false;
-        }
         // 格式化后列名称
         $columnName = $this->getColumnName('const');
         // 列名称注释
@@ -117,7 +118,7 @@ class Column
             $this->columnList['const'] = trim($constText, "\n\r\0\x0B");
             $this->columnList['constVarName'] = $constVarName;
         }
-        return ;
+        return;
     }
 
     /**
@@ -126,6 +127,9 @@ class Column
      */
     public function makeColumnMapVar()
     {
+        if (!isset($this->columnCommentType)) {
+            return false;
+        }
         $constColumnName = $this->getColumnName('const');
         $funColumnName = $this->getColumnName('function');
         // 生成变量名称
@@ -152,7 +156,7 @@ VAR;
         }, $columnMapVar);
         $this->columnList['columnMapVar'] = $columnMapVar;
         $this->columnList['columnMapVarName'] = $columnMapVarName;
-        return ;
+        return;
     }
 
     /**
@@ -181,7 +185,7 @@ VAR;
 FUNC;
         $this->columnList['columnTextFunc'] = $columnTextFunc;
         $this->columnList['columnTextFuncName'] = $columnTextFuncName;
-        return ;
+        return;
     }
 
     /**
@@ -190,11 +194,12 @@ FUNC;
     public function getColumnComment()
     {
         // 列注释文本
-        $pos1 = strpos($this->columnComment, ':');
-        $pos2 = strpos($this->columnComment, '：');
-        $pos = $pos1 ?: $pos2;
-        $columnCommentText = substr($this->columnComment, 0, $pos);
-        $this->columnComment = str_replace(['：','｜', ' '], [':','|', ''], $this->columnComment);
+        $this->columnComment = trim($this->columnComment, "\ \t\n\r\0\x0B").'|';
+        if (preg_match('/[\x{4e00}-\x{9fa5}]+\:(\d+\=[\x{4e00}-\x{9fa5}]+\|)+/ui', $this->columnComment, $match)) {
+            if (strlen($this->columnComment) != strlen($match[0])) {
+                return (new Console())->warning("注释不符合规范");
+            }
+        }
         $columnCommentArr = preg_split('/[\:\|]/', $this->columnComment);
         $columnCommentArr = array_filter($columnCommentArr, function($v){
             return $v !== '' && $v !== null;
@@ -215,26 +220,13 @@ FUNC;
             if (is_numeric($value)) {
                 $columnCommentType[$value] = $columnCommentArr[$key + 1];
             } else {
-                // 0停用1正常
-                if (!preg_match('/[\=]/', $value)) {
-                    $value = preg_replace_callback('/(\d+)/', function($a){
-                        return '|'.$a[0].'=';
-                    }, $value);
-                    $value = trim($value, '|');
-                    $value = preg_split('/[\|]/', $value);
-                    foreach ($value as $index => $item) {
-                        $newValue = preg_split('/[\=]/', $item);
-                        $columnCommentType[$newValue[0]] = $newValue[1];
-                    }
-                } else {
-                    $newValue = preg_split('/[\=]/', $value);
-                    $columnCommentType[$newValue[0]] = $newValue[1];
-                }
+                $newValue = preg_split('/[\=]/', $value);
+                $columnCommentType[$newValue[0]] = $newValue[1];
             }
         }
         $this->columnCommentType = $columnCommentType;
         $this->columnCommentText = $columnCommentText;
-        return ;
+        return;
     }
 
     /**
