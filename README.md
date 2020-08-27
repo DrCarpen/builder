@@ -67,14 +67,19 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 #### Controller层
 1. 生成`create，delete，update，detail，listing，paging`的方法及sdk名
 
-#### 版本更新计划
-##### v1.1版本
-1. 已知bug修复
-1. 支持多model生成，baseModel与normalModel拆分，支持重写
-1. 支持数据字段注解，支持@enum(1=a|2=b)的文档显示
-1. 支持单model重写 --model all
-                 --model  tableName
-##### v2.0+版本
+### 版本更新计划
+
+#### v3.0.0 版本
+1. 不基于数据库的代码生成脚手架（计划）
+
+
+
+#### v2.1.0 版本
+1. 数据库默认环境修改 testing 
+1. 
+
+
+#### v2.0.0 版本
 1. 多数据库连接支持 
 1. 根据字段生成对应 [常量][映射方法][文本方法] 注意：该字段是以`status`或`type`结尾的字段
 1. 字段注释参考  消息类型:1=特权通知|2=积分通知|3=到家通知|4=活动通知|5=公告|6=审核通知|7=意见反馈
@@ -136,5 +141,12 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
         }
     }
 ```
+
+##### v1.1版本
+1. 已知bug修复
+1. 支持多model生成，baseModel与normalModel拆分，支持重写
+1. 支持数据字段注解，支持@enum(1=a|2=b)的文档显示
+1. 支持单model重写 --model all
+                 --model  tableName
 
 

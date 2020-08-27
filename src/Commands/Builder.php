@@ -26,10 +26,8 @@ class Builder extends Command
      * @var string
      */
     protected $signature = 'builder
-            {--database=|-d : Database\'s name [databases.example_db]}
-            {--table=|-t : Table\'s name}
-            {--column=|-c : Table\'s column name}
-            {--api= : 接口名称，支持自定义接口}';
+            {--table=|-t : 表名，或者控制器名}
+            {--api=|-a : 接口名称，支持自定义接口}';
     /**
      * 命令描述
      * @var string
@@ -54,6 +52,7 @@ class Builder extends Command
     public function handle()
     {
         $parameter = $this->getInputArguments();
+        print_r($parameter);die;
         $dbConfig = $this->_checkDatabase();
         // TODO::模式分发
         if ($parameter['api']) {
@@ -158,6 +157,7 @@ class Builder extends Command
     }
 
     /**
+     * 读取输入的命令
      * @return array
      */
     public function getInputArguments()
