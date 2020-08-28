@@ -17,6 +17,7 @@ class BuildModel extends BuildBasic
      * @var array
      */
     public $parameter;
+
     public function __construct($parameter)
     {
         parent::__construct($parameter);
@@ -66,9 +67,9 @@ class BuildModel extends BuildBasic
         $columnList = [];
         array_walk($columnArr, function($column) use (&$columnList, $className){
             if ($column['columnComment']) {
-                $result  = (new Column($column, $className))->handle();
+                $result = (new Column($column, $className))->handle();
                 if ($result) {
-                    $columnList[$column['columnName']] =  $result;
+                    $columnList[$column['columnName']] = $result;
                 }
             }
         });

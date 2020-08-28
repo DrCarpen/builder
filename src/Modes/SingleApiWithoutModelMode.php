@@ -25,14 +25,11 @@ class SingleApiWithoutModelMode extends Mode
 {
     public function __construct(array $parameter)
     {
-        parent::__construct($parameter, $dbConfig);
+        parent::__construct($parameter, []);
     }
 
     public function run()
     {
-        // 创建model
-        $model = new BuildModel($this->parameter);
-        $model->build($this->columns);
         // 创建控制器
         $controller = new BuildController($this->parameter);
         $controller->build($this->columns);
@@ -42,9 +39,6 @@ class SingleApiWithoutModelMode extends Mode
         // 创建service
         $service = new BuildService($this->parameter);
         $service->build($this->columns);
-        // 创建 trait
-        $trait = new BuildTrait($this->parameter);
-        $trait->build($this->columns);
         // 创建 入参结构体
         $request = new BuildRequest($this->parameter);
         $request->build($this->columns);

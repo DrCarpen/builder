@@ -75,6 +75,7 @@ class Model
         $this->username = $dbConfig['username'];
         $this->password = $dbConfig['password'];
         $this->dbname = $dbConfig['dbname'];
+        $this->table = $dbConfig['table'];
         $this->port = $dbConfig['port'] ? $dbConfig['port'] : 3712;
         $this->charset = $dbConfig['charset'] ? $dbConfig['charset'] : 'utf8';
     }

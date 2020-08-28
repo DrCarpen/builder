@@ -9,7 +9,6 @@ namespace Uniondrug\Builder\Modes;
 
 use Uniondrug\Builder\Tools\Console;
 use Uniondrug\Builder\Tools\Model;
-use Phalcon\Config;
 
 /**
  * Class Mode
@@ -39,39 +38,33 @@ class Mode
      */
     protected $dbConfig;
 
-    public function __construct(array $parameter, Config $dbConfig)
+    public function __construct(array $parameter, $dbConfig)
     {
         // 初始化数据库配置
         $this->dbConfig = $dbConfig;
         // 初始化全局变量
-        $this->_parameter($parameter);
+        $this->_setParameter($parameter);
         // 获取数据库的字段
-        $this->_columns();
+        if ($dbConfig) {
+            $this->_getColumns();
+        }
     }
 
-    protected function _parameter($parameter)
+    /**
+     * @param $parameter
+     */
+    protected function _setParameter($parameter)
     {
         $this->parameter = $parameter;
         $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
     }
 
-    private function _columns()
+    /**
+     *
+     */
+    private function _getColumns()
     {
         $model = new Model($this->dbConfig);
-        $columns = $model->getColums();
-        $_columns = [];
-        foreach ($columns as $column) {
-            $_columns[] = [
-                'columnName' => $column['COLUMN_NAME'],
-                'columnDefault' => $column['COLUMN_DEFAULT'],
-                'isNullAble' => $column['IS_NULLABLE'],
-                'dataType' => $column['DATA_TYPE'],
-                'characterMaximumLength' => $column['CHARACTER_MAXIMUM_LENGTH'],
-                'numericPrecision' => $column['NUMERIC_PRECISION'],
-                'columnComment' => $column['COLUMN_COMMENT'],
-                'columnKey' => $column['COLUMN_KEY']
-            ];
-        }
-        $this->columns = $_columns;
+        $this->columns = $model->getColumns();
     }
 }

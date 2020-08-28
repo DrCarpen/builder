@@ -68,16 +68,14 @@ class Builder extends Command
     }
 
     /**
-     * 检查数据库配置
-     * @return Config
+     * 读取数据库配置
+     * @param $parameter
+     * @return bool|array
      */
     private function _getDatabase($parameter)
     {
-        new DatabaseCheck($parameter);
-        die;
-        $model = new Model($connection);
-        print_r($model->getColumns());
-        die;
+        $databaseCheck = new DatabaseCheck($parameter);
+        return $databaseCheck->getConnection();
     }
 
     /**
