@@ -86,4 +86,11 @@ class Builder extends Command
     {
         return $this->input->getOptions();
     }
+
+    private function askQuestion()
+    {
+        $fh = fopen('php://stdin', 'r');
+        echo "请输入任意字符";
+        $str = fread($fh, 1000);
+    }
 }

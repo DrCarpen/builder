@@ -36,9 +36,6 @@ class SingleApiWithoutModelMode extends Mode
         // 创建logic
         $logic = new BuildLogic($this->parameter);
         $logic->build($this->columns);
-        // 创建service
-        $service = new BuildService($this->parameter);
-        $service->build($this->columns);
         // 创建 入参结构体
         $request = new BuildRequest($this->parameter);
         $request->build($this->columns);

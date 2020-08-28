@@ -1,4 +1,3 @@
     public function {{MIN_API}}({{MAX_API}}Request $struct)
     {
     }
-

@@ -28,7 +28,7 @@ class BuildController extends BuildBasic
             $this->initBuild($direct, ['TABLE_NAME' => lcfirst($this->_tableName())]);
         }
         if ($this->checkActionExist()) {
-            $this->console->errorExit($this->getClassName().'控制器中已经存在此API');
+            $this->console->errorExit($this->getClassName().'控制器中已经存在此接口');
         }
         $this->appendAPI($direct);
         return true;
@@ -90,7 +90,6 @@ class BuildController extends BuildBasic
         ], $controllerBody);
         // 追加接口
         $newFile = substr_replace($initFile, PHP_EOL.$controllerBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
-//        $newFile = preg_replace('/\}$/', $controllerBodyFile.PHP_EOL.'}', $initFile);
         // 追加命名空间
         $baseText = 'use App\Controllers\Abstracts\Base;';
         $text = $baseText.PHP_EOL.'use App\Logics\\'.$this->_tableName().'\\'.ucfirst($this->api).'Logic;';

@@ -12,12 +12,10 @@ class DatabaseCheck
 {
     private $console;
     private $inputArguments;
-    private $singleDB = [
+    private $databaseNameList = [
         'database',
-        'db'
-    ];
-    private $multiplyDB = [
         'databases',
+        'db',
         'dbs'
     ];
     /**
@@ -59,19 +57,10 @@ class DatabaseCheck
     private function _getConnections()
     {
         $connections = [];
-        foreach ($this->singleDB as $single) {
+        foreach ($this->databaseNameList as $single) {
             if ($parts = app()->getConfig()->{$single}) {
                 foreach ($parts as $partKey => $part) {
                     $part['databaseName'] = $single;
-                    $part['instanceName'] = $partKey;
-                    array_push($connections, $part);
-                }
-            }
-        }
-        foreach ($this->multiplyDB as $multiply) {
-            if ($parts = app()->getConfig()->{$multiply}) {
-                foreach ($parts as $partKey => $part) {
-                    $part['databaseName'] = $multiply;
                     $part['instanceName'] = $partKey;
                     array_push($connections, $part);
                 }
