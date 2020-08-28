@@ -51,5 +51,6 @@ class SingleApiMode extends Mode
         // 创建  出参结构体
         $result = new BuildResult($this->parameter);
         $result->build($this->columns);
+        $this->console->info('生成结束');
     }
 }

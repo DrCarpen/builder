@@ -26,8 +26,8 @@ class BuildResult extends BuildBasic
         $this->initBuild($direct, [
             'TABLE_NAME' => $this->_tableName(),
             'EXTEND_CLASS' => $this->getExtendClass(),
-            'USE_TRAIT' => $this->getUseTrait(),
-            'RESULT_PART' => $this->getResultPart()
+            'USE_TRAIT' => $this->getUseTrait($columns),
+            'RESULT_PART' => $this->getResultPart($columns)
         ]);
         // 创建Row
         if (in_array($this->api, [
@@ -39,8 +39,8 @@ class BuildResult extends BuildBasic
             $this->initBuild($rowDirect, [
                 'TABLE_NAME' => $this->_tableName(),
                 'EXTEND_CLASS' => $this->getExtendClass(),
-                'USE_TRAIT' => $this->getUseTrait(),
-                'RESULT_PART' => $this->getResultPart()
+                'USE_TRAIT' => $this->getUseTrait($columns),
+                'RESULT_PART' => $this->getResultPart($columns)
             ]);
         }
         return true;
@@ -63,7 +63,7 @@ class BuildResult extends BuildBasic
     /**
      * @return string
      */
-    protected function getUseTrait()
+    protected function getUseTrait($columns)
     {
         if (in_array($this->api, [
             'page',
@@ -71,6 +71,9 @@ class BuildResult extends BuildBasic
         ])) {
             return '';
         } else {
+            if (!$columns) {
+                return '';
+            }
             return 'use App\Structs\Traits\\'.$this->_tableName().'Trait;';
         }
     }
@@ -78,7 +81,7 @@ class BuildResult extends BuildBasic
     /**
      * @return bool|string
      */
-    protected function getResultPart()
+    protected function getResultPart($columns)
     {
         if (in_array($this->api, [
             'page',
@@ -86,6 +89,9 @@ class BuildResult extends BuildBasic
         ])) {
             return $this->getPartTemplate();
         } else {
+            if (!$columns) {
+                return '';
+            }
             return '     use '.$this->_tableName().'Trait;';
         }
     }

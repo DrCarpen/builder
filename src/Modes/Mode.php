@@ -40,6 +40,7 @@ class Mode
 
     public function __construct(array $parameter, $dbConfig)
     {
+        $this->console = new Console();
         // 初始化数据库配置
         $this->dbConfig = $dbConfig;
         // 初始化全局变量

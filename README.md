@@ -73,12 +73,8 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 1. 不基于数据库的接口生产   -t clerk -a create
 1. 基于数据库的model生产   -t clerk
 1. 基于数据库的接口生产     -t clerk -a create
-
-
-
-#### v2.1.0 版本
 1. 数据库默认环境修改 testing 
-1. 
+
 
 
 #### v2.0.0 版本

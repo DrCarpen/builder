@@ -26,5 +26,6 @@ class SimpleMode extends Mode
         // 调用组件-创建model文件
         $build = new BuildModel($this->parameter);
         $build->build($this->columns);
+        $this->console->info('生成结束');
     }
 }

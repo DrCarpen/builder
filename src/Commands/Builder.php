@@ -5,19 +5,11 @@
  */
 namespace Uniondrug\Builder\Commands;
 
-use Phalcon\Config;
-use Symfony\Component\Console\Exception\RuntimeException;
-use Symfony\Component\Console\Input\InputAwareInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Uniondrug\Builder\Modes\SimpleMode;
 use Uniondrug\Builder\Modes\SingleApiMode;
 use Uniondrug\Builder\Modes\SingleApiWithoutModelMode;
 use Uniondrug\Builder\Tools\DatabaseCheck;
-use Uniondrug\Builder\Tools\Model;
 use Uniondrug\Console\Command;
-use Uniondrug\Builder\Parsers\Collection;
-use Uniondrug\Builder\Tools\Console;
 
 /**
  * Class Builder
@@ -35,19 +27,7 @@ class Builder extends Command
      * 命令描述
      * @var string
      */
-    protected $description = '脚手架生成工具';
-    /**
-     * 数据库配置必填项
-     * @var string[]
-     */
-    protected $_dbConfigItemRequired = [
-        'host',
-        'port',
-        'dbname',
-        'charset',
-        'username',
-        'password'
-    ];
+    protected $description = 'Builder-代码生成工具';
 
     /**
      * @inheritdoc
@@ -87,10 +67,13 @@ class Builder extends Command
         return $this->input->getOptions();
     }
 
-    private function askQuestion()
+    /**
+     * @param $parameter
+     */
+    private function askQuestion($parameter)
     {
         $fh = fopen('php://stdin', 'r');
-        echo "请输入任意字符";
+        echo "未找到模型";
         $str = fread($fh, 1000);
     }
 }
