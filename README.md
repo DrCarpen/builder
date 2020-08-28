@@ -80,7 +80,9 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 1. 不基于数据库的接口生产   -t clerk -a create
 1. 基于数据库的model生产   -t clerk
 1. 基于数据库的接口生产     -t clerk -a create
-1. 数据库默认环境修改 testing 
+1. 结构体的入参出参，及模型的注释转为小驼峰 
+1. 入参的类型加入validator判断
+
 
 
 
