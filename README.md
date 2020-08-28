@@ -70,7 +70,9 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 ### 版本更新计划
 
 #### v3.0.0 版本
-1. 不基于数据库的代码生成脚手架（计划）
+1. 不基于数据库的接口生产   -t clerk -a create
+1. 基于数据库的model生产   -t clerk
+1. 基于数据库的接口生产     -t clerk -a create
 
 
 
