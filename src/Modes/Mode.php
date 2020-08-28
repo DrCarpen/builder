@@ -34,7 +34,7 @@ class Mode
      */
     public $parameter;
     /**
-     * @var Config
+     * @var array
      */
     protected $dbConfig;
 

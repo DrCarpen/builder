@@ -40,8 +40,8 @@ class BuildService extends BuildBasic
         $service = new \ReflectionClass(ServiceTrait::class);
         //更改注解
         $preDocument = $service->getDocComment();
-        $propertyText = "* @property ".$name."  $".lcfirst($name);
-        $propertyText .= PHP_EOL."*/";
+        $propertyText = "* @property ".$name." $".lcfirst($name);
+        $propertyText .= PHP_EOL." */";
         $newDocument = str_replace('*/', $propertyText, $preDocument);
         //更改use
         $oldUseText = "namespace App\Services\Abstracts;".PHP_EOL;
@@ -70,7 +70,6 @@ class BuildService extends BuildBasic
         ], $partBody);
         // 追加接口
         $newFile = substr_replace($initFile, PHP_EOL.$partBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
-        //        $newFile = preg_replace('/\}$/', $partBodyFile.'}', $initFile);
         // 追加命名空间
         $baseText = 'use App\Services\Abstracts\Service;';
         $text = $baseText.PHP_EOL.'use App\Structs\Requests\\'.$this->_tableName().'\\'.ucfirst($this->api).'Request;';

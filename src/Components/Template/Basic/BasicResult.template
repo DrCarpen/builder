@@ -6,9 +6,9 @@ use Uniondrug\Structs\{{EXTEND_CLASS}};
 {{USE_TRAIT}}
 
 /**
-* Class {{CLASS_NAME}}
-* @package App\Structs\Results\{{TABLE_NAME}}
-*/
+ * Class {{CLASS_NAME}}
+ * @package App\Structs\Results\{{TABLE_NAME}}
+ */
 class {{CLASS_NAME}} extends {{EXTEND_CLASS}}
 {
 {{RESULT_PART}}

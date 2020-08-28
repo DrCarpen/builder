@@ -1,4 +1,4 @@
-## Builder v2.0
+## Builder v3.0.0
 
 ### 介绍
 1. 致力于开发全流程的代码生成工具
@@ -8,16 +8,17 @@
 1. 支持多数据选择
 
 
-### 使用方法
+### 快速上手
 ##### 1 composer.json引入如下包名，更新composer
+
 ```text
 "require-dev" : {
         "drcarpen/builder":"^2.0"
     }
 ```
-#####  2 app/Commands 加入新文件 BuilderCommand.php
-```text
+#####  2 app/Commands目录下创建文件 BuilderCommand.php
 
+```text
 <?php
 namespace App\Commands;
 
@@ -32,19 +33,18 @@ class BuilderCommand extends Builder
 ##### 3 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
 
 ```bash
+php vendor/uniondrug/console/console builder  -e testing  -t 表名或控制器名 -a 方法
+```
 
-php console builder [--database=数据库名] --table=表名 [--column=字段名] --env=testing
-或
-php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
-
+```bash
+php vendor/uniondrug/console/console builder  --table=表名  --env=testing --api 方法
 ```
 
 ### 参数说明
 
-1. --database  数据库名[非必填]
-1. --table     表名[必填]
-1. --column    字段名[非必填]
-1. --env       指定的环境变量[默认development]
+1. --table(-t)     表名[必填]
+1. --api(-a)       字段名[非必填]
+1. --env(-e)       指定的环境变量[默认development]
 
 ### 功能说明
 
@@ -52,6 +52,13 @@ php console builder [-d 数据库名] -t 表名 [-c 字段名] -e testing
 1. 根据指定的数据表生成对应的Model文件
 1. 生成property属性
 1. Table有`status`或`type`结尾的字段时，自动生成对应的[常量][映射方法][文本方法]`statusText`
+
+### 推荐命名
+1. 新增   create
+1. 修改   edit
+1. 详情   detail
+1. 无分页列表 listing
+1. 分页列表   page
 
 #### Struct层
 1. 生成对应的`trait`文件

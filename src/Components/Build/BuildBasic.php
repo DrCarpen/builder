@@ -37,6 +37,6 @@ class BuildBasic extends Build
         $fileContent = $this->templateParser->assign($assign, $template);
         // 生成文件
         $this->buildFile($fileContent, $this->getDocumentDirectPrefix(), $direct);
-        $this->console->info('已生成'.$this->classType.'基础文件');
+        $this->console->info('已生成'.$className.'基础文件');
     }
 }

@@ -92,7 +92,7 @@ class BuildResult extends BuildBasic
             if (!$columns) {
                 return '';
             }
-            return '     use '.$this->_tableName().'Trait;';
+            return '    use '.$this->_tableName().'Trait;';
         }
     }
 }
