@@ -9,12 +9,20 @@ use Uniondrug\Builder\Components\Build\BuildBasic;
 
 class BuildLogic extends BuildBasic
 {
+    /**
+     * BuildLogic constructor.
+     * @param $parameter
+     */
     public function __construct($parameter)
     {
         parent::__construct($parameter);
         $this->classType = 'Logic';
     }
 
+    /**
+     * @param $columns
+     * @return bool
+     */
     public function build($columns)
     {
         // 获取文件名称

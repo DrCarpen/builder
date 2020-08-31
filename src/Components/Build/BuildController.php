@@ -13,12 +13,21 @@ use Uniondrug\Builder\Components\Build\BuildBasic;
  */
 class BuildController extends BuildBasic
 {
+    /**
+     * BuildController constructor.
+     * @param $parameter
+     */
     public function __construct($parameter)
     {
         parent::__construct($parameter);
         $this->classType = 'Controller';
     }
 
+    /**
+     * @param $columns
+     * @return bool
+     * @throws \ReflectionException
+     */
     public function build($columns)
     {
         // 获取文件名称
@@ -26,9 +35,6 @@ class BuildController extends BuildBasic
         // 判断初试文件是否存在
         if (!$this->checkFileExsit($direct)) {
             $this->initBuild($direct, ['TABLE_NAME' => lcfirst($this->_tableName())]);
-        }
-        if ($this->checkActionExist()) {
-            $this->console->errorExit($this->getClassName().'控制器中已经存在此接口');
         }
         $this->appendAPI($direct);
         return true;
@@ -47,6 +53,7 @@ class BuildController extends BuildBasic
     }
 
     /**
+     * 获取sdk注释
      * @return string
      */
     protected function getSdkName()
@@ -55,6 +62,7 @@ class BuildController extends BuildBasic
     }
 
     /**
+     * 检查方法名是否存在
      * @return bool
      * @throws \ReflectionException
      */
@@ -73,10 +81,15 @@ class BuildController extends BuildBasic
     }
 
     /**
+     * 追加接口的action
      * @param $direct
      */
     public function appendAPI($direct)
     {
+        // 检查接口是否存在
+        if ($this->checkActionExist()) {
+            $this->console->errorExit($this->getClassName().'控制器中已经存在此接口');
+        }
         // 读取文件
         $initFile = $this->getInitFile($direct);
         // 创建接口数据

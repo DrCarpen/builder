@@ -15,6 +15,10 @@ class BuildResult extends BuildBasic
         $this->classType = 'Result';
     }
 
+    /**
+     * @param $columns
+     * @return bool
+     */
     public function build($columns)
     {
         // 获取文件名称
@@ -47,6 +51,7 @@ class BuildResult extends BuildBasic
     }
 
     /**
+     * 获取拓展类文件名
      * @return string
      */
     protected function getExtendClass()
@@ -61,6 +66,7 @@ class BuildResult extends BuildBasic
     }
 
     /**
+     * 获取trait类的文件名
      * @return string
      */
     protected function getUseTrait($columns)

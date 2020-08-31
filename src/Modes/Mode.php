@@ -52,6 +52,7 @@ class Mode
     }
 
     /**
+     * 配置参数
      * @param $parameter
      */
     protected function _setParameter($parameter)
@@ -61,7 +62,7 @@ class Mode
     }
 
     /**
-     *
+     * 获取表字段
      */
     private function _getColumns()
     {
@@ -74,6 +75,7 @@ class Mode
     }
 
     /**
+     * 获取小驼峰字段
      * @param      $str
      * @param bool $ucfirst
      * @return mixed|string

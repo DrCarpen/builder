@@ -11,6 +11,12 @@ namespace Uniondrug\Builder\Tools;
  */
 class TemplateParser
 {
+    /**
+     * 字段注入模板
+     * @param $replaceList
+     * @param $template
+     * @return null|string|string[]
+     */
     public function assign($replaceList, $template)
     {
         if (!empty($replaceList)) {

@@ -22,11 +22,18 @@ use Uniondrug\Builder\Components\Build\BuildTrait;
  */
 class SingleApiWithoutModelMode extends Mode
 {
+    /**
+     * SingleApiWithoutModelMode constructor.
+     * @param array $parameter
+     */
     public function __construct(array $parameter)
     {
         parent::__construct($parameter, []);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function run()
     {
         // 创建控制器

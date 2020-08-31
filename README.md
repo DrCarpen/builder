@@ -58,6 +58,7 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 ##### 入参结构体
 1. 根据参数【-api -a】生成入参结构体，例如 --api create 生成 createRequest.php 文件
 1. 若参数【--table -t】有对应的数据表，则入参结构体中生成入参字段
+1. 自动注解Validator规则
 
 ##### 出参结构体
 1. 根据参数【-api -a】生成出参结构体，例如 --api create 生成 createResult.php 文件

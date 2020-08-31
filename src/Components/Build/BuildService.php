@@ -8,14 +8,27 @@ namespace Uniondrug\Builder\Components\Build;
 use Uniondrug\Builder\Components\Build\BuildBasic;
 use App\Services\Abstracts\ServiceTrait;
 
+/**
+ * Class BuildService
+ * @package Uniondrug\Builder\Components\Build
+ */
 class BuildService extends BuildBasic
 {
+    /**
+     * BuildService constructor.
+     * @param $parameter
+     */
     public function __construct($parameter)
     {
         parent::__construct($parameter);
         $this->classType = 'Service';
     }
 
+    /**
+     * @param $columns
+     * @return bool
+     * @throws \ReflectionException
+     */
     public function build($columns)
     {
         // 获取文件名称
@@ -32,6 +45,7 @@ class BuildService extends BuildBasic
     }
 
     /**
+     * 重写serviceTrait文件
      * @throws \ReflectionException
      */
     public function rewriteServiceTrait()
@@ -56,6 +70,7 @@ class BuildService extends BuildBasic
     }
 
     /**
+     * 追加service中的方法
      * @param $direct
      */
     public function appendAPI($direct)

@@ -23,11 +23,19 @@ use Phalcon\Config;
  */
 class SingleApiMode extends Mode
 {
+    /**
+     * SingleApiMode constructor.
+     * @param array  $parameter
+     * @param Config $dbConfig
+     */
     public function __construct(array $parameter, Config $dbConfig)
     {
         parent::__construct($parameter, $dbConfig);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function run()
     {
         // 创建model

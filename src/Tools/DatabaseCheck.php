@@ -10,8 +10,18 @@ use Uniondrug\Builder\Tools\Base;
  */
 class DatabaseCheck
 {
+    /**
+     * @var Console
+     */
     private $console;
+    /**
+     * @var array
+     */
     private $inputArguments;
+    /**
+     * 默认的数据库配置文件名
+     * @var array
+     */
     private $databaseNameList = [
         'database',
         'databases',
@@ -20,7 +30,7 @@ class DatabaseCheck
     ];
     /**
      * 数据库配置必填项
-     * @var string[]
+     * @var array
      */
     protected $_dbConfigItemRequired = [
         'host',
@@ -29,6 +39,10 @@ class DatabaseCheck
         'password'
     ];
 
+    /**
+     * DatabaseCheck constructor.
+     * @param $inputArguments
+     */
     public function __construct($inputArguments)
     {
         $this->console = new Console();
@@ -36,7 +50,7 @@ class DatabaseCheck
     }
 
     /**
-     * 读取连接
+     * 读取可用的数据库连接配置
      * @return bool
      */
     public function getConnection()

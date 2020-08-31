@@ -16,11 +16,19 @@ use Uniondrug\Builder\Components\Build\BuildModel;
  */
 class SimpleMode extends Mode
 {
+    /**
+     * SimpleMode constructor.
+     * @param array $parameter
+     * @param       $dbConfig
+     */
     public function __construct(array $parameter, $dbConfig)
     {
         parent::__construct($parameter, $dbConfig);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function run()
     {
         if (!$this->dbConfig) {

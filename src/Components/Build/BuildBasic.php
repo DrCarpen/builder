@@ -11,12 +11,17 @@ namespace Uniondrug\Builder\Components\Build;
  */
 class BuildBasic extends Build
 {
+    /**
+     * BuildBasic constructor.
+     * @param $parameter
+     */
     public function __construct($parameter)
     {
         parent::__construct($parameter);
     }
 
     /**
+     * 构建各个子类的基础文件
      * @param $direct
      * @param $assign
      */

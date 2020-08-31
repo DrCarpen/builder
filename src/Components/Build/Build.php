@@ -15,10 +15,12 @@ use Uniondrug\Builder\Tools\TemplateParser;
 class Build
 {
     /**
+     * 接口名称
      * @var string
      */
     public $api;
     /**
+     * 接口的表名
      * @var string
      */
     public $table;
@@ -27,15 +29,20 @@ class Build
      */
     public $console;
     /**
+     * 模板引擎
      * @var TemplateParser
      */
     public $templateParser;
     /**
-     * 各个子类中定义class的类型
+     * 文件类型
+     * 在各个子类中定义
      * @var string
      */
     public $classType;
-    // int类型包含的子类型
+    /**
+     * 结构体中int映射的数据库类型表
+     * @var array
+     */
     protected $int = [
         'int',
         'integer',
@@ -44,7 +51,10 @@ class Build
         'mediumint',
         'bigint'
     ];
-    // string字符串类型包含的子类型
+    /**
+     * 结构体中string映射的数据库类型表
+     * @var array
+     */
     protected $string = [
         'char',
         'varchar',
@@ -54,20 +64,30 @@ class Build
         'longtext',
         'json'
     ];
-    // float类型包含的子类型
+    /**
+     * 结构体中float映射的数据库类型表
+     * @var array
+     */
     protected $float = [
         'double',
         'float',
         'decimal'
     ];
     // 日期类型包含的子类型
+    /**
+     * 结构体中日期映射的数据库类型表
+     * @var array
+     */
     protected $time = [
         'date',
         'datetime',
         'year',
         'time'
     ];
-    // 时间戳类型
+    /**
+     * 结构体中时间戳映射的数据库类型表
+     * @var array
+     */
     protected $timestamp = [
         'timestamp'
     ];
@@ -81,38 +101,45 @@ class Build
         'update' => '修改',
         'detail' => '详情',
         'listing' => '无分页列表',
-        'paging' => '分页列表'
+        'page' => '分页列表'
     ];
 
     public function __construct($parameter)
     {
-        $this->_console();
-        $this->_parameter($parameter);
+        $this->_setConsole();
+        $this->_setParameter($parameter);
         $this->_setAuthorInfo();
         $this->_templateParser();
     }
 
     /**
+     * 配置参数
      * @param $parameter
      */
-    private function _parameter($parameter)
+    private function _setParameter($parameter)
     {
         $this->api = key_exists('api', $parameter) ? $parameter['api'] : '';
         $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
     }
 
-    private function _templateParser()
+    /**
+     * 引入模板引擎
+     */
+    private function _setTemplateParser()
     {
         $this->templateParser = new TemplateParser();
     }
 
-    private function _console()
+    /**
+     * 引入输出引擎
+     */
+    private function _setConsole()
     {
         $this->console = new Console();
     }
 
     /**
-     * 获取用户名称信息
+     * 配置用户名称信息
      */
     private function _setAuthorInfo()
     {
@@ -133,6 +160,7 @@ class Build
     }
 
     /**
+     * 读取作者信息
      * @return string
      */
     protected function getAuthorContent()
@@ -197,7 +225,7 @@ class Build
     }
 
     /**
-     * 查询此类型
+     * 查询字段的Validator类型
      * @param $type
      * @return string
      */
@@ -234,7 +262,7 @@ class Build
         foreach ($columns as $key => $value) {
             $propertyTemplateContentString = ' * @property ';
             $propertyTemplateContentString .= str_pad($this->getType($value['dataType']), $longestTypeNum - $this->getType($value['dataType']) + 1, ' ');
-            $propertyTemplateContentString .= '$'.str_pad($value['columnName'], $longestNum - $value['columnName'] + 1, ' ');
+            $propertyTemplateContentString .= '$'.str_pad($value['camelColumnName'], $longestNum - $value['camelColumnName'] + 1, ' ');
             $propertyTemplateContentString .= $value['columnComment'];
             $propertyTemplateContent[] = $propertyTemplateContentString;
         }
@@ -250,8 +278,8 @@ class Build
     {
         $longestNum = 0;
         foreach ($columns as $column) {
-            if (strlen($column['columnName']) > $longestNum) {
-                $longestNum = strlen($column['columnName']);
+            if (strlen($column['camelColumnName']) > $longestNum) {
+                $longestNum = strlen($column['camelColumnName']);
             }
         }
         return $longestNum;
@@ -351,10 +379,16 @@ class Build
         }
     }
 
+    /**
+     * 获取Validator的校验
+     * @param $type
+     * @param $column
+     * @return string
+     */
     protected function getValidator($type, $column)
     {
-        if ($type == 'string' && $column['CHARACTER_MAXIMUM_LENGTH']) {
-            $validator = 'required,options={minChar:1,maxChar:'.$column['CHARACTER_MAXIMUM_LENGTH'].'}';
+        if ($type == 'string' && $column['characterMaximumLength']) {
+            $validator = 'required,options={minChar:1,maxChar:'.$column['characterMaximumLength'].'}';
         } else {
             $validator = 'required';
         }
