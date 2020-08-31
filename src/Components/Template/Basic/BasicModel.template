@@ -10,4 +10,5 @@ use App\Models\Abstracts\Model;
  */
 class {{CLASS_NAME}} extends Model
 {
+{{COLUMN_MAP}}
 }

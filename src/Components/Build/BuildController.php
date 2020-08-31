@@ -34,7 +34,7 @@ class BuildController extends BuildBasic
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();
         // 判断初试文件是否存在
         if (!$this->checkFileExsit($direct)) {
-            $this->initBuild($direct, ['TABLE_NAME' => lcfirst($this->_tableName())]);
+            $this->initBuild($direct, ['ROUTE_PRIFIX' => $this->getRoutelPrefix($this->table)]);
         }
         $this->appendAPI($direct);
         return true;
@@ -102,12 +102,21 @@ class BuildController extends BuildBasic
             'TABLE_NAME' => $this->_tableName(),
         ], $controllerBody);
         // 追加接口
-        $newFile = substr_replace($initFile, PHP_EOL.$controllerBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
+        $newFile = substr_replace($initFile, PHP_EOL.PHP_EOL.$controllerBodyFile.'}', strrpos($initFile, '}') - 1, strrpos($initFile, '}'));
         // 追加命名空间
         $baseText = 'use App\Controllers\Abstracts\Base;';
         $text = $baseText.PHP_EOL.'use App\Logics\\'.$this->_tableName().'\\'.ucfirst($this->api).'Logic;';
         $newFile = str_replace($baseText, $text, $newFile);
         $this->rewriteFile($direct, $newFile);
         $this->console->info('Controller中已追加API!');
+    }
+
+    /**
+     * @param $table
+     * @return mixed
+     */
+    private function getRoutelPrefix($table)
+    {
+        return str_replace('_', '/', $table);
     }
 }

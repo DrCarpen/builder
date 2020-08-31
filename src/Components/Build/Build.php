@@ -109,7 +109,7 @@ class Build
         $this->_setConsole();
         $this->_setParameter($parameter);
         $this->_setAuthorInfo();
-        $this->_templateParser();
+        $this->_setTemplateParser();
     }
 
     /**
@@ -469,7 +469,7 @@ class Build
      * @param $templateName
      * @return bool|string
      */
-    protected function getPartTemplate()
+    protected function getPartTemplate($partTemplate = '')
     {
         $templateDirect = './vendor/drcarpen/builder/src/Components/Template/Part/';
         switch ($this->classType) {
@@ -480,7 +480,13 @@ class Build
                 $templateDirect = $templateDirect.'ServicePart.template';
                 break;
             case 'Model':
-                $templateDirect = $templateDirect.'ModelPart.template';
+                if (!$partTemplate) {
+                    $templateDirect = $templateDirect.'ModelPart.template';
+                } else if ($partTemplate == 'ModeColumnMap') {
+                    $templateDirect = $templateDirect.'ModelColumnMapPart.template';
+                } else if ($partTemplate == 'ModeColumnMap') {
+                    $templateDirect = $templateDirect.'ModelPart.template';
+                }
                 break;
             case 'Trait':
                 $templateDirect = $templateDirect.'TraitPart.template';

@@ -62,8 +62,8 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 
 ##### 出参结构体
 1. 根据参数【-api -a】生成出参结构体，例如 --api create 生成 createResult.php 文件
-1. 分页列表：--api page 生成rowResult,pageResult
-1. 无分页列表：--api listing 生成 rowResult，listingResult
+1. 分页列表【--api page】 生成pageResult，rowResult
+1. 无分页列表【--api listing】 生成 listingResult，rowResult
 
 ##### Trait
 1. 根据指定的数据表生成对应的`trait`文件
@@ -78,6 +78,7 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 #### Controller层
 1. 根据参数【--table -t】生成对应的controller文件，例如 --table create 生成 createController.php 
 1. 根据参数【-api -a】生成控制器中的方法，input,output,sdk注释等
+1. 路由切割 表名resource_img转化路由为 /resource/img 
 
 
 ### 版本更新计划

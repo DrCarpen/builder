@@ -35,7 +35,8 @@ class BuildTrait extends BuildBasic
         // 判断基础文件是否存在
         if (!$this->checkFileExsit($direct)) {
             $this->initBuild($direct, [
-                'TRAIT_LIST' => $this->getTraitList($columns)
+                'TRAIT_LIST' => $this->getTraitList($columns),
+                'TRAIT_NAME' => $this->_tableName().'Trait'
             ]);
         }
         return true;

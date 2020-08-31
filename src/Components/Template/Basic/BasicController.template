@@ -7,7 +7,7 @@ use App\Controllers\Abstracts\Base;
 /**
  * Class {{CLASS_NAME}}
  * @package App\Controllers
- * @RoutePrefix("/{{TABLE_NAME}}")
+ * @RoutePrefix("/{{ROUTE_PRIFIX}}")
  */
 class {{CLASS_NAME}} extends Base
 {
