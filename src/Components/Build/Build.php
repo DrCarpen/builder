@@ -228,17 +228,49 @@ class Build
      */
     protected function getPropertyContent($columns)
     {
-        $propertyTemplate = ' * @property {{DATA_TYPE}}  ${{COLUMN_NAME}}    {{COLUMN_COMMENT}}';
+        $longestNum = $this->getLongestCharNum($columns);
+        $longestTypeNum = $this->getTypeCharNum($columns);
         $propertyTemplateContent = [];
         foreach ($columns as $key => $value) {
-            $repalceList = [
-                'DATA_TYPE' => $this->getType($value['dataType']),
-                'COLUMN_NAME' => $value['columnName'],
-                'COLUMN_COMMENT' => $value['columnComment']
-            ];
-            $propertyTemplateContent[] = $this->templateParser->assign($repalceList, $propertyTemplate);
+            $propertyTemplateContentString = ' * @property ';
+            $propertyTemplateContentString .= str_pad($this->getType($value['dataType']), $longestTypeNum - $this->getType($value['dataType']) + 1, ' ');
+            $propertyTemplateContentString .= '$'.str_pad($value['columnName'], $longestNum - $value['columnName'] + 1, ' ');
+            $propertyTemplateContentString .= $value['columnComment'];
+            $propertyTemplateContent[] = $propertyTemplateContentString;
         }
         return implode(PHP_EOL, $propertyTemplateContent);
+    }
+
+    /**
+     * 获取最长的字段的字符数
+     * @param $columns
+     * @return int
+     */
+    protected function getLongestCharNum($columns)
+    {
+        $longestNum = 0;
+        foreach ($columns as $column) {
+            if (strlen($column['columnName']) > $longestNum) {
+                $longestNum = strlen($column['columnName']);
+            }
+        }
+        return $longestNum;
+    }
+
+    /**
+     * 获取类型最长的字符数
+     * @param $columns
+     * @return int
+     */
+    protected function getTypeCharNum($columns)
+    {
+        $longestTypeNum = 0;
+        foreach ($columns as $column) {
+            if (strlen($this->getType($column['dataType'])) > $longestTypeNum) {
+                $longestTypeNum = strlen($this->getType($column['dataType']));
+            }
+        }
+        return $longestTypeNum;
     }
 
     /**

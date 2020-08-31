@@ -39,7 +39,7 @@ class BuildRequest extends BuildBasic
         $template = $this->getPartTemplate();
         $templateList = [];
         foreach ($columns as $key => $value) {
-            if ($value['columnKey'] != 'PRI' && !in_array($value['COLUMN_NAME'], [
+            if ($value['columnKey'] != 'PRI' && !in_array($value['columnName'], [
                     'gmtCreated',
                     'gmtUpdated'
                 ])) {
@@ -47,7 +47,7 @@ class BuildRequest extends BuildBasic
                     'COLUMN_COMMENT' => $value['columnComment'] ? $value['columnComment'] : $value['columnName'],
                     'VALIDATOR_TYPE' => $this->getValidator($this->getType($value['dataType']), $value),
                     'DATA_TYPE' => $this->getType($value['dataType']),
-                    'COLUMN_NAME' => $value['columnName']
+                    'COLUMN_NAME' => $value['camelColumnName']
                 ];
                 $templateList[] = $this->templateParser->assign($repalceList, $template);
             }

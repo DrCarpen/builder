@@ -1,11 +1,12 @@
 ## Builder v3.0.0
+### Build More Code Easy
 
 ### 介绍
-1. 致力于开发全流程的代码生成工具
-1. 支持单接口模式，可自定义接口
-1. 支持model模式
-1. 一行命令，让你的CURD生活更加简单
+1. 涉及开发全流程的代码生成工具
+1. 支持单纯model文件生成
+1. 支持自定义单接口
 1. 支持多数据选择
+
 
 
 ### 快速上手
@@ -13,7 +14,7 @@
 
 ```text
 "require-dev" : {
-        "drcarpen/builder":"^2.0"
+        "drcarpen/builder":"^3.0"
     }
 ```
 #####  2 app/Commands目录下创建文件 BuilderCommand.php
@@ -28,7 +29,6 @@ class BuilderCommand extends Builder
 {
 }
 ```
-
 
 ##### 3 命令行第三个参数为数据表命，必须依照规范，为下划线定义，如 wx_members
 
@@ -50,29 +50,34 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 
 ####  Model层
 1. 根据指定的数据表生成对应的Model文件
-1. 生成property属性
-1. Table有`status`或`type`结尾的字段时，自动生成对应的[常量][映射方法][文本方法]`statusText`
-
-### 推荐命名
-1. 新增   create
-1. 修改   edit
-1. 详情   detail
-1. 无分页列表 listing
-1. 分页列表   page
+1. 生成property属性注释
+1. 生成columnMap()，支持表字段下划线式转化成小驼峰式 如user_staus映射成userStatus
+1. 支持字段注释内容自动生成状态位，自动生成对应的[常量][映射方法][文本方法]`statusText`
 
 #### Struct层
-1. 生成对应的`trait`文件
-1. 生成 `create，delete，update，detail，listing，paging`六个入参结构体
-1. 生成`row，rows，listing`三个出参结构体
+##### 入参结构体
+1. 根据参数【-api -a】生成入参结构体，例如 --api create 生成 createRequest.php 文件
+1. 若参数【--table -t】有对应的数据表，则入参结构体中生成入参字段
+
+##### 出参结构体
+1. 根据参数【-api -a】生成出参结构体，例如 --api create 生成 createResult.php 文件
+1. 分页列表：--api page 生成rowResult,pageResult
+1. 无分页列表：--api listing 生成 rowResult，listingResult
+
+##### Trait
+1. 根据指定的数据表生成对应的`trait`文件
 
 #### Service层
-1. 生成`create，delete，update，detail，listing，paging`的方法
+1. 根据参数【--table -t】生成service文件，例如 --table create 生成 createService.php 文件，并且注入到serviceTrait.php中
+1. 根据参数【-api -a】生成方法
 
 #### Logic层
-1. 生成`create，delete，update，detail，listing，paging`的逻辑层文件
+1. 根据参数【-api -a】生成logic文件，例如 --api create 生成 createLogic.php 文件
 
 #### Controller层
-1. 生成`create，delete，update，detail，listing，paging`的方法及sdk名
+1. 根据参数【--table -t】生成对应的controller文件，例如 --table create 生成 createController.php 
+1. 根据参数【-api -a】生成控制器中的方法，input,output,sdk注释等
+
 
 ### 版本更新计划
 

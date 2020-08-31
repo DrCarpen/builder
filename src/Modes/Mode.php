@@ -66,6 +66,22 @@ class Mode
     private function _getColumns()
     {
         $model = new Model($this->dbConfig);
-        $this->columns = $model->getColumns();
+        $columns = $model->getColumns();
+        foreach ($columns as $columnKey => $column) {
+            $columns[$columnKey]['camelColumnName'] = $this->getLowerCamelCase($column['columnName']);
+        }
+        $this->columns = $columns;
+    }
+
+    /**
+     * @param      $str
+     * @param bool $ucfirst
+     * @return mixed|string
+     */
+    private function getLowerCamelCase($str, $ucfirst = false)
+    {
+        $str = ucwords(str_replace('_', ' ', $str));
+        $str = str_replace(' ', '', lcfirst($str));
+        return $ucfirst ? ucfirst($str) : $str;
     }
 }
