@@ -1,0 +1,1 @@
+    const {{UPPER_UNDERLINE_CASE}}_{{SIT_STATUS}} = {{SIT_STATUS}}; // {{SIT_COMMNET}}

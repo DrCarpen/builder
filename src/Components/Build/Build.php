@@ -484,8 +484,14 @@ class Build
                     $templateDirect = $templateDirect.'ModelPart.template';
                 } else if ($partTemplate == 'ModeColumnMap') {
                     $templateDirect = $templateDirect.'ModelColumnMapPart.template';
-                } else if ($partTemplate == 'ModeColumnMap') {
-                    $templateDirect = $templateDirect.'ModelPart.template';
+                } else if ($partTemplate == 'ModeConstant') {
+                    $templateDirect = $templateDirect.'ModelConstantPart.template';
+                } else if ($partTemplate == 'ModeTextFunc') {
+                    $templateDirect = $templateDirect.'ModelTextFuncPart.template';
+                } else if ($partTemplate == 'ModeTextArray') {
+                    $templateDirect = $templateDirect.'ModelTextArrayPart.template';
+                } else if ($partTemplate == 'ModeText') {
+                    $templateDirect = $templateDirect.'ModelTextPart.template';
                 }
                 break;
             case 'Trait':

@@ -1,0 +1,4 @@
+
+    private static $_{{LOWER_CAMEL_CASE}}Text = [
+{{ARRAY_CONTENT}}
+    ];

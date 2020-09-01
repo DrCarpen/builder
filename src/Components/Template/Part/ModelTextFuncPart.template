@@ -1,0 +1,9 @@
+
+    /**
+     * {{COLUMN_COMMENT}}
+     * @return mixed|string
+     */
+    public function get{{UPPER_CAMEL_CASE}}Text()
+    {
+        return isset(static::$_{{LOWER_CAMEL_CASE}}Text[$this->{{LOWER_CAMEL_CASE}}]) ? static::$_{{LOWER_CAMEL_CASE}}Text[$this->{{LOWER_CAMEL_CASE}}] : static::$_unknownMessage;
+    }
