@@ -53,7 +53,7 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 1. 生成property属性注释
 1. 生成columnMap()，支持表字段下划线式转化成小驼峰式 如user_staus映射成userStatus
 1. 支持字段注释内容自动生成状态位，自动生成对应的[常量][映射方法][文本方法]`statusText`
-1. 注释主体说明: 1=xx 2=xx 3=xx
+1. 注释主体说明 1=xx 2=xx 3=xx
 #### Struct层
 ##### 入参结构体
 1. 根据参数【-api -a】生成入参结构体，例如 --api create 生成 createRequest.php 文件
