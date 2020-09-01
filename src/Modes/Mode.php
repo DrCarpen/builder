@@ -70,6 +70,7 @@ class Mode
         $columns = $model->getColumns();
         foreach ($columns as $columnKey => $column) {
             $columns[$columnKey]['camelColumnName'] = $this->getLowerCamelCase($column['columnName']);
+            $columns[$columnKey]['underlineColumnName'] = $this->getUnderlineCase($column['columnName']);
         }
         $this->columns = $columns;
     }
@@ -85,5 +86,15 @@ class Mode
         $str = ucwords(str_replace('_', ' ', $str));
         $str = str_replace(' ', '', lcfirst($str));
         return $ucfirst ? ucfirst($str) : $str;
+    }
+
+    /**
+     * @param        $camelCaps
+     * @param string $separator
+     * @return string
+     */
+    private function getUnderlineCase($camelCaps, $separator = '_')
+    {
+        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1".$separator."$2", $camelCaps));
     }
 }
