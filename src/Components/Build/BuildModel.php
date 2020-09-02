@@ -8,7 +8,6 @@ namespace Uniondrug\Builder\Components\Build;
 use Phalcon\Db\Exception;
 use Uniondrug\Builder\Column;
 use Uniondrug\Builder\Components\Build\BuildBasic;
-use Uniondrug\Builder\Traits\ColumnTrait;
 
 /**
  * Class BuildModel
@@ -16,7 +15,6 @@ use Uniondrug\Builder\Traits\ColumnTrait;
  */
 class BuildModel extends BuildBasic
 {
-    use ColumnTrait;
     /**
      * @var array
      */
@@ -82,12 +80,12 @@ class BuildModel extends BuildBasic
                     $str .= $this->templateParser->assign([
                         'UPPER_UNDERLINE_CASE' => strtoupper($column['underlineColumnName']),
                         'SIT_STATUS' => $sit['sitStatus'],
-                        'SIT_COMMNET' => $sit['sitComment']
+                        'SIT_COMMNET' => $column['sitAnnotation']['main'].$sit['sitComment']
                     ], $this->getPartTemplate('ModeConstant'));
                 }
             }
         }
-        $str .= '    private static $_unknownMessage = \'非法状态\';';
+        $str .= '    private static $_unknownMessage = \'非法状态\';'.PHP_EOL;
         foreach ($columns as $column) {
             if ($column['sitAnnotation']['sit']) {
                 $arrayContent = '';
@@ -100,7 +98,8 @@ class BuildModel extends BuildBasic
                 }
                 $str .= $this->templateParser->assign([
                     'LOWER_CAMEL_CASE' => $column['camelColumnName'],
-                    'ARRAY_CONTENT' => $arrayContent
+                    'ARRAY_CONTENT' => $arrayContent,
+                    'COLUMN_COMMENT' => $column['sitAnnotation']['main'] ? $column['sitAnnotation']['main'] : $column['camelColumnName']
                 ], $this->getPartTemplate('ModeTextArray'));
             }
         }
