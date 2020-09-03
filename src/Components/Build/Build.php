@@ -261,8 +261,8 @@ class Build
         $propertyTemplateContent = [];
         foreach ($columns as $key => $value) {
             $propertyTemplateContentString = ' * @property ';
-            $propertyTemplateContentString .= str_pad($this->getType($value['dataType']), $longestTypeNum - $this->getType($value['dataType']) + 1, ' ');
-            $propertyTemplateContentString .= '$'.str_pad($value['camelColumnName'], $longestNum - $value['camelColumnName'] + 1, ' ');
+            $propertyTemplateContentString .= str_pad($this->getType($value['dataType']), $longestTypeNum - strlen($this->getType($value['dataType'])) + 1, ' ');
+            $propertyTemplateContentString .= '$'.str_pad($value['camelColumnName'], $longestNum - strlen($value['camelColumnName']) + 1, ' ');
             $propertyTemplateContentString .= $value['columnComment'];
             $propertyTemplateContent[] = $propertyTemplateContentString;
         }

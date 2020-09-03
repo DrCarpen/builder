@@ -26,7 +26,9 @@ class DatabaseCheck
         'database',
         'databases',
         'db',
-        'dbs'
+        'dbs',
+        'db1',
+        'db2'
     ];
     /**
      * 数据库配置必填项
@@ -72,7 +74,12 @@ class DatabaseCheck
     {
         $connections = [];
         foreach ($this->databaseNameList as $single) {
-            if ($parts = app()->getConfig()->{$single}) {
+            try {
+                $parts = app()->getConfig()->{$single};
+            } catch(\Exception $exception) {
+                continue;
+            }
+            if ($parts) {
                 foreach ($parts as $partKey => $part) {
                     $part['databaseName'] = $single;
                     $part['instanceName'] = $partKey;
