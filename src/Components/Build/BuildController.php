@@ -92,6 +92,10 @@ class BuildController extends BuildBasic
         }
         // 读取文件
         $initFile = $this->getInitFile($direct);
+        if (!$initFile) {
+            $this->console->warning('Controller基础文件不存在!');
+            return false;
+        }
         // 创建接口数据
         $controllerBody = $this->getPartTemplate();
         $controllerBodyFile = $this->templateParser->assign([

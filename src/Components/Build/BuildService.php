@@ -51,7 +51,11 @@ class BuildService extends BuildBasic
     public function rewriteServiceTrait()
     {
         $name = $this->getClassName();
-        $service = new \ReflectionClass(ServiceTrait::class);
+        try {
+            $service = new \ReflectionClass(ServiceTrait::class);
+        } catch(\Exception $exception) {
+            return false;
+        }
         //更改注解
         $preDocument = $service->getDocComment();
         $propertyText = "* @property ".$name." $".lcfirst($name);
@@ -77,6 +81,9 @@ class BuildService extends BuildBasic
     {
         // 读取文件
         $initFile = $this->getInitFile($direct);
+        if (!$initFile) {
+            $this->console->info('Service基础文件不存在！');
+        }
         // 创建接口数据
         $partBody = $this->getPartTemplate();
         $partBodyFile = $this->templateParser->assign([
