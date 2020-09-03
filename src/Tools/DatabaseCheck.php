@@ -19,18 +19,6 @@ class DatabaseCheck
      */
     private $inputArguments;
     /**
-     * 默认的数据库配置文件名
-     * @var array
-     */
-    private $databaseNameList = [
-        'database',
-        'databases',
-        'db',
-        'dbs',
-        'db1',
-        'db2'
-    ];
-    /**
      * 数据库配置必填项
      * @var array
      */
@@ -72,18 +60,28 @@ class DatabaseCheck
      */
     private function _getConnections()
     {
+        try {
+            $configLists = app()->getConfig();
+            if (!$configLists) {
+                return [];
+            }
+        } catch(\Exception $exception) {
+            return [];
+        }
         $connections = [];
-        foreach ($this->databaseNameList as $single) {
-            try {
-                $parts = app()->getConfig()->{$single};
-            } catch(\Exception $exception) {
+        foreach ($configLists as $configListKey => $configList) {
+            if (!$configList) {
                 continue;
             }
-            if ($parts) {
-                foreach ($parts as $partKey => $part) {
-                    $part['databaseName'] = $single;
-                    $part['instanceName'] = $partKey;
-                    array_push($connections, $part);
+            foreach ($configList as $configKey => $config) {
+                if (!$config) {
+                    continue;
+                } else {
+                    if (key_exists('dbname', $config) && key_exists('host', $config)) {
+                        $config['databaseName'] = $configListKey;
+                        $config['instanceName'] = $configKey;
+                        array_push($connections, $config);
+                    }
                 }
             }
         }
