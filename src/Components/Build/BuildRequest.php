@@ -52,6 +52,9 @@ class BuildRequest extends BuildBasic
     {
         $template = $this->getPartTemplate();
         $templateList = [];
+        if (!$columns) {
+            return '';
+        }
         foreach ($columns as $key => $value) {
             // 过滤不需要的字段
             if ($value['columnKey'] == 'PRI' || in_array($value['camelColumnName'], [

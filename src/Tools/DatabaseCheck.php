@@ -74,7 +74,7 @@ class DatabaseCheck
                 continue;
             }
             foreach ($configList as $configKey => $config) {
-                if (!$config) {
+                if (!$config || !is_array($config)) {
                     continue;
                 } else {
                     if (key_exists('dbname', $config) && key_exists('host', $config)) {

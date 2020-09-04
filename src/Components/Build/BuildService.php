@@ -37,7 +37,7 @@ class BuildService extends BuildBasic
         if (!$this->checkFileExsit($direct)) {
             $this->initBuild($direct, ['TABLE_NAME' => lcfirst($this->_tableName())]);
             // 更新serviceTrait文件
-            $this->rewriteServiceTrait();
+//            $this->rewriteServiceTrait();
         }
         // 追加API
         $this->appendAPI($direct);
