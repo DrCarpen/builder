@@ -5,9 +5,7 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
-class BuildLogic extends BuildBasic
+class BuildLogic extends Base
 {
     /**
      * BuildLogic constructor.

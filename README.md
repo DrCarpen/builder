@@ -90,6 +90,8 @@ php vendor/uniondrug/console/console builder  --table=表名  --env=testing --ap
 1. 结构体的入参出参，及模型的注释转为小驼峰 
 1. 入参的类型加入validator判断
 1. 模型的注释格式化
+1. 模板引擎类重构
+1. 架构调整
 
 
 

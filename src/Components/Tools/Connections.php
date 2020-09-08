@@ -1,14 +1,12 @@
 <?php
-namespace Uniondrug\Builder\Tools;
-
-use Symfony\Component\Console\Exception\RuntimeException;
-use Uniondrug\Builder\Tools\Base;
+namespace Uniondrug\Builder\Components\Tools;
 
 /**
- * Class Model
- * @package Uniondrug\Builder\Tools
+ * 检查数据库连接
+ * Class Connections
+ * @package Uniondrug\Builder\Components\Tools
  */
-class DatabaseCheck
+class Connections
 {
     /**
      * @var Console
@@ -45,39 +43,49 @@ class DatabaseCheck
      */
     public function getConnection()
     {
-        if (!$connections = $this->_getConnections()) {
+        if (!$configLists = $this->getConfigLists()) {
             return false;
         }
-        if (!$connections = $this->_checkConnections($connections)) {
+        if (!$connections = $this->getConnections($configLists)) {
             return false;
         }
-        return $this->_getRealConnection($connections, $this->inputArguments['table']);
+        if (!$connections = $this->filterConnections($connections)) {
+            return false;
+        }
+        return $this->getRealConnection($connections, $this->inputArguments['table']);
     }
 
     /**
-     * 读取所有连接
-     * @return array
+     * 获取所有配置列表
+     * @return array|\Phalcon\Config
      */
-    private function _getConnections()
+    private function getConfigLists()
     {
         try {
             $configLists = app()->getConfig();
-            if (!$configLists) {
-                return [];
-            }
         } catch(\Exception $exception) {
             return [];
         }
+        return $configLists;
+    }
+
+    /**
+     * 读取所有有效数据库配置
+     * @param $configLists
+     * @return array
+     */
+    private function getConnections($configLists)
+    {
         $connections = [];
         foreach ($configLists as $configListKey => $configList) {
             if (!$configList) {
                 continue;
             }
             foreach ($configList as $configKey => $config) {
-                if (!$config || !is_array($config)) {
+                if (!$config) {
                     continue;
                 } else {
-                    if (key_exists('dbname', $config) && key_exists('host', $config)) {
+                    if (isset($config->dbname) && isset($config->host)) {
                         $config['databaseName'] = $configListKey;
                         $config['instanceName'] = $configKey;
                         array_push($connections, $config);
@@ -93,7 +101,7 @@ class DatabaseCheck
      * @param $connections
      * @return mixed
      */
-    private function _checkConnections($connections)
+    private function filterConnections($connections)
     {
         foreach ($connections as $connectionKey => $connection) {
             foreach ($this->_dbConfigItemRequired as $item) {
@@ -113,7 +121,7 @@ class DatabaseCheck
      * @param $table
      * @return bool
      */
-    private function _getRealConnection($connections, $table)
+    private function getRealConnection($connections, $table)
     {
         foreach ($connections as $connection) {
             $this->console->info('开始检索配置文件【'.$connection['databaseName'].'】下的数据库【'.$connection['dbname'].'】');
@@ -122,7 +130,7 @@ class DatabaseCheck
             if (!$model) {
                 continue;
             }
-            if ($this->_checkTableExist($model->getTables(), $table)) {
+            if ($this->checkTableExist($model->getTables(), $table)) {
                 $this->console->info('选取配置文件【'.$connection['databaseName'].'】下的数据库【'.$connection['dbname'].'】');
                 $connection['table'] = $table;
                 return $connection;
@@ -137,7 +145,7 @@ class DatabaseCheck
      * @param $table
      * @return bool
      */
-    private function _checkTableExist($tables, $table)
+    private function checkTableExist($tables, $table)
     {
         $isExist = false;
         foreach ($tables as $items) {

@@ -5,11 +5,12 @@
  */
 namespace Uniondrug\Builder\Commands;
 
-use Uniondrug\Builder\Modes\SimpleMode;
-use Uniondrug\Builder\Modes\SingleApiMode;
-use Uniondrug\Builder\Modes\SingleApiWithoutModelMode;
-use Uniondrug\Builder\Tools\DatabaseCheck;
+use Uniondrug\Builder\Components\Modes\Mode;
+use Uniondrug\Builder\Components\Tools\Connections;
+use Uniondrug\Builder\Components\Tools\Console;
+use Uniondrug\Builder\Components\Tools\DatabaseCheck;
 use Uniondrug\Console\Command;
+use Uniondrug\Framework\Models\Model;
 
 /**
  * Class Builder
@@ -17,6 +18,10 @@ use Uniondrug\Console\Command;
  */
 class Builder extends Command
 {
+    /**
+     * @var Console
+     */
+    public $console;
     /**
      * @var string
      */
@@ -34,17 +39,18 @@ class Builder extends Command
      */
     public function handle()
     {
+        $this->console = new Console();
         $parameter = $this->getInputArguments();
-        $dbConfig = $this->_getDatabase($parameter);
-        // TODO::模式分发
+        $dbConfig = $this->getDatabase($parameter);
+        $mode = new Mode($parameter, $dbConfig);
+        // 模式分发
         if (!$parameter['api']) {
-            $mode = new SimpleMode($parameter, $dbConfig);
+            $mode->simpleMode();
         } else if ($dbConfig) {
-            $mode = new SingleApiMode($parameter, $dbConfig);
+            $mode->singleApiMode();
         } else {
-            $mode = new SingleApiWithoutModelMode($parameter);
+            $mode->singleApiWithoutDBMode();
         }
-        $mode->run();
     }
 
     /**
@@ -52,9 +58,9 @@ class Builder extends Command
      * @param $parameter
      * @return bool|array
      */
-    private function _getDatabase($parameter)
+    private function getDatabase($parameter)
     {
-        $databaseCheck = new DatabaseCheck($parameter);
+        $databaseCheck = new Connections($parameter);
         return $databaseCheck->getConnection();
     }
 
@@ -64,7 +70,11 @@ class Builder extends Command
      */
     public function getInputArguments()
     {
-        return $this->input->getOptions();
+        $parameter = $this->input->getOptions();
+        if (!key_exists('table', $parameter) || !$parameter['table']) {
+            $this->console->errorExit('--table【-t】为必填参数');
+        }
+        return $parameter;
     }
 
     /**

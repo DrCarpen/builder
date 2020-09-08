@@ -5,13 +5,11 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
 /**
  * Class BuildRequest
  * @package Uniondrug\Builder\Components\Build
  */
-class BuildRequest extends BuildBasic
+class BuildRequest extends Base
 {
     /**
      * BuildRequest constructor.

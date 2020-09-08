@@ -5,14 +5,21 @@
  * Date: 2020/7/9
  * Time: 12:06 AM
  */
-namespace Uniondrug\Builder\Modes;
+namespace Uniondrug\Builder\Components\Modes;
 
-use Uniondrug\Builder\Tools\Console;
-use Uniondrug\Builder\Tools\Model;
+use Uniondrug\Builder\Components\Build\BuildController;
+use Uniondrug\Builder\Components\Build\BuildLogic;
+use Uniondrug\Builder\Components\Build\BuildModel;
+use Uniondrug\Builder\Components\Build\BuildRequest;
+use Uniondrug\Builder\Components\Build\BuildResult;
+use Uniondrug\Builder\Components\Build\BuildService;
+use Uniondrug\Builder\Components\Build\BuildTrait;
+use Uniondrug\Builder\Components\Tools\Console;
+use Uniondrug\Builder\Components\Tools\Model;
 
 /**
  * Class Mode
- * @package Uniondrug\Builder\Modes
+ * @package Uniondrug\Builder\Components\Modes
  */
 class Mode
 {
@@ -44,18 +51,82 @@ class Mode
         // 初始化数据库配置
         $this->dbConfig = $dbConfig;
         // 初始化全局变量
-        $this->_setParameter($parameter);
+        $this->setParameter($parameter);
         // 获取数据库的字段
-        if ($dbConfig) {
-            $this->_getColumns();
+        $this->setColumns();
+    }
+
+    /**
+     * 简单模式
+     */
+    public function simpleMode()
+    {
+        if (!$this->dbConfig) {
+            $this->console->errorExit('当前数据库中无此数据表【'.$this->parameter['table'].'】，不能生成model文件');
         }
+        // 创建model文件
+        $build = new BuildModel($this->parameter);
+        $build->build($this->columns);
+        $this->console->info('生成结束');
+    }
+
+    /**
+     * 单接口
+     */
+    public function singleApiMode()
+    {
+        // 创建model
+        $model = new BuildModel($this->parameter);
+        $model->build($this->columns);
+        // 创建控制器
+        $controller = new BuildController($this->parameter);
+        $controller->build($this->columns);
+        // 创建logic
+        $logic = new BuildLogic($this->parameter);
+        $logic->build($this->columns);
+        // 创建 trait
+        $trait = new BuildTrait($this->parameter);
+        $trait->build($this->columns);
+        // 创建 入参结构体
+        $request = new BuildRequest($this->parameter);
+        $request->build($this->columns);
+        // 创建  出参结构体
+        $result = new BuildResult($this->parameter);
+        $result->build($this->columns);
+        // 创建service
+        $service = new BuildService($this->parameter);
+        $service->build($this->columns);
+        $this->console->info('生成结束');
+    }
+
+    /**
+     * 单接口无DB
+     */
+    public function singleApiWithoutDBMode()
+    {
+        // 创建控制器
+        $controller = new BuildController($this->parameter);
+        $controller->build($this->columns);
+        // 创建logic
+        $logic = new BuildLogic($this->parameter);
+        $logic->build($this->columns);
+        // 创建 入参结构体
+        $request = new BuildRequest($this->parameter);
+        $request->build($this->columns);
+        // 创建  出参结构体
+        $result = new BuildResult($this->parameter);
+        $result->build($this->columns);
+        // 创建service
+        $service = new BuildService($this->parameter);
+        $service->build($this->columns);
+        $this->console->info('生成结束');
     }
 
     /**
      * 配置参数
      * @param $parameter
      */
-    protected function _setParameter($parameter)
+    protected function setParameter($parameter)
     {
         $this->parameter = $parameter;
         $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
@@ -63,9 +134,13 @@ class Mode
 
     /**
      * 获取表字段
+     * @return bool
      */
-    private function _getColumns()
+    private function setColumns()
     {
+        if (!$this->dbConfig) {
+            return false;
+        }
         $model = new Model($this->dbConfig);
         $columns = $model->getColumns();
         foreach ($columns as $columnKey => $column) {
@@ -74,6 +149,7 @@ class Mode
             $columns[$columnKey]['sitAnnotation'] = $this->getAnnotation($column['columnComment']);
         }
         $this->columns = $columns;
+        return true;
     }
 
     /**

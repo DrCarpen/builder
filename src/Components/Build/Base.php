@@ -5,14 +5,14 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Tools\Console;
-use Uniondrug\Builder\Tools\TemplateParser;
+use Uniondrug\Builder\Components\Tools\Console;
+use Uniondrug\Builder\Components\Tools\TemplateParser;
 
 /**
- * Class Build
+ * Class Base
  * @package Uniondrug\Builder\Components\Build
  */
-class Build
+class Base
 {
     /**
      * 接口名称
@@ -110,6 +110,31 @@ class Build
         $this->_setParameter($parameter);
         $this->_setAuthorInfo();
         $this->_setTemplateParser();
+    }
+
+    /**
+     * 构建各个子类的基础文件
+     * @param $direct
+     * @param $assign
+     */
+    public function initBuild($direct, $assign)
+    {
+        // 追加公共字段
+        $assign = array_merge($assign, [
+            'AUTHOR' => $this->getAuthorContent(),
+            'CLASS_NAME' => $this->getClassName()
+        ]);
+        // 作者信息
+        $authorContent = $this->getAuthorContent();
+        // 方法类
+        $className = $this->getClassName();
+        // 获取模板
+        $template = $this->getBasicTemplate();
+        // 注入模板
+        $fileContent = $this->templateParser->assign($assign, $template);
+        // 生成文件
+        $this->templateParser->buildFile($this->getDocumentDirectPrefix(), $direct, $fileContent);
+        $this->console->info('已生成'.$className.'基础文件');
     }
 
     /**
@@ -518,21 +543,6 @@ class Build
     protected function getInitFile($direct)
     {
         return file_get_contents($direct);
-    }
-
-    /**
-     * @param $html
-     * @param $documentDirectPrifix
-     * @param $fileDirect
-     */
-    protected function buildFile($html, $documentDirectPrifix, $fileDirect)
-    {
-        if (!is_dir($documentDirectPrifix)) {
-            mkdir($documentDirectPrifix, 0777, true);
-        }
-        if (!file_exists($fileDirect)) {
-            file_put_contents($fileDirect, $html);
-        }
     }
 
     /**

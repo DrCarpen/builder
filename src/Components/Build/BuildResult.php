@@ -5,9 +5,7 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
-class BuildResult extends BuildBasic
+class BuildResult extends Base
 {
     public function __construct($parameter)
     {

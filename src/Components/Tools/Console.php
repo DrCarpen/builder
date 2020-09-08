@@ -3,8 +3,12 @@
  * @author wsfuyibing <websearch@163.com>
  * @date   2018-05-09
  */
-namespace Uniondrug\Builder\Tools;
+namespace Uniondrug\Builder\Components\Tools;
 
+/**
+ * Class Console
+ * @package Uniondrug\Builder\Components\Tools
+ */
 class Console
 {
     public function errorExit($format, ... $args)

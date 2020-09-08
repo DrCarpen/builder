@@ -1,12 +1,9 @@
 <?php
-namespace Uniondrug\Builder\Tools;
-
-use Symfony\Component\Console\Exception\RuntimeException;
-use Uniondrug\Builder\Tools\Base;
+namespace Uniondrug\Builder\Components\Tools;
 
 /**
  * Class Model
- * @package Uniondrug\Builder\Tools
+ * @package Uniondrug\Builder\Components\Tools
  */
 class Model
 {

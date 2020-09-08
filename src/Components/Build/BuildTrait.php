@@ -5,16 +5,14 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
 /**
  * Class BuildTrait
  * @package Uniondrug\Builder\Components\Build
  */
-class BuildTrait extends BuildBasic
+class BuildTrait extends Base
 {
     /**
-     * BuildTrait constructor.
+     * BuildTrait constructor
      * @param $parameter
      */
     public function __construct($parameter)

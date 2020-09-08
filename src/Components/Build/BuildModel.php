@@ -5,15 +5,11 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Phalcon\Db\Exception;
-use Uniondrug\Builder\Column;
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
 /**
  * Class BuildModel
  * @package Uniondrug\Builder\Components\Build
  */
-class BuildModel extends BuildBasic
+class BuildModel extends Base
 {
     /**
      * @var array

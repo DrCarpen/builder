@@ -5,13 +5,11 @@
  */
 namespace Uniondrug\Builder\Components\Build;
 
-use Uniondrug\Builder\Components\Build\BuildBasic;
-
 /**
  * Class BuildController
  * @package Uniondrug\Builder\Components\Build
  */
-class BuildController extends BuildBasic
+class BuildController extends Base
 {
     /**
      * BuildController constructor.
