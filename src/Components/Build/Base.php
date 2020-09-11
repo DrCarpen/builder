@@ -403,19 +403,19 @@ class Base
     }
 
     /**
-     * 获取Validator的校验
      * @param $type
      * @param $column
      * @return string
      */
     protected function getValidator($type, $column)
     {
-        if ($type == 'string' && $column['characterMaximumLength']) {
-            $validator = 'required,options={minChar:1,maxChar:'.$column['characterMaximumLength'].'}';
-        } else {
-            $validator = 'required';
+        if ($column['isNullAble'] == "NO") {
+            $validator[] = 'required';
         }
-        return $validator;
+        if ($type == 'string' && $column['characterMaximumLength']) {
+            $validator[] = 'options={minChar:1,maxChar:'.$column['characterMaximumLength'].'}';
+        }
+        return implode(',', $validator);
     }
 
     /**
