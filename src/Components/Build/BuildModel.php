@@ -51,10 +51,20 @@ class BuildModel extends Base
     }
 
     /**
-     * @return string
+     * @param $columns
+     * @return null|string|string[]
      */
     private function getColumnMap($columns)
     {
+        $isUnderlineStyle = false;
+        foreach ($columns as $columnValue) {
+            if (preg_match('/\-/', $columnValue['columnName'])) {
+                $isUnderlineStyle = true;
+            }
+        }
+        if (!$isUnderlineStyle) {
+            return '';
+        }
         $columnMap = [];
         foreach ($columns as $column) {
             $columnMap[] = '            \''.$column['columnName'].'\' => \''.$column['camelColumnName'].'\'';
@@ -64,6 +74,7 @@ class BuildModel extends Base
     }
 
     /**
+     * 获取字段注释
      * @param $columns
      * @return string
      */

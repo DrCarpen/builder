@@ -39,6 +39,6 @@ class TemplateParser
         if (!is_dir($pathPrifix)) {
             mkdir($pathPrifix, 0777, true);
         }
-        file_put_contents($path, $content);
+        file_put_contents($fileDirect, $content);
     }
 }

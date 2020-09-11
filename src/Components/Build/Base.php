@@ -106,10 +106,10 @@ class Base
 
     public function __construct($parameter)
     {
-        $this->_setConsole();
-        $this->_setParameter($parameter);
-        $this->_setAuthorInfo();
-        $this->_setTemplateParser();
+        $this->setConsole();
+        $this->setParameter($parameter);
+        $this->setAuthorInfo();
+        $this->setTemplateParser();
     }
 
     /**
@@ -124,24 +124,20 @@ class Base
             'AUTHOR' => $this->getAuthorContent(),
             'CLASS_NAME' => $this->getClassName()
         ]);
-        // 作者信息
-        $authorContent = $this->getAuthorContent();
-        // 方法类
-        $className = $this->getClassName();
         // 获取模板
         $template = $this->getBasicTemplate();
         // 注入模板
         $fileContent = $this->templateParser->assign($assign, $template);
         // 生成文件
         $this->templateParser->buildFile($this->getDocumentDirectPrefix(), $direct, $fileContent);
-        $this->console->info('已生成'.$className.'基础文件');
+        $this->console->info('已生成'.$this->getClassName().'基础文件');
     }
 
     /**
      * 配置参数
      * @param $parameter
      */
-    private function _setParameter($parameter)
+    private function setParameter($parameter)
     {
         $this->api = key_exists('api', $parameter) ? $parameter['api'] : '';
         $this->table = key_exists('table', $parameter) ? $parameter['table'] : '';
@@ -150,7 +146,7 @@ class Base
     /**
      * 引入模板引擎
      */
-    private function _setTemplateParser()
+    private function setTemplateParser()
     {
         $this->templateParser = new TemplateParser();
     }
@@ -158,7 +154,7 @@ class Base
     /**
      * 引入输出引擎
      */
-    private function _setConsole()
+    private function setConsole()
     {
         $this->console = new Console();
     }
@@ -166,7 +162,7 @@ class Base
     /**
      * 配置用户名称信息
      */
-    private function _setAuthorInfo()
+    private function setAuthorInfo()
     {
         $nameShell = 'git config --get user.name ';
         $emailShell = 'git config --get user.email';
@@ -286,9 +282,11 @@ class Base
         $propertyTemplateContent = [];
         foreach ($columns as $key => $value) {
             $propertyTemplateContentString = ' * @property ';
-            $propertyTemplateContentString .= str_pad($this->getType($value['dataType']), $longestTypeNum - strlen($this->getType($value['dataType'])) + 1, ' ');
-            $propertyTemplateContentString .= '$'.str_pad($value['camelColumnName'], $longestNum - strlen($value['camelColumnName']) + 1, ' ');
-            $propertyTemplateContentString .= $value['columnComment'];
+            $firstlen = $longestTypeNum - strlen($this->getType($value['dataType'])) + 1;
+            $propertyTemplateContentString .= $this->getType($value['dataType']).str_repeat(' ', $firstlen);
+            $secendlen = $longestNum - strlen($value['camelColumnName']) + 1;
+            $propertyTemplateContentString .= '$'.$value['camelColumnName'].str_repeat(' ', $secendlen);
+            $propertyTemplateContentString .= ' '.$value['columnComment'];
             $propertyTemplateContent[] = $propertyTemplateContentString;
         }
         return implode(PHP_EOL, $propertyTemplateContent);
