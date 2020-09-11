@@ -63,6 +63,15 @@ class BuildTrait extends Base
                 'COLUMN_NAME' => $value['camelColumnName']
             ];
             $propertyTemplateList[] = $this->templateParser->assign($replaceList, $propertyTemplate);
+            // 字段注释
+            if ($value['sitAnnotation']['sit']) {
+                $replaceList = [
+                    'COLUMN_COMMENT' => $value['columnComment'] ? $value['columnComment'] : $value['camelColumnName'],
+                    'DATA_TYPE' => 'string',
+                    'COLUMN_NAME' => $value['camelColumnName'].'Text'
+                ];
+                $propertyTemplateList[] = $this->templateParser->assign($replaceList, $propertyTemplate);
+            }
         }
         return implode(PHP_EOL, $propertyTemplateList);
     }

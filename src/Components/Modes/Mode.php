@@ -53,6 +53,7 @@ class Mode
         // 初始化全局变量
         $this->setParameter($parameter);
         // 获取数据库的字段
+        $this->filterColumns();
         $this->setColumns();
     }
 
@@ -133,10 +134,9 @@ class Mode
     }
 
     /**
-     * 获取表字段
      * @return bool
      */
-    private function setColumns()
+    private function filterColumns()
     {
         if (!$this->dbConfig) {
             return false;
@@ -144,7 +144,21 @@ class Mode
         $model = new Model($this->dbConfig);
         $columns = $model->getColumns();
         foreach ($columns as $columnKey => $column) {
+            $columns[$columnKey][columnComment] = preg_replace('/\\n/', '', $column['columnComment']);
+        }
+        $this->columns = $columns;
+    }
+
+    /**
+     * 获取表字段
+     * @return bool
+     */
+    private function setColumns()
+    {
+        $columns = $this->columns;
+        foreach ($columns as $columnKey => $column) {
             $columns[$columnKey]['camelColumnName'] = $this->getLowerCamelCase($column['columnName']);
+            $columns[$columnKey][columnComment] = preg_replace('/\\n/', '', $column['columnComment']);
             $columns[$columnKey]['underlineColumnName'] = $this->getUnderlineCase($column['columnName']);
             $columns[$columnKey]['sitAnnotation'] = $this->getAnnotation($column['columnComment']);
         }

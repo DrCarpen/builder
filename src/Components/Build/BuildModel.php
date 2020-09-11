@@ -58,7 +58,7 @@ class BuildModel extends Base
     {
         $isUnderlineStyle = false;
         foreach ($columns as $columnValue) {
-            if (preg_match('/\-/', $columnValue['columnName'])) {
+            if (preg_match('/\_/', $columnValue['columnName'])) {
                 $isUnderlineStyle = true;
             }
         }
