@@ -156,6 +156,9 @@ class Mode
     private function setColumns()
     {
         $columns = $this->columns;
+        if (!$columns) {
+            return true;
+        }
         foreach ($columns as $columnKey => $column) {
             $columns[$columnKey]['camelColumnName'] = $this->getLowerCamelCase($column['columnName']);
             $columns[$columnKey][columnComment] = preg_replace('/\\n/', '', $column['columnComment']);
