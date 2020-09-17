@@ -77,6 +77,9 @@ class Connections
     private function getConnections($configLists)
     {
         $connections = [];
+        if (!$configLists) {
+            return [];
+        }
         foreach ($configLists as $configListKey => $configList) {
             if (!$configList) {
                 continue;
@@ -103,6 +106,9 @@ class Connections
      */
     private function filterConnections($connections)
     {
+        if (!$connections) {
+            return [];
+        }
         foreach ($connections as $connectionKey => $connection) {
             foreach ($this->_dbConfigItemRequired as $item) {
                 if (!$connection[$item]) {
@@ -123,6 +129,9 @@ class Connections
      */
     private function getRealConnection($connections, $table)
     {
+        if (!$connections) {
+            return [];
+        }
         foreach ($connections as $connection) {
             $this->console->info('开始检索配置文件【'.$connection['databaseName'].'】下的数据库【'.$connection['dbname'].'】');
             $model = new Model($connection);
