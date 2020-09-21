@@ -409,11 +409,15 @@ class Base
      */
     protected function getValidator($type, $column)
     {
+        $validator = [];
         if ($column['isNullAble'] == "NO") {
             $validator[] = 'required';
         }
         if ($type == 'string' && $column['characterMaximumLength']) {
             $validator[] = 'options={minChar:1,maxChar:'.$column['characterMaximumLength'].'}';
+        }
+        if (!isset($validator)) {
+            return '';
         }
         return implode(',', $validator);
     }
