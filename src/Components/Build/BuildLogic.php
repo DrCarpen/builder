@@ -18,10 +18,9 @@ class BuildLogic extends Base
     }
 
     /**
-     * @param $columns
      * @return bool
      */
-    public function build($columns)
+    public function build()
     {
         // 获取文件名称
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();

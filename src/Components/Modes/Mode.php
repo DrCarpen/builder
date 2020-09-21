@@ -76,28 +76,32 @@ class Mode
      */
     public function singleApiMode()
     {
-        // 创建model
-        $model = new BuildModel($this->parameter);
-        $model->build($this->columns);
-        // 创建控制器
-        $controller = new BuildController($this->parameter);
-        $controller->build($this->columns);
-        // 创建logic
-        $logic = new BuildLogic($this->parameter);
-        $logic->build($this->columns);
-        // 创建 trait
-        $trait = new BuildTrait($this->parameter);
-        $trait->build($this->columns);
-        // 创建 入参结构体
-        $request = new BuildRequest($this->parameter);
-        $request->build($this->columns);
-        // 创建  出参结构体
-        $result = new BuildResult($this->parameter);
-        $result->build($this->columns);
-        // 创建service
-        $service = new BuildService($this->parameter);
-        $service->build($this->columns);
-        $this->console->info('生成结束');
+        try {
+            // 创建model
+            $model = new BuildModel($this->parameter);
+            $model->build($this->columns);
+            // 创建控制器
+            $controller = new BuildController($this->parameter);
+            $controller->build();
+            // 创建logic
+            $logic = new BuildLogic($this->parameter);
+            $logic->build();
+            // 创建 trait
+            $trait = new BuildTrait($this->parameter);
+            $trait->build($this->columns);
+            // 创建 入参结构体
+            $request = new BuildRequest($this->parameter);
+            $request->build($this->columns);
+            // 创建  出参结构体
+            $result = new BuildResult($this->parameter);
+            $result->build($this->columns);
+            // 创建service
+            $service = new BuildService($this->parameter);
+            $service->build();
+            $this->console->info('生成结束');
+        } catch(\Exception $exception) {
+            $this->console->errorExit($exception->getMessage());
+        }
     }
 
     /**
@@ -105,22 +109,26 @@ class Mode
      */
     public function singleApiWithoutDBMode()
     {
-        // 创建控制器
-        $controller = new BuildController($this->parameter);
-        $controller->build($this->columns);
-        // 创建logic
-        $logic = new BuildLogic($this->parameter);
-        $logic->build($this->columns);
-        // 创建 入参结构体
-        $request = new BuildRequest($this->parameter);
-        $request->build($this->columns);
-        // 创建  出参结构体
-        $result = new BuildResult($this->parameter);
-        $result->build($this->columns);
-        // 创建service
-        $service = new BuildService($this->parameter);
-        $service->build($this->columns);
-        $this->console->info('生成结束');
+        try {
+            // 创建控制器
+            $controller = new BuildController($this->parameter);
+            $controller->build();
+            // 创建logic
+            $logic = new BuildLogic($this->parameter);
+            $logic->build();
+            // 创建 入参结构体
+            $request = new BuildRequest($this->parameter);
+            $request->build($this->columns);
+            // 创建  出参结构体
+            $result = new BuildResult($this->parameter);
+            $result->build($this->columns);
+            // 创建service
+            $service = new BuildService($this->parameter);
+            $service->build();
+            $this->console->info('生成结束');
+        } catch(\Exception $exception) {
+            $this->console->errorExit($exception->getMessage());
+        }
     }
 
     /**
@@ -147,6 +155,7 @@ class Mode
             $columns[$columnKey]['columnComment'] = preg_replace('/\\n/', '', $column['columnComment']);
         }
         $this->columns = $columns;
+        return true;
     }
 
     /**

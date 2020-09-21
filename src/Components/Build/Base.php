@@ -103,6 +103,14 @@ class Base
         'listing' => '无分页列表',
         'page' => '分页列表'
     ];
+    /**
+     * @var string
+     */
+    public $authorName;
+    /**
+     * @var string
+     */
+    public $authorEmail;
 
     public function __construct($parameter)
     {
@@ -424,42 +432,41 @@ class Base
 
     /**
      * 获取文件对应的目录
-     * @param $classType
      * @return string
      */
     protected function getDocumentDirectPrefix()
     {
+        $prefix = '';
         $tableName = $this->_tableName();
         $base = './app/';
         switch ($this->classType) {
             case 'Controller':
-                $prifix = $base.'Controllers/';
+                $prefix = $base.'Controllers/';
                 break;
             case 'Service':
-                $prifix = $base.'Services/';
+                $prefix = $base.'Services/';
                 break;
             case 'Model':
-                $prifix = $base.'Models/';
+                $prefix = $base.'Models/';
                 break;
             case 'Trait':
-                $prifix = $base.'Structs/Traits/';
+                $prefix = $base.'Structs/Traits/';
                 break;
             case 'Logic':
-                $prifix = $base.'Logics/'.$tableName.'/';
+                $prefix = $base.'Logics/'.$tableName.'/';
                 break;
             case 'Request':
-                $prifix = $base.'Structs/Requests/'.$tableName.'/';
+                $prefix = $base.'Structs/Requests/'.$tableName.'/';
                 break;
             case 'Result':
-                $prifix = $base.'Structs/Results/'.$tableName.'/';
+                $prefix = $base.'Structs/Results/'.$tableName.'/';
                 break;
         }
-        return $prifix;
+        return $prefix;
     }
 
     /**
      * 获取文件对应的基础模板
-     * @param $classType
      * @return bool|string
      */
     protected function getBasicTemplate()
@@ -492,8 +499,8 @@ class Base
     }
 
     /**
-     * 获取分部模板
-     * @param $templateName
+     *      * 获取分部模板
+     * @param string $partTemplate
      * @return bool|string
      */
     protected function getPartTemplate($partTemplate = '')

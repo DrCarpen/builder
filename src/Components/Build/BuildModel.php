@@ -29,8 +29,6 @@ class BuildModel extends Base
 
     /**
      * @param array $columns
-     * @throws Exception
-     * @throws \ReflectionException
      */
     public function build(array $columns)
     {

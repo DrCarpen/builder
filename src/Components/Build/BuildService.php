@@ -24,11 +24,9 @@ class BuildService extends Base
     }
 
     /**
-     * @param $columns
      * @return bool
-     * @throws \ReflectionException
      */
-    public function build($columns)
+    public function build()
     {
         // 获取文件名称
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();
@@ -45,7 +43,7 @@ class BuildService extends Base
 
     /**
      * 重写serviceTrait文件
-     * @throws \ReflectionException
+     * @return bool
      */
     public function rewriteServiceTrait()
     {
@@ -64,12 +62,13 @@ class BuildService extends Base
         $oldUseText = "namespace App\Services\Abstracts;".PHP_EOL;
         $newUseText = $oldUseText.PHP_EOL.'use App\\Services\\'.$name.';';
         $filename = $service->getFileName();
-        $oldFlie = file_get_contents($filename);
-        $newFlie = str_replace($preDocument, $newDocument, $oldFlie);
-        $newFlie = str_replace($oldUseText, $newUseText, $newFlie);
-        $this->console->info($this->className." 写入 ServiceTrait");
-        file_put_contents($filename, $newFlie);
+        $oldFile = file_get_contents($filename);
+        $newFile = str_replace($preDocument, $newDocument, $oldFile);
+        $newFile = str_replace($oldUseText, $newUseText, $newFile);
+        $this->console->info(" 写入 ServiceTrait");
+        file_put_contents($filename, $newFile);
         $this->console->info('已更新ServiceTrait文件');
+        return true;
     }
 
     /**

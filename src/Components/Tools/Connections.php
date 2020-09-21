@@ -57,7 +57,7 @@ class Connections
 
     /**
      * 获取所有配置列表
-     * @return array|\Phalcon\Config
+     * @return array
      */
     private function getConfigLists()
     {
@@ -125,7 +125,7 @@ class Connections
      * 获取真实连接
      * @param $connections
      * @param $table
-     * @return bool
+     * @return array|bool
      */
     private function getRealConnection($connections, $table)
     {

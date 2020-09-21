@@ -65,6 +65,7 @@ class BuildResult extends Base
 
     /**
      * 获取trait类的文件名
+     * @param $columns
      * @return string
      */
     protected function getUseTrait($columns)
@@ -83,6 +84,7 @@ class BuildResult extends Base
     }
 
     /**
+     * @param $columns
      * @return bool|string
      */
     protected function getResultPart($columns)

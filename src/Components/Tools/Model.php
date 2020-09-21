@@ -17,6 +17,10 @@ class Model
     private $connection;
     private $console;
 
+    /**
+     * Model constructor.
+     * @param $dbConfig
+     */
     public function __construct($dbConfig)
     {
         $this->console = new Console();
@@ -29,6 +33,7 @@ class Model
         $this->_setDb();
         // 设置字符集
         $this->_setCharset();
+        return true;
     }
 
     /**
@@ -102,7 +107,7 @@ class Model
     /**
      * 查询
      * @param $sql
-     * @return bool|mysqli_result
+     * @return bool|\mysqli_result
      */
     private function _query($sql)
     {

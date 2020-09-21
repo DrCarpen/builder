@@ -8,7 +8,6 @@ namespace Uniondrug\Builder\Commands;
 use Uniondrug\Builder\Components\Modes\Mode;
 use Uniondrug\Builder\Components\Tools\Connections;
 use Uniondrug\Builder\Components\Tools\Console;
-use Uniondrug\Builder\Components\Tools\DatabaseCheck;
 use Uniondrug\Console\Command;
 use Uniondrug\Framework\Models\Model;
 
@@ -80,10 +79,10 @@ class Builder extends Command
     /**
      * @param $parameter
      */
-    private function askQuestion($parameter)
+    private function askQuestion()
     {
         $fh = fopen('php://stdin', 'r');
         echo "未找到模型";
-        $str = fread($fh, 1000);
+        fread($fh, 1000);
     }
 }

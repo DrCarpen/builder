@@ -22,17 +22,16 @@ class BuildController extends Base
     }
 
     /**
-     * @param $columns
      * @return bool
      * @throws \ReflectionException
      */
-    public function build($columns)
+    public function build()
     {
         // 获取文件名称
         $direct = $this->getDocumentDirectPrefix().$this->getFileName();
         // 判断初试文件是否存在
         if (!$this->checkFileExsit($direct)) {
-            $this->initBuild($direct, ['ROUTE_PRIFIX' => $this->getRoutelPrefix($this->table)]);
+            $this->initBuild($direct, ['ROUTE_PRIFIX' => $this->getRoutePrefix($this->table)]);
         }
         $this->appendAPI($direct);
         return true;
@@ -81,6 +80,8 @@ class BuildController extends Base
     /**
      * 追加接口的action
      * @param $direct
+     * @return bool
+     * @throws \ReflectionException
      */
     public function appendAPI($direct)
     {
@@ -111,13 +112,14 @@ class BuildController extends Base
         $newFile = str_replace($baseText, $text, $newFile);
         $this->rewriteFile($direct, $newFile);
         $this->console->info('Controller中已追加API!');
+        return true;
     }
 
     /**
      * @param $table
      * @return mixed
      */
-    private function getRoutelPrefix($table)
+    private function getRoutePrefix($table)
     {
         return str_replace('_', '/', $table);
     }
