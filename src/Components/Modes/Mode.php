@@ -144,7 +144,7 @@ class Mode
         $model = new Model($this->dbConfig);
         $columns = $model->getColumns();
         foreach ($columns as $columnKey => $column) {
-            $columns[$columnKey][columnComment] = preg_replace('/\\n/', '', $column['columnComment']);
+            $columns[$columnKey]['columnComment'] = preg_replace('/\\n/', '', $column['columnComment']);
         }
         $this->columns = $columns;
     }
@@ -161,7 +161,7 @@ class Mode
         }
         foreach ($columns as $columnKey => $column) {
             $columns[$columnKey]['camelColumnName'] = $this->getLowerCamelCase($column['columnName']);
-            $columns[$columnKey][columnComment] = preg_replace('/\\n/', '', $column['columnComment']);
+            $columns[$columnKey]['columnComment'] = preg_replace('/\\n/', '', $column['columnComment']);
             $columns[$columnKey]['underlineColumnName'] = $this->getUnderlineCase($column['columnName']);
             $columns[$columnKey]['sitAnnotation'] = $this->getAnnotation($column['columnComment']);
         }
