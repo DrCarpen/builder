@@ -208,7 +208,7 @@ class Mode
      */
     private function getAnnotation($columnComment)
     {
-        $pregRule = "/^(\=|\:|\：|\||\,|\，|\-|\(|\)|\（|\）)*|(\=|\:|\：|\||\,|\，|\-|\(|\)|\（|\）)*$/";
+        $pregRule = "/^(\=|\:|\：|\||\,|\，|\-|\(|\)|\（|\）|\、|\；|\;)*|(\=|\:|\：|\||\,|\，|\-|\(|\)|\（|\）|\、|\；|\;)*$/";
         // 匹配是否有数字
         preg_match_all('/-?\d+/u', $columnComment, $match);
         if (!$match[0]) {
@@ -222,7 +222,7 @@ class Mode
         // 主注释
         $annotation['main'] = preg_replace($pregRule, '', $commentChips[0]);
         unset($commentChips[0]);
-        sort($commentChips);
+        $commentChips = array_values($commentChips);
         // 分解注释
         $annotation['sit'] = [];
         $max = count($commentChips) > count($match[0]) ? count($commentChips) : count($match[0]);

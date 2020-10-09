@@ -85,7 +85,7 @@ class BuildModel extends Base
                     $str .= $this->templateParser->assign([
                         'UPPER_UNDERLINE_CASE' => strtoupper($column['underlineColumnName']),
                         'SIT_STATUS' => $sit['sitStatus'],
-                        'SIT_COMMNET' => $column['sitAnnotation']['main'].$sit['sitComment']
+                        'SIT_COMMNET' => ($column['sitAnnotation']['main'] ? $column['sitAnnotation']['main'] : $column['camelColumnName']).': '.$sit['sitComment']
                     ], $this->getPartTemplate('ModeConstant'));
                 }
             }
