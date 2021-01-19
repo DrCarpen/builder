@@ -1,0 +1,17 @@
+<?php
+{{AUTHOR}}
+namespace App\Structs\Results\{{CLASS_NAME}};
+
+use Uniondrug\Structs\Struct;
+
+/**
+ * Class Listing
+ * @package App\Structs\Results\{{CLASS_NAME}}
+ */
+ class Listing extends Struct
+ {
+     /**
+      * @var Row[]
+      */
+      public $body;
+ }

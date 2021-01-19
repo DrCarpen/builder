@@ -1,0 +1,15 @@
+    /**
+     * @param {{MAX_API}}Request $request
+     * @return {{TABLE_NAME}}
+     */
+    public function paging({{MAX_API}}Request $request)
+    {
+        $conditions = [];
+{{CONDITIONS_BODY}}
+        $orderBy = " id desc";
+        $builder = $this->modelsManager->createBuilder();
+        $builder->from(array({{TABLE_NAME}}::class));
+        $builder->where(implode(" and ", $conditions));
+        $builder->orderBy($orderBy);
+        return  $this->withQueryPaging($builder, $request->page, $request->limit);
+    }

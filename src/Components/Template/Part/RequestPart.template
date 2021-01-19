@@ -1,0 +1,6 @@
+    /**
+     * {{COLUMN_COMMENT}}
+     * @var {{DATA_TYPE}}
+     * @validator({{VALIDATOR_TYPE}})
+     */
+    public ${{COLUMN_NAME}};

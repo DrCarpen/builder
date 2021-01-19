@@ -1,0 +1,18 @@
+    /**
+     * 根据主键ID获得对象
+     * @param $id
+     * @return bool|{{TABLE_NAME}}
+     */
+    public function getById(int $id)
+    {
+        $model = {{TABLE_NAME}}::findFirst([
+            'conditions' => 'id = :id:',
+            'bind' => [
+                'id' => $id
+            ]
+        ]);
+        if ($model instanceof {{TABLE_NAME}}) {
+            return $model;
+        }
+        return false;
+    }

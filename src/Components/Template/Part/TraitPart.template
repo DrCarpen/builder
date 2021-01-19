@@ -1,0 +1,5 @@
+    /**
+     * {{COLUMN_COMMENT}}
+     * @var {{DATA_TYPE}}
+     */
+    public ${{COLUMN_NAME}};

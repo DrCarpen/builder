@@ -1,0 +1,14 @@
+    /**
+     * @param {{MAX_API}}Request $request
+     * @return bool
+     * @throws Error
+     */
+    public function update({{MAX_API}}Request $request)
+    {
+        $model = $this->{{TABLE_NAME}}Service->getById($request->id);
+{{COLUMN_BODY}}        if ($model->save()) {
+            return true;
+        }
+        throw new Error(Code::FAILURE_UPDATE);
+    }
+

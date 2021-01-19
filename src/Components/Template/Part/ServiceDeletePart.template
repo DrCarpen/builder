@@ -1,0 +1,12 @@
+    /**
+     * @param {{TABLE_NAME}} $model
+     * @return true
+     * @throws Error
+     */
+    public function delete({{TABLE_NAME}} $model)
+    {
+        if ($model->delete()) {
+            return true;
+        }
+        throw new Error(Code::FAILURE_DELETE);
+    }

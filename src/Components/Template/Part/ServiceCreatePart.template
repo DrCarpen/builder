@@ -1,0 +1,13 @@
+    /**
+     * @param {{MAX_API}}Request $request
+     * @return {{TABLE_NAME}}
+     * @throws Error
+     */
+    public function {{MIN_API}}({{MAX_API}}Request $request)
+    {
+        $model = new {{TABLE_NAME}}();
+{{COLUMN_BODY}}        if ($model->save()){
+            return $model;
+        }
+        throw new Error(Code::FAILURE_CREATE);
+    }

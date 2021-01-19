@@ -1,0 +1,14 @@
+<?php
+{{AUTHOR}}
+namespace App\Models;
+
+use App\Models\Abstracts\Model;
+
+/**
+{{PROPERTY_TEMPLATE_LIST}}
+ * @package App\Models
+ */
+class {{CLASS_NAME}} extends Model
+{
+{{COLUMN_INIT}}{{COLUMN_COMMENT}}{{COLUMN_MAP}}
+}

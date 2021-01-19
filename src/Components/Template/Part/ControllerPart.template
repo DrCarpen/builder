@@ -1,0 +1,11 @@
+    /**
+     * {{API_NAME}}
+     * @Post("/{{MIN_API}}")
+     * @input \App\Structs\Requests\{{TABLE_NAME}}\{{MAX_API}}Request
+     * @output \App\Structs\Results\{{TABLE_NAME}}\{{MAX_API}}Result
+     */
+    public function {{MIN_API}}Action()
+    {
+        $output = {{MAX_API}}Logic::factory($this->request->getJsonRawBody());
+        return $this->serviceServer->withStruct($output);
+    }

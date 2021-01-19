@@ -1,0 +1,14 @@
+<?php
+{{AUTHOR}}
+namespace App\Structs\Requests\{{TABLE_NAME}};
+
+use Uniondrug\Structs\{{EXTEND_CLASS}};
+
+/**
+ * Class {{CLASS_NAME}}
+ * @package App\Structs\Requests\{{TABLE_NAME}}
+ */
+class {{CLASS_NAME}} extends {{EXTEND_CLASS}}
+{
+{{REQUEST_BODY}}
+}

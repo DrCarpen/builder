@@ -1,0 +1,10 @@
+
+    /**
+     * @return array
+     */
+    public function columnMap()
+    {
+        return [
+{{COLUMN_MAP}}
+        ];
+    }

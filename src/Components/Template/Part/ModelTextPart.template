@@ -1,0 +1,1 @@
+        self::{{UPPER_UNDERLINE_CASE}}_{{SIT_STATUS}} => '{{SIT_CONTENT}}',

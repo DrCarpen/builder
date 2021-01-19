@@ -5,9 +5,12 @@
  */
 namespace Uniondrug\Builder\Commands;
 
-use Uniondrug\Builder\Parsers\Tool\Console;
+use Symfony\Component\Console\Input\InputArgument;
+use Uniondrug\Builder\Components\Modes\Mode;
+use Uniondrug\Builder\Components\Tools\Connections;
+use Uniondrug\Builder\Components\Tools\Console;
 use Uniondrug\Console\Command;
-use Uniondrug\Builder\Parsers\Collection;
+use Uniondrug\Framework\Models\Model;
 
 /**
  * Class Builder
@@ -15,19 +18,23 @@ use Uniondrug\Builder\Parsers\Collection;
  */
 class Builder extends Command
 {
+    /**
+     * @var Console
+     */
+    public $console;
+    /**
+     * @var string
+     */
     protected $signature = 'builder
-                            {--table= : 指定数据库的表名}';
-    protected $authorConfig = [
-        'name' => 'developer',
-        'email' => 'developer@uniondrug.cn',
-        'tool' => 'Builder'
-    ];
+            {--table=|-t : 表名，或控制器名 tablename|rename}
+            {--api=|-a :  单独生成控制器里action及其关联logic、service和model [c|u|r|p|l|d|actionName]}
+            {--path=|-p : 指定contorller路径}
+            ';
     /**
      * 命令描述
      * @var string
      */
-    protected $description = '脚手架生成工具';
-    public $console;
+    protected $description = 'Builder-代码生成工具';
 
     /**
      * @inheritdoc
@@ -35,73 +42,65 @@ class Builder extends Command
     public function handle()
     {
         $this->console = new Console();
-        $this->setAuthorConfig();
-        $dbConfig = $this->checkDatabase();
-        $dbConfig['table'] = $this->checkArgvs();
-        $collection = new Collection(getcwd(), $dbConfig, $this->authorConfig);
-        $collection->build();
+        $parameter = $this->getInputArguments();
+        $dbConfig  = $this->getDatabase($parameter);
+        if ('all' == $parameter['api']){
+            unset($parameter['api']);
+            $options = ['c', 'u', 'p', 'd', 'r'];
+            foreach ($options as $op){
+                $parameter['api'] = $op;
+                $mode = new Mode($parameter, $dbConfig);
+                $this->build($mode, $parameter, $dbConfig);
+            }
+            exit;
+        }
+        $mode = new Mode($parameter, $dbConfig);
+        $this->build($mode, $parameter, $dbConfig);
     }
 
-    private function setAuthorConfig()
+    private function build(Mode $mode,$parameter,$dbConfig)
     {
-        $nameShell = 'git config --get user.name ';
-        $emailShell = 'git config --get user.email';
-        $name = shell_exec($nameShell);
-        $email = shell_exec($emailShell);
-        if ($name) {
-            $this->authorConfig['name'] = str_replace(PHP_EOL, '', $name);
-        }
-        if ($email) {
-            $this->authorConfig['email'] = str_replace(PHP_EOL, '', $email);;
+        // 模式分发
+        if (!$parameter['api']) {
+            $mode->simpleMode();
+        } else if ($dbConfig) {
+            $mode->singleApiMode();
+        } else {
+            $mode->singleApiWithoutDBMode();
         }
     }
 
     /**
-     * 检查数据库配置
+     * 读取数据库配置
+     * @param $parameter
+     * @return bool|array
+     */
+    private function getDatabase($parameter)
+    {
+        $databaseCheck = new Connections($parameter);
+        return $databaseCheck->getConnection();
+    }
+
+    /**
+     * 读取输入的命令
      * @return array
      */
-    private function checkDatabase()
+    public function getInputArguments()
     {
-        $connection = app()->getConfig()->database->connection;
-        // 检查数据库链接是否存在
-        if (empty($connection)) {
-            $this->console->error('config/database is not exist, please checkout your config files!');
-            exit;
+        $parameter = $this->input->getOptions();
+        if (!key_exists('table', $parameter) || !$parameter['table']) {
+            $this->console->errorExit('--table【-t】为必填参数');
         }
-        // 检查数据库配置是否存在
-        foreach ($connection as $key => $value) {
-            if (empty($value) && in_array($key, [
-                    'host',
-                    'username',
-                    'port',
-                    'password',
-                    'dbname'
-                ])) {
-                $this->console->error(' do not have right value');
-                exit;
-            }
-        }
-        return [
-            'host' => $connection->host,
-            'user' => $connection->username,
-            'password' => $connection->password,
-            'database' => $connection->dbname,
-            'port' => $connection->port,
-            'noShowFields' => []
-        ];
+        return $parameter;
     }
 
     /**
-     * 处理入参
+     * @param $parameter
      */
-    private function checkArgvs()
+    private function askQuestion()
     {
-        $table = $this->input->getOption('table');
-        if (empty($table)) {
-            $this->console->error('database table name is not exist,try again like this :');
-            $this->console->error(' php console builder --table tableName');
-            exit;
-        }
-        return $table;
+        $fh = fopen('php://stdin', 'r');
+        echo "未找到模型";
+        fread($fh, 1000);
     }
 }
