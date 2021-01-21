@@ -83,5 +83,11 @@ php console builder --table tableName -e release
 1. 支持数据字段注解，支持@enum(1=a|2=b)的文档显示
 1. 支持单model重写 --model all
                  --model  tableName
+                 
+                 
 
 
+##### v3.1.0版本
+1.支持别名
+2.快速常用的创建curd
+3.指定controller生成路径
