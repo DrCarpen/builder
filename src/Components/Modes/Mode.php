@@ -60,6 +60,8 @@ class Mode
         $this->dbConfig = $dbConfig;
         if (isset($dbConfig['pre'])){
             $parameter['pre'] = $dbConfig['pre'];
+        }else{
+            $this->console->info('如果有表前缀请在数据库配置里进行pre设置');
         }
         // 初始化全局变量
         $this->setParameter($parameter);

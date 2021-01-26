@@ -56,7 +56,7 @@ class Connections
         if (isset($connections[0]['pre'])){
             $this->inputArguments['table'] = $connections[0]['pre'].$arr[0];
         }else{
-            $this->inputArguments['table'] = arr[0];
+            $this->inputArguments['table'] = $arr[0];
         }
         return $this->getRealConnection($connections, $this->inputArguments['table']);
     }
